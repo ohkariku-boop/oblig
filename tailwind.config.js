@@ -1,16 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 
-// Navy ramp (primary) — the original `navy`
-const navy = {
-  50: '#eef1f7', 100: '#d9dfee', 200: '#b3bedd', 300: '#8a9dc7',
-  400: '#5a73a8', 500: '#3a5588', 600: '#2a4170', 700: '#1b2a4a',
-  800: '#16223d', 900: '#111a31', 950: '#0a0f1e',
+// Teal ramp (primary) — top of the logo's gradient
+const teal = {
+  50: '#ecfdf9', 100: '#d1faf1', 200: '#a7f3e0', 300: '#6ee7cb',
+  400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e',
+  800: '#115e59', 900: '#134e4a', 950: '#042f2c',
 };
-// Brick-red ramp (secondary) — the original `red`
-const red = {
-  50: '#fbeeec', 100: '#f6d9d4', 200: '#ebb4ab', 300: '#dd8a7a',
-  400: '#c95c47', 500: '#c4392e', 600: '#a82d24', 700: '#8a261f',
-  800: '#71211d', 900: '#5e1e1b', 950: '#330d0b',
+// Blue ramp (secondary) — bottom of the logo's gradient
+const blue = {
+  50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
+  400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
+  800: '#1e40af', 900: '#1e3a8a', 950: '#172554',
 };
 
 module.exports = {
@@ -20,12 +20,12 @@ module.exports = {
     extend: {
       colors: {
         // ramps used across the SaaS shell
-        primary: navy,
-        secondary: red,
+        primary: teal,
+        secondary: blue,
         accent: {
-          50: '#fbf6e9', 100: '#f5ebc9', 200: '#ead48c', 300: '#ddb94d',
-          400: '#d0a024', 500: '#b88810', 600: '#996e0c', 700: '#7c560d',
-          800: '#66470f', 900: '#573d11', 950: '#321f06',
+          50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
+          400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
+          800: '#92400e', 900: '#78350f', 950: '#451a03',
         },
         success: {
           50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac',
@@ -42,13 +42,13 @@ module.exports = {
           400: '#f87171', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c',
           800: '#991b1b', 900: '#7f1d1d', 950: '#450a0a',
         },
-        // original GRCArc editorial tokens (single-value, used by name)
-        cream: '#faf7f0',
-        paper: '#f5efe4',
-        line: '#e6ddca',
-        navy: '#1b2a4a',
-        red: '#c4392e',
-        ink: '#6a7993', // navy-soft
+        // Oblig editorial tokens (single-value, used by name)
+        cream: '#f3f7f9',   // cool off-white surface (light mode)
+        paper: '#e8eef2',   // secondary light surface
+        line: '#d3dfe6',    // hairline borders (light mode)
+        navy: '#0c1b2e',    // deep navy-teal — matches the logo backdrop, used as dark-mode base + headline ink
+        red: '#2563eb',     // brand accent (was brick-red in GRCArc) — now logo blue
+        ink: '#5b7280',     // muted body text (teal-grey)
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -59,9 +59,9 @@ module.exports = {
         sm: '2px', md: '6px', lg: '8px', xl: '10px', '2xl': '12px', '3xl': '14px',
       },
       boxShadow: {
-        soft: '0 1px 2px rgba(27,42,74,0.04)',
-        card: '0 1px 3px rgba(27,42,74,0.05), 0 8px 24px -14px rgba(27,42,74,0.12)',
-        glow: '0 0 0 1px rgba(196,57,46,0.18), 0 10px 30px -8px rgba(196,57,46,0.25)',
+        soft: '0 1px 2px rgba(12,27,46,0.05)',
+        card: '0 1px 3px rgba(12,27,46,0.06), 0 8px 24px -14px rgba(12,27,46,0.16)',
+        glow: '0 0 0 1px rgba(45,212,191,0.20), 0 10px 30px -8px rgba(45,212,191,0.30)',
       },
       keyframes: {
         'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
