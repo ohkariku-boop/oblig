@@ -6,20 +6,20 @@
 
 @layer base {
   :root {
-    --bg: 250 247 240;          /* cream */
-    --surface: 245 239 228;     /* paper */
+    --bg: 243 247 249;          /* cream (Oblig) */
+    --surface: 232 238 242;     /* paper */
     --elev: 255 255 255;
-    --border: 230 221 202;      /* line */
-    --text: 27 42 74;           /* navy */
-    --muted: 106 121 147;       /* ink */
+    --border: 211 223 230;      /* line */
+    --text: 12 27 46;           /* navy */
+    --muted: 91 114 128;        /* ink */
   }
   .dark {
-    --bg: 14 20 36;
-    --surface: 22 34 61;
-    --elev: 27 42 74;
-    --border: 42 58 96;
-    --text: 237 240 247;
-    --muted: 138 157 199;
+    --bg: 8 17 28;
+    --surface: 15 28 42;
+    --elev: 18 47 56;
+    --border: 31 74 87;
+    --text: 240 247 249;
+    --muted: 130 173 186;
   }
   * { border-color: rgb(var(--border)); }
   html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
@@ -57,21 +57,21 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
-  .dark .glass { background: rgba(14,20,36,0.88); }
+  .dark .glass { background: rgba(8,17,28,0.88); }
 
-  /* Buttons: the navy block + red outline style from the original */
+  /* Buttons: the navy block + blue outline style from the original */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-[13px] font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98];
   }
-  .btn-primary { @apply btn bg-navy text-cream hover:bg-[#2a4170] hover:shadow-lg; }
+  .btn-primary { @apply btn bg-navy text-cream hover:bg-navy-700 hover:shadow-lg; }
   .btn-secondary { @apply btn surface border border-app text-navy hover:border-navy; }
   .btn-secondary:hover { background-color: rgb(var(--elev)); }
   .btn-ghost { @apply btn text-ink; }
   .btn-ghost:hover { background-color: rgb(var(--muted) / 0.12); }
-  .btn-accent { @apply btn bg-red text-cream hover:bg-[#a82d24]; }
+  .btn-accent { @apply btn bg-red text-cream hover:bg-red-700; }
 
   .input {
-    @apply w-full rounded-md border border-app bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-ink/60 focus:outline-none focus:ring-2 focus:ring-navy focus:border-navy transition dark:bg-[#16223d] dark:text-cream;
+    @apply w-full rounded-md border border-app bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-ink/60 focus:outline-none focus:ring-2 focus:ring-navy focus:border-navy transition dark:bg-navy-800 dark:text-cream;
   }
   .label { @apply mb-1.5 block text-sm font-medium text-navy dark:text-cream; }
 
@@ -86,9 +86,9 @@
   .badge-success { @apply badge bg-success-100 text-success-700 dark:bg-success-900/40 dark:text-success-300; }
   .badge-warning { @apply badge bg-warning-100 text-warning-700 dark:bg-warning-900/40 dark:text-warning-300; }
   .badge-error { @apply badge bg-error-100 text-error-700 dark:bg-error-900/40 dark:text-error-300; }
-  .badge-info { @apply badge; background-color: rgb(27 42 74 / 0.1); color: #1b2a4a; }
-  .dark .badge-info { background-color: rgb(27 42 74 / 0.3); color: #d9dfee; }
-  .badge-neutral { @apply badge bg-paper text-ink dark:bg-[#16223d] dark:text-cream; }
+  .badge-info { @apply badge; background-color: rgb(12 27 46 / 0.1); color: #0c1b2e; }
+  .dark .badge-info { background-color: rgb(12 27 46 / 0.3); color: #f0f7f9; }
+  .badge-neutral { @apply badge bg-paper text-ink dark:bg-navy-800 dark:text-cream; }
 
   .skeleton { @apply relative overflow-hidden rounded-md; background-color: rgb(var(--muted) / 0.15); }
   .skeleton::after {
@@ -105,7 +105,7 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   .bg-grid {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 0H0v28' fill='none' stroke='%231b2a4a' stroke-opacity='0.05'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 0H0v28' fill='none' stroke='%230c1b2e' stroke-opacity='0.05'/%3E%3C/svg%3E");
   }
   .dark .bg-grid {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 0H0v28' fill='none' stroke='%23ffffff' stroke-opacity='0.04'/%3E%3C/svg%3E");

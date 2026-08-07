@@ -121,7 +121,7 @@ export function HomePage() {
               transition={{ duration: 0.4, delay: i * 0.05 }}
               className="card p-6 hover:shadow-card transition-shadow"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-md bg-paper text-navy dark:bg-[#16223d] dark:text-cream">
+              <div className="flex h-11 w-11 items-center justify-center rounded-md bg-paper text-navy dark:bg-navy-800 dark:text-cream">
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-4 font-semibold text-slate-900 dark:text-white">{f.title}</h3>
@@ -151,7 +151,7 @@ export function HomePage() {
               { icon: FileText, name: 'Reports', desc: 'Board-ready reports in a click.' },
             ].map(m => (
               <div key={m.name} className="flex items-start gap-4 rounded-2xl border border-app surface p-5 hover:border-primary-300 dark:hover:border-primary-700 transition">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-paper text-navy dark:bg-[#16223d] dark:text-cream">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-paper text-navy dark:bg-navy-800 dark:text-cream">
                   <m.icon className="h-5 w-5" />
                 </div>
                 <div>
@@ -200,10 +200,10 @@ export function HomePage() {
             </div>
             <div className="mt-6 space-y-3">
               {[
-                { name: 'Strategy & Leadership', v: 65, c: '#1b2a4a' },
+                { name: 'Strategy & Leadership', v: 65, c: '#0c1b2e' },
                 { name: 'Information Security', v: 72, c: '#22c55e' },
                 { name: 'Risk Management', v: 48, c: '#f59e0b' },
-                { name: 'Asset & Data Management', v: 41, c: '#c4392e' },
+                { name: 'Asset & Data Management', v: 41, c: '#2563eb' },
                 { name: 'People & Awareness', v: 58, c: '#6a7993' },
               ].map(r => (
                 <div key={r.name}>
@@ -214,7 +214,7 @@ export function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="mt-6 rounded-sm bg-paper dark:bg-[#16223d]/50 p-4">
+            <div className="mt-6 rounded-sm bg-paper dark:bg-navy-800/50 p-4">
               <p className="mono-label">AI Recommendation</p>
               <p className="mt-1 text-sm text-navy dark:text-cream">Add an Asset Register to lift your weakest domain from 41% — high impact, low effort.</p>
             </div>
@@ -298,7 +298,7 @@ function DashboardPreview() {
             <p className="mono-label">AI RECOMMENDATIONS</p>
             <div className="mt-3 space-y-2">
               {['Create a Password Policy', 'Add an Asset Register', 'Test your backups quarterly'].map(t => (
-                <div key={t} className="flex items-center gap-2 rounded-sm bg-paper dark:bg-[#16223d]/50 px-3 py-2 text-xs text-navy dark:text-cream">
+                <div key={t} className="flex items-center gap-2 rounded-sm bg-paper dark:bg-navy-800/50 px-3 py-2 text-xs text-navy dark:text-cream">
                   <Sparkles className="h-3.5 w-3.5 text-red shrink-0" /> {t}
                 </div>
               ))}

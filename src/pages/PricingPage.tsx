@@ -155,7 +155,7 @@ export function PricingPage() {
               <div className="flex items-center gap-3">
                 <div className={cn(
                   'flex h-10 w-10 items-center justify-center rounded-md',
-                  plan.highlight ? 'bg-navy text-cream' : 'bg-paper text-navy dark:bg-[#16223d] dark:text-cream',
+                  plan.highlight ? 'bg-navy text-cream' : 'bg-paper text-navy dark:bg-navy-800 dark:text-cream',
                 )}>
                   <plan.icon className="h-5 w-5" />
                 </div>

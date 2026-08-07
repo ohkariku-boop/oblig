@@ -75,15 +75,15 @@ export function DashboardPage() {
                 <AreaChart data={s.trend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#1b2a4a" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#1b2a4a" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#0c1b2e" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#0c1b2e" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(106,121,147,0.18)" />
                   <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#6a7993' }} axisLine={false} tickLine={false} />
                   <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: '#6a7993' }} axisLine={false} tickLine={false} />
                   <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid #e6ddca', fontSize: 13 }} />
-                  <Area type="monotone" dataKey="score" stroke="#1b2a4a" strokeWidth={2.5} fill="url(#scoreGrad)" />
+                  <Area type="monotone" dataKey="score" stroke="#0c1b2e" strokeWidth={2.5} fill="url(#scoreGrad)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -102,7 +102,7 @@ export function DashboardPage() {
                   <PolarGrid stroke="rgba(106,121,147,0.25)" />
                   <PolarAngleAxis dataKey="name" tick={{ fontSize: 11, fill: '#6a7993' }} />
                   <PolarRadiusAxis domain={[0, 100]} tick={{ fontSize: 10, fill: '#6a7993' }} axisLine={false} />
-                  <Radar dataKey="score" stroke="#1b2a4a" fill="#1b2a4a" fillOpacity={0.3} strokeWidth={2} />
+                  <Radar dataKey="score" stroke="#0c1b2e" fill="#0c1b2e" fillOpacity={0.3} strokeWidth={2} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -203,7 +203,7 @@ export function DashboardPage() {
 }
 
 function KpiCard({ icon: Icon, label, value, suffix, tone, trend }: { icon: LucideIcon; label: string; value: string; suffix?: string; tone: 'primary' | 'secondary' | 'warning'; trend: string }) {
-  const toneClass = tone === 'primary' ? 'from-navy to-[#2a4170]' : tone === 'secondary' ? 'from-red to-[#a82d24]' : 'from-warning-500 to-accent-500';
+  const toneClass = tone === 'primary' ? 'from-navy to-navy-700' : tone === 'secondary' ? 'from-red to-red-700' : 'from-warning-500 to-accent-500';
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
       <Card hover className="p-5">
@@ -227,7 +227,7 @@ function KpiCard({ icon: Icon, label, value, suffix, tone, trend }: { icon: Luci
 function MiniStat({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string | number }) {
   return (
     <div className="card flex items-center gap-3 p-4">
-      <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-paper text-navy dark:bg-[#16223d] dark:text-cream">
+      <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-paper text-navy dark:bg-navy-800 dark:text-cream">
         <Icon className="h-4 w-4" />
       </div>
       <div>

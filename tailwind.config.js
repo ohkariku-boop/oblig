@@ -6,11 +6,26 @@ const teal = {
   400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e',
   800: '#115e59', 900: '#134e4a', 950: '#042f2c',
 };
-// Blue ramp (secondary) — bottom of the logo's gradient
+// Blue ramp (secondary + brand accent) — bottom of the logo's gradient.
+// Has a DEFAULT so `bg-blue` / `text-blue` work, plus full 50–950 shades
+// so utilities like `from-blue-200`, `dark:bg-blue-900` resolve correctly.
 const blue = {
+  DEFAULT: '#2563eb',
   50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
   400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
   800: '#1e40af', 900: '#1e3a8a', 950: '#172554',
+};
+// Navy ramp — deep teal-navy surfaces, matching the logo's dark backdrop.
+// Has a DEFAULT so `bg-navy` / `text-navy` keep working as before, plus
+// full 50–950 shades so utilities like `bg-navy-900`, `bg-navy-50` resolve.
+// (Previously `navy` was a single hex string, so any `navy-###` shade
+// utility silently failed to generate CSS — this is the root cause of
+// text/backgrounds going missing in dark mode.)
+const navy = {
+  DEFAULT: '#0c1b2e',
+  50: '#eef4f6', 100: '#d7e6ea', 200: '#b0cdd6', 300: '#82adba',
+  400: '#4f7f8f', 500: '#2f5f6e', 600: '#1f4a57', 700: '#173b46',
+  800: '#122f38', 900: '#0c1b2e', 950: '#070f1a',
 };
 
 module.exports = {
@@ -46,8 +61,8 @@ module.exports = {
         cream: '#f3f7f9',   // cool off-white surface (light mode)
         paper: '#e8eef2',   // secondary light surface
         line: '#d3dfe6',    // hairline borders (light mode)
-        navy: '#0c1b2e',    // deep navy-teal — matches the logo backdrop, used as dark-mode base + headline ink
-        red: '#2563eb',     // brand accent (was brick-red in GRCArc) — now logo blue
+        navy: navy,         // deep navy-teal ramp — DEFAULT matches logo backdrop
+        red: blue,          // brand accent ramp (was brick-red in GRCArc) — now logo blue
         ink: '#5b7280',     // muted body text (teal-grey)
       },
       fontFamily: {

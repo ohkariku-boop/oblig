@@ -194,7 +194,7 @@ function Results({ state, scores, band, count, pct, recs, milestone, onReview, o
 }) {
   const radarData = scores.map(s => ({ name: s.name.split(' ')[0], score: s.pct, fullMark: 100 }));
   const barData = [...scores].sort((a, b) => a.pct - b.pct);
-  const scoreColor = (s: number) => s >= 70 ? '#22c55e' : s >= 40 ? '#f59e0b' : '#c4392e';
+  const scoreColor = (s: number) => s >= 70 ? '#22c55e' : s >= 40 ? '#f59e0b' : '#2563eb';
 
   return (
     <div>
@@ -247,7 +247,7 @@ function Results({ state, scores, band, count, pct, recs, milestone, onReview, o
                   <PolarGrid stroke="rgba(106,121,147,0.25)" />
                   <PolarAngleAxis dataKey="name" tick={{ fontSize: 11, fill: '#6a7993' }} />
                   <PolarRadiusAxis domain={[0, 100]} tick={{ fontSize: 10, fill: '#6a7993' }} axisLine={false} />
-                  <Radar dataKey="score" stroke="#c4392e" fill="#c4392e" fillOpacity={0.3} strokeWidth={2} />
+                  <Radar dataKey="score" stroke="#2563eb" fill="#2563eb" fillOpacity={0.3} strokeWidth={2} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -278,10 +278,10 @@ function Results({ state, scores, band, count, pct, recs, milestone, onReview, o
         <CardBody>
           <div className="grid gap-4 sm:grid-cols-4">
             {[
-              { label: 'Your score', value: pct, color: '#c4392e' },
+              { label: 'Your score', value: pct, color: '#2563eb' },
               { label: 'SMB average', value: 42, color: '#6a7993' },
               { label: 'Industry leaders', value: 82, color: '#22c55e' },
-              { label: 'Certification ready', value: 75, color: '#1b2a4a' },
+              { label: 'Certification ready', value: 75, color: '#0c1b2e' },
             ].map(b => (
               <div key={b.label} className="rounded-md border border-app p-4 text-center">
                 <p className="text-3xl font-bold" style={{ color: b.color }}>{b.value}%</p>
@@ -330,7 +330,7 @@ function Results({ state, scores, band, count, pct, recs, milestone, onReview, o
               ].map((h, i) => (
                 <div key={i} className="flex items-center justify-between rounded-md border border-app p-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-md bg-paper text-red dark:bg-[#16223d]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-md bg-paper text-red dark:bg-navy-800">
                       <Target className="h-4 w-4" />
                     </div>
                     <div>
