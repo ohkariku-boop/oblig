@@ -102,8 +102,8 @@ export function PricingPage() {
           <nav className="hidden items-center gap-8 md:flex">
             <Link to="/" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Home</Link>
             <Link to="/pricing" className="text-sm font-medium text-navy dark:text-cream">Pricing</Link>
-            <a href="/#features" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Platform</a>
-            <a href="/#modules" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Modules</a>
+            <Link to="/#features" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Platform</Link>
+            <Link to="/#modules" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Modules</Link>
           </nav>
           <div className="flex items-center gap-2">
             <button onClick={toggle} className="btn-ghost !p-2" aria-label="Toggle theme">

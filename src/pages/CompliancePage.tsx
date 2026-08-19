@@ -58,7 +58,7 @@ export function CompliancePage() {
                 key={f.id}
                 onClick={() => setSelected(f)}
                 className={cn(
-                  'flex w-full items-center gap-3 rounded-xl border p-3 text-left transition',
+                  'flex w-full items-center gap-3 rounded-md border p-3 text-left transition',
                   selected?.id === f.id ? 'border-primary-300 bg-primary-50 dark:border-primary-700 dark:bg-primary-900/20' : 'border-app surface hover:border-slate-300 dark:hover:border-slate-600',
                 )}
               >
@@ -81,7 +81,10 @@ export function CompliancePage() {
               <CardBody>
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">{selected.name}</h2>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h2 className="text-xl font-bold text-slate-900 dark:text-white">{selected.name}</h2>
+                      <span className="citation-chip">{selected.shortName}</span>
+                    </div>
                     <p className="mt-1 text-sm text-muted">{selected.description}</p>
                   </div>
                   <div className="text-right">

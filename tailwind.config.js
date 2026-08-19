@@ -66,12 +66,12 @@ module.exports = {
         ink: '#5b7280',     // muted body text (teal-grey)
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        grotesk: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+        grotesk: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
-        sm: '2px', md: '6px', lg: '8px', xl: '10px', '2xl': '12px', '3xl': '14px',
+        sm: '2px', md: '4px', lg: '6px', xl: '6px', '2xl': '6px', '3xl': '6px',
       },
       boxShadow: {
         soft: '0 1px 2px rgba(12,27,46,0.05)',

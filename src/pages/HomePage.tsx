@@ -41,39 +41,40 @@ export function HomePage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-60" />
         <div className="absolute -top-32 left-1/2 h-[480px] w-[820px] -translate-x-1/2 rounded-full bg-gradient-to-br from-navy-200/40 to-red-200/30 blur-3xl dark:from-navy-800/30 dark:to-red-900/20" />
-        <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28">
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-app surface px-4 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 shadow-soft">
-              <CheckCircle2 className="h-4 w-4 text-success-500" />
-              Free 5-Minute Governance Assessment
-            </span>
-            <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-6xl text-balance">
-              Vendor &amp; AI Governance Readiness <span className="text-red">for APAC Fintechs</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted text-balance">
-              Map your vendor security and AI governance posture directly to MAS, BNM, OJK, BSP, NBC, FSA and FSC — the frameworks banks, insurers and payment institutions actually use to assess you, not just SOC 2 or ISO 27001.
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link to="/app/assessment" className="btn-primary px-6 py-3 text-base">
-                Start Free Assessment <ArrowRight className="h-4 w-4" />
-              </Link>
-              <button onClick={() => setDemoOpen(true)} className="btn-secondary px-6 py-3 text-base">
-                <Play className="h-4 w-4" /> Watch Interactive Demo
-              </button>
-            </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted">
-              <span className="inline-flex items-center gap-1.5"><Zap className="h-4 w-4 text-red" /> 5 Minutes</span>
-              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-red" /> Industry Best Practices</span>
-            </div>
-          </motion.div>
+        <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-24 lg:pb-20">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-left">
+              <span className="inline-flex items-center gap-2 rounded-full border border-app surface px-4 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 shadow-soft">
+                <CheckCircle2 className="h-4 w-4 text-success-500" />
+                Free 5-Minute Governance Assessment
+              </span>
+              <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05] text-balance">
+                Vendor &amp; AI Governance Readiness <span className="text-red">for APAC Fintechs</span>
+              </h1>
+              <p className="mt-6 max-w-xl text-lg text-muted text-balance">
+                Map your vendor security and AI governance posture directly to MAS, BNM, OJK, BSP, NBC, FSA and FSC — the frameworks banks, insurers and payment institutions actually use to assess you, not just SOC 2 or ISO 27001.
+              </p>
+              <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row">
+                <Link to="/app/assessment" className="btn-primary px-6 py-3 text-base">
+                  Start Free Assessment <ArrowRight className="h-4 w-4" />
+                </Link>
+                <button onClick={() => setDemoOpen(true)} className="btn-secondary px-6 py-3 text-base">
+                  <Play className="h-4 w-4" /> Watch Interactive Demo
+                </button>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
+                <span className="inline-flex items-center gap-1.5"><Zap className="h-4 w-4 text-red" /> 5 Minutes</span>
+                <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-red" /> 8 APAC Markets</span>
+              </div>
+            </motion.div>
 
-          {/* Dashboard preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto mt-16 max-w-5xl"
-          >
-            <DashboardPreview />
-          </motion.div>
+            {/* Dashboard preview */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <DashboardPreview />
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -238,7 +239,6 @@ export function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <Logo />
-            <p className="text-sm text-muted">AI Governance Copilot for growing businesses.</p>
             <div className="flex items-center gap-6 text-sm text-muted">
               <a href="#features" className="hover:text-slate-900 dark:hover:text-white transition">Platform</a>
               <a href="#modules" className="hover:text-slate-900 dark:hover:text-white transition">Modules</a>
@@ -265,7 +265,7 @@ function DashboardPreview() {
           </div>
           <span className="text-xs text-ink">oblig.app/dashboard</span>
         </div>
-        <div className="grid gap-4 py-5 sm:grid-cols-3">
+        <div className="grid gap-4 py-5 min-[420px]:grid-cols-3">
           <div className="rounded-sm border border-app surface p-4">
             <p className="text-xs text-ink">Governance Score</p>
             <p className="mt-1 font-grotesk text-3xl font-bold text-navy dark:text-cream">62</p>
@@ -282,7 +282,7 @@ function DashboardPreview() {
             <p className="mt-1 text-xs text-ink">2 high priority</p>
           </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 min-[560px]:grid-cols-2">
           <div className="rounded-sm border border-app surface p-4">
             <p className="mono-label">CATEGORY SCORES</p>
             <div className="mt-3 space-y-2">
