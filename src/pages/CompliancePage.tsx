@@ -14,7 +14,7 @@ import { cn } from '@/utils/cn';
 export function CompliancePage() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<Framework | null>(sampleFrameworks[1]);
-  const [compare, setCompare] = useState<string[]>(['iso27001', 'soc2']);
+  const [compare, setCompare] = useState<string[]>(['mas-trm', 'bnm-rmit']);
 
   const filtered = sampleFrameworks.filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
   const compareFrameworks = sampleFrameworks.filter(f => compare.includes(f.id));

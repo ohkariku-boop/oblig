@@ -48,10 +48,10 @@ export function HomePage() {
               Free 5-Minute Governance Assessment
             </span>
             <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-6xl text-balance">
-              Build Better IT Governance <span className="text-red">with AI</span>
+              Vendor &amp; AI Governance Readiness <span className="text-red">for APAC Fintechs</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted text-balance">
-              Assess your governance maturity, identify risks, generate policies and build a practical governance roadmap — before investing in expensive consultants or compliance programmes.
+              Map your vendor security and AI governance posture directly to MAS, BNM, OJK, BSP, NBC, FSA and FSC — the frameworks banks, insurers and payment institutions actually use to assess you, not just SOC 2 or ISO 27001.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link to="/app/assessment" className="btn-primary px-6 py-3 text-base">
@@ -110,7 +110,7 @@ export function HomePage() {
             { icon: Brain, title: 'AI governance copilot', body: 'Ask how to improve, generate policies, and get prioritised recommendations in plain language.' },
             { icon: FileText, title: 'Generate policies instantly', body: 'Production-ready security, password and incident response policies — editable and exportable.' },
             { icon: ShieldAlert, title: 'Track real risks', body: 'A proper risk register with likelihood, impact, owners and a heat map.' },
-            { icon: Network, title: 'Map to frameworks', body: 'See coverage against ISO 27001, SOC 2, NIST CSF, COBIT, CIS, PDPA and GDPR.' },
+            { icon: Network, title: 'Map to real regulator frameworks', body: 'See coverage against MAS TRM, BNM RMiT, OJK, BSP, NBC TCRMG, FSA and FSC — mapped to the exact clauses your buyers\' vendor questionnaires reference.' },
             { icon: TrendingUp, title: 'A roadmap that makes sense', body: 'A phased plan from where you are today to the maturity level you need next.' },
           ].map((f, i) => (
             <motion.div
@@ -140,17 +140,17 @@ export function HomePage() {
           </div>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { icon: BarChart3, name: 'Dashboard', desc: 'Executive overview of score, risks and readiness.' },
-              { icon: ShieldCheck, name: 'Governance Assessment', desc: 'Score maturity across six domains in minutes.' },
-              { icon: Sparkles, name: 'AI Governance Copilot', desc: 'Conversational guidance and policy generation.' },
-              { icon: FileText, name: 'AI Policy Generator', desc: 'Generate, edit and export governance documents.' },
-              { icon: ShieldAlert, name: 'Risk Register', desc: 'Identify, score and mitigate your risks.' },
-              { icon: TrendingUp, name: 'Governance Roadmap', desc: 'A phased path to your target maturity.' },
-              { icon: Network, name: 'Compliance Mapping', desc: 'Coverage across seven major frameworks.' },
-              { icon: Lock, name: 'Evidence Library', desc: 'A searchable home for all your proof.' },
-              { icon: FileText, name: 'Reports', desc: 'Board-ready reports in a click.' },
+              { icon: BarChart3, name: 'Dashboard', desc: 'Executive overview of score, risks and readiness.', to: '/app' },
+              { icon: ShieldCheck, name: 'Governance Assessment', desc: 'Score maturity across six domains in minutes.', to: '/app/assessment' },
+              { icon: Sparkles, name: 'AI Governance Copilot', desc: 'Conversational guidance and policy generation.', to: '/app/copilot' },
+              { icon: FileText, name: 'AI Policy Generator', desc: 'Generate, edit and export governance documents.', to: '/app/policies' },
+              { icon: ShieldAlert, name: 'Risk Register', desc: 'Identify, score and mitigate your risks.', to: '/app/risk' },
+              { icon: TrendingUp, name: 'Governance Roadmap', desc: 'A phased path to your target maturity.', to: '/app/roadmap' },
+              { icon: Network, name: 'Compliance Mapping', desc: '8 APAC markets — MAS, BNM, OJK, BSP, NBC, FSA, FSC.', to: '/app/compliance' },
+              { icon: Lock, name: 'Evidence Library', desc: 'A searchable home for all your proof.', to: '/app/evidence' },
+              { icon: FileText, name: 'Reports', desc: 'Board-ready reports in a click.', to: '/app/reports' },
             ].map(m => (
-              <div key={m.name} className="flex items-start gap-4 rounded-2xl border border-app surface p-5 hover:border-primary-300 dark:hover:border-primary-700 transition">
+              <Link key={m.name} to={m.to} className="flex items-start gap-4 rounded-2xl border border-app surface p-5 hover:border-primary-300 dark:hover:border-primary-700 transition cursor-pointer">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-paper text-navy dark:bg-navy-800 dark:text-cream">
                   <m.icon className="h-5 w-5" />
                 </div>
@@ -158,7 +158,7 @@ export function HomePage() {
                   <h3 className="font-semibold text-slate-900 dark:text-white">{m.name}</h3>
                   <p className="mt-1 text-sm text-muted">{m.desc}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

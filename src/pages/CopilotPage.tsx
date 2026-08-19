@@ -109,7 +109,7 @@ export function CopilotPage() {
                     {m.role === 'assistant' ? <Sparkles className="h-4 w-4" /> : <User className="h-4 w-4" />}
                   </div>
                   <div className={cn('max-w-[80%] rounded-2xl px-4 py-3', m.role === 'assistant' ? 'surface-elev border border-app' : 'bg-primary-600 text-white')}>
-                    <p className="whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-200 [&]:text-white">{m.content}</p>
+                    <p className={cn('whitespace-pre-wrap text-sm', m.role === 'assistant' ? 'text-slate-700 dark:text-slate-200' : 'text-white')}>{m.content}</p>
                     {m.role === 'assistant' && (
                       <div className="mt-3 flex items-center gap-2 border-t border-app pt-2">
                         <button onClick={() => navigator.clipboard?.writeText(m.content)} className="inline-flex items-center gap-1 text-xs text-muted hover:text-slate-700 dark:hover:text-slate-200 transition">

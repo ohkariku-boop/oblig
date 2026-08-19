@@ -113,13 +113,23 @@ export const sampleEvidence: EvidenceItem[] = [
 ];
 
 export const sampleFrameworks: Framework[] = [
-  { id: 'cobit', name: 'COBIT 2019', shortName: 'COBIT', description: 'Governance framework for enterprise IT objectives.', coverage: 41, totalControls: 40, metControls: 16, color: '#3b66f5' },
-  { id: 'iso27001', name: 'ISO/IEC 27001', shortName: 'ISO 27001', description: 'International standard for information security management.', coverage: 58, totalControls: 93, metControls: 54, color: '#14b8a6' },
-  { id: 'nistcsf', name: 'NIST Cybersecurity Framework', shortName: 'NIST CSF', description: 'Framework to understand and reduce cyber risk.', coverage: 64, totalControls: 108, metControls: 69, color: '#f59e0b' },
-  { id: 'cis', name: 'CIS Controls v8', shortName: 'CIS', description: 'Prioritised actions to protect against common attacks.', coverage: 47, totalControls: 153, metControls: 72, color: '#ef4444' },
-  { id: 'soc2', name: 'SOC 2', shortName: 'SOC 2', description: 'Trust services criteria for service organisations.', coverage: 52, totalControls: 64, metControls: 33, color: '#8b5cf6' },
-  { id: 'pdpa', name: 'PDPA (SG)', shortName: 'PDPA', description: 'Personal Data Protection Act obligations.', coverage: 70, totalControls: 12, metControls: 8, color: '#0ea5e9' },
-  { id: 'gdpr', name: 'GDPR', shortName: 'GDPR', description: 'EU General Data Protection Regulation requirements.', coverage: 62, totalControls: 18, metControls: 11, color: '#22c55e' },
+  { id: 'mas-trm', name: 'MAS Technology Risk Management Guidelines', shortName: 'MAS TRM (SG)', description: 'Singapore — 10 core domains incl. board oversight, vendor due diligence, cloud, and 1-hour severe-incident notification to MAS.', coverage: 64, totalControls: 42, metControls: 27, color: '#dc2626' },
+  { id: 'bnm-rmit', name: 'BNM Risk Management in Technology', shortName: 'BNM RMiT (MY)', description: 'Malaysia — cybersecurity risk (Domain 10) and technology resilience (Domain 11), incl. SOC, SIEM 3-yr retention, annual pentest.', coverage: 52, totalControls: 38, metControls: 20, color: '#0d9488' },
+  { id: 'ojk-2026', name: 'OJK Regulation No. 1/2026', shortName: 'OJK (ID)', description: 'Indonesia — IT governance, cyber resilience, and IT service provider engagement for commercial banks, mirrors elements of EU DORA.', coverage: 38, totalControls: 45, metControls: 17, color: '#d97706' },
+  { id: 'bsp-808', name: 'BSP Circular 808 / 1137 (SAFr)', shortName: 'BSP (PH)', description: 'Philippines — IT risk management and outsourcing, self-assessed against BSP\'s Supervisory Assessment Framework.', coverage: 57, totalControls: 30, metControls: 17, color: '#2563eb' },
+  { id: 'nbc-tcrmg', name: 'NBC Technology & Cyber Risk Mgmt Guidelines', shortName: 'NBC TCRMG (KH)', description: 'Cambodia — 6 policy domains; in-country data residency is a hard requirement, not a recommendation.', coverage: 29, totalControls: 24, metControls: 7, color: '#7c3aed' },
+  { id: 'fsa-cyber', name: 'FSA Cybersecurity Guidelines', shortName: 'FSA (JP)', description: 'Japan — 176 discrete response items across 6 areas, checklist-style rather than principles-based.', coverage: 33, totalControls: 176, metControls: 58, color: '#be123c' },
+  { id: 'efta-kr', name: 'Electronic Financial Transactions Act', shortName: 'EFTA (KR)', description: 'South Korea — FSC/FSS-enforced; obligations are licensing-status gated, plus PIPA/CIUPA for data and credit info.', coverage: 21, totalControls: 28, metControls: 6, color: '#0891b2' },
+  { id: 'fsc-outsourcing-tw', name: 'FSC Outsourcing & Supply Chain Guidelines', shortName: 'FSC (TW)', description: 'Taiwan — strict subcontractor consent requirements; cross-border outsourcing has additional conditions under Article 17.', coverage: 45, totalControls: 26, metControls: 12, color: '#65a30d' },
+];
+
+export const sampleAiFrameworks: Framework[] = [
+  { id: 'mas-ai-feat', name: 'MAS AI Risk Management Guidelines (in consultation) + FEAT', shortName: 'MAS AI (SG)', description: 'Singapore — principles for fairness, ethics, accountability and transparency in AI/ML use by financial institutions.', coverage: 40, totalControls: 20, metControls: 8, color: '#dc2626' },
+  { id: 'bnm-ai', name: 'BNM AI Discussion Paper + AICB Framework', shortName: 'BNM AI (MY)', description: 'Malaysia — emerging industry framework for AI governance in financial services.', coverage: 22, totalControls: 16, metControls: 4, color: '#0d9488' },
+  { id: 'ojk-ai', name: 'OJK AI Governance for Indonesian Banking', shortName: 'OJK AI (ID)', description: 'Indonesia — 8-stage AI governance lifecycle for banking institutions.', coverage: 18, totalControls: 22, metControls: 4, color: '#d97706' },
+  { id: 'bsp-stars', name: 'BSP STARS Framework', shortName: 'BSP STARS (PH)', description: 'Philippines — Memorandum M-2026-031, AI governance expectations for BSP-supervised institutions.', coverage: 15, totalControls: 18, metControls: 3, color: '#2563eb' },
+  { id: 'fsa-ai', name: 'FSA AI Discussion Paper Series + AI Promotion Act', shortName: 'FSA AI (JP)', description: 'Japan — active working groups on frontier AI risk in the financial sector as of mid-2026.', coverage: 12, totalControls: 24, metControls: 3, color: '#be123c' },
+  { id: 'fsc-ai-kr', name: 'FSC 7-Principle AI Guidelines + AI Framework Act', shortName: 'FSC AI (KR)', description: 'South Korea — binding for high-impact AI use cases under the AI Framework Act.', coverage: 10, totalControls: 20, metControls: 2, color: '#0891b2' },
 ];
 
 export const sampleActivity: ActivityItem[] = [

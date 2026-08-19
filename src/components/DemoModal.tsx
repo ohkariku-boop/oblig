@@ -210,7 +210,7 @@ function CopilotScene({ messages, typing, step, total }: { messages: typeof COPI
               {m.role === 'assistant' ? <Sparkles className="h-4 w-4" /> : <User className="h-4 w-4" />}
             </div>
             <div className={cn('max-w-[80%] rounded-xl px-4 py-2.5', m.role === 'assistant' ? 'border border-app bg-cream/10' : 'bg-navy text-cream')}>
-              <p className="whitespace-pre-wrap text-sm text-navy dark:text-cream [&]:text-cream">{m.content}</p>
+              <p className={cn('whitespace-pre-wrap text-sm', m.role === 'assistant' ? 'text-navy dark:text-cream' : 'text-cream')}>{m.content}</p>
             </div>
           </motion.div>
         ))}
