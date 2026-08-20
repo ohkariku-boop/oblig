@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer,
@@ -12,6 +13,7 @@ import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { ScoreRing, ProgressBar, Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { dashboardSummary, sampleActivity } from '@/data/sampleData';
+import { checkedCount, overallPct, bandFor, sectionScores, marketCoverage, ALL_MARKETS, type ChecklistState } from '@/data/assessment';
 import { formatRelative, daysUntil, cn } from '@/utils/cn';
 
 const activityIcon: Record<string, LucideIcon> = {
@@ -20,7 +22,31 @@ const activityIcon: Record<string, LucideIcon> = {
 };
 
 export function DashboardPage() {
-  const s = dashboardSummary;
+  const s = useMemo(() => {
+    let assessmentState: ChecklistState = {};
+    try { assessmentState = JSON.parse(localStorage.getItem('oblig_scorecard_v1') ?? '{}'); } catch { /* ignore */ }
+    const count = checkedCount(assessmentState);
+    if (count === 0) return dashboardSummary; // no real assessment yet — show the demo data
+
+    const pct = overallPct(assessmentState);
+    const band = bandFor(count);
+    const coverage = marketCoverage(assessmentState);
+    const avgMarketCoverage = Math.round(
+      ALL_MARKETS.reduce((sum, code) => sum + coverage[code].pct, 0) / ALL_MARKETS.length,
+    );
+    const categoryScores = sectionScores(assessmentState).map(sec => ({ name: sec.name.split(' ').slice(0, 2).join(' '), score: sec.pct }));
+
+    return {
+      ...dashboardSummary,
+      governanceScore: pct,
+      maturityLevel: band.level,
+      maturityLabel: band.levelLabel,
+      healthStatus: pct >= 70 ? 'healthy' : pct >= 40 ? 'attention' as const : 'critical' as const,
+      healthLabel: pct >= 70 ? 'On Track' : pct >= 40 ? 'Needs Attention' : 'Critical Gaps',
+      complianceReadiness: avgMarketCoverage,
+      categoryScores,
+    };
+  }, []);
   const healthTone = s.healthStatus === 'healthy' ? 'success' : s.healthStatus === 'attention' ? 'warning' : 'error';
 
   return (

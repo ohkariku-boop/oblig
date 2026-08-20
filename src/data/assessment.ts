@@ -1,8 +1,30 @@
-import { DATA, TOTAL_ITEMS, MILESTONES, MILESTONE_NOTES, type Milestone } from '@/data/checklist';
+import { DATA, TOTAL_ITEMS, MILESTONES, MILESTONE_NOTES, ALL_MARKETS, MARKET_LABELS, type Milestone, type MarketCode } from '@/data/checklist';
 
-export { DATA, TOTAL_ITEMS, MILESTONES, MILESTONE_NOTES };
-export type { Milestone };
+export { DATA, TOTAL_ITEMS, MILESTONES, MILESTONE_NOTES, ALL_MARKETS, MARKET_LABELS };
+export type { Milestone, MarketCode };
 export type ChecklistState = Record<string, boolean>;
+
+export const MARKET_TO_FRAMEWORK: Record<MarketCode, string> = {
+  SG: 'mas-trm', MY: 'bnm-rmit', ID: 'ojk-2026', PH: 'bsp-808',
+  KH: 'nbc-tcrmg', JP: 'fsa-cyber', KR: 'efta-kr', TW: 'fsc-outsourcing-tw',
+};
+
+export function marketCoverage(state: ChecklistState): Record<MarketCode, { checked: number; total: number; pct: number }> {
+  const result = {} as Record<MarketCode, { checked: number; total: number; pct: number }>;
+  for (const code of ALL_MARKETS) {
+    let checked = 0, total = 0;
+    for (const sec of DATA) {
+      sec.items.forEach((it, i) => {
+        if (it.c.includes(code)) {
+          total++;
+          if (state[itemKey(sec.id, i)]) checked++;
+        }
+      });
+    }
+    result[code] = { checked, total, pct: total ? Math.round((checked / total) * 100) : 0 };
+  }
+  return result;
+}
 
 export function itemKey(sectionId: string, idx: number): string {
   return `${sectionId}__${idx}`;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Network, Search, CheckCircle2, XCircle, AlertTriangle,
@@ -7,17 +7,40 @@ import {
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge, ProgressBar } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
-import { sampleFrameworks } from '@/data/sampleData';
+import { sampleFrameworks, sampleAiFrameworks } from '@/data/sampleData';
+import { generateRealControls } from '@/data/trmControls';
+import { marketCoverage, MARKET_TO_FRAMEWORK, type ChecklistState } from '@/data/assessment';
 import type { Framework } from '@/types';
 import { cn } from '@/utils/cn';
 
 export function CompliancePage() {
+  const [track, setTrack] = useState<'vendor' | 'ai'>('vendor');
+
+  const liveFrameworks = useMemo(() => {
+    let assessmentState: ChecklistState = {};
+    try { assessmentState = JSON.parse(localStorage.getItem('oblig_scorecard_v1') ?? '{}'); } catch { /* ignore */ }
+    const coverage = marketCoverage(assessmentState);
+    const frameworkToMarket = Object.fromEntries(
+      Object.entries(MARKET_TO_FRAMEWORK).map(([market, fw]) => [fw, market]),
+    ) as Record<string, keyof typeof coverage>;
+
+    return sampleFrameworks.map(f => {
+      const market = frameworkToMarket[f.id];
+      const cov = market ? coverage[market] : undefined;
+      if (cov && cov.checked > 0) {
+        return { ...f, coverage: cov.pct, totalControls: cov.total, metControls: cov.checked };
+      }
+      return f;
+    });
+  }, []);
+
+  const activeFrameworks = track === 'vendor' ? liveFrameworks : sampleAiFrameworks;
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<Framework | null>(sampleFrameworks[1]);
+  const [selected, setSelected] = useState<Framework | null>(liveFrameworks[1]);
   const [compare, setCompare] = useState<string[]>(['mas-trm', 'bnm-rmit']);
 
-  const filtered = sampleFrameworks.filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
-  const compareFrameworks = sampleFrameworks.filter(f => compare.includes(f.id));
+  const filtered = activeFrameworks.filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
+  const compareFrameworks = activeFrameworks.filter(f => compare.includes(f.id));
 
   const controls = selected ? generateControls(selected) : [];
 
@@ -25,23 +48,30 @@ export function CompliancePage() {
     <div>
       <PageHeader
         title="Compliance Mapping"
-        description="See your coverage against major governance and security frameworks."
+        description={track === 'vendor'
+          ? 'Vendor & technology risk coverage across 8 APAC financial regulators.'
+          : 'AI governance coverage across each market\'s emerging AI frameworks.'}
         action={<button className="btn-primary"><Sparkles className="h-4 w-4" /> AI Gap Analysis</button>}
       />
+
+      <div className="mb-6 inline-flex rounded-md border border-app p-1 surface">
+        <button onClick={() => { setTrack('vendor'); setSelected(liveFrameworks[0]); setCompare(['mas-trm', 'bnm-rmit']); }} className={cn('rounded-sm px-3 py-1.5 text-sm font-medium transition', track === 'vendor' ? 'bg-navy text-cream' : 'text-muted hover:text-navy dark:hover:text-cream')}>Vendor & Tech Risk</button>
+        <button onClick={() => { setTrack('ai'); setSelected(sampleAiFrameworks[0]); setCompare(['mas-ai-feat', 'bnm-ai']); }} className={cn('rounded-sm px-3 py-1.5 text-sm font-medium transition', track === 'ai' ? 'bg-navy text-cream' : 'text-muted hover:text-navy dark:hover:text-cream')}>AI Governance</button>
+      </div>
 
       {/* Overall coverage */}
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <Card className="p-5">
           <p className="text-xs text-muted">Frameworks tracked</p>
-          <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">{sampleFrameworks.length}</p>
+          <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">{activeFrameworks.length}</p>
         </Card>
         <Card className="p-5">
           <p className="text-xs text-muted">Average coverage</p>
-          <p className="mt-1 text-3xl font-bold text-primary-600">{Math.round(sampleFrameworks.reduce((s, f) => s + f.coverage, 0) / sampleFrameworks.length)}%</p>
+          <p className="mt-1 text-3xl font-bold text-primary-600">{Math.round(activeFrameworks.reduce((s, f) => s + f.coverage, 0) / activeFrameworks.length)}%</p>
         </Card>
         <Card className="p-5">
           <p className="text-xs text-muted">Controls met</p>
-          <p className="mt-1 text-3xl font-bold text-success-600">{sampleFrameworks.reduce((s, f) => s + f.metControls, 0)}</p>
+          <p className="mt-1 text-3xl font-bold text-success-600">{activeFrameworks.reduce((s, f) => s + f.metControls, 0)}</p>
         </Card>
       </div>
 
@@ -139,7 +169,7 @@ export function CompliancePage() {
         <CardHeader title="Framework Comparison" subtitle="Select frameworks to compare side by side" icon={<Network className="h-5 w-5" />} />
         <CardBody>
           <div className="mb-4 flex flex-wrap gap-2">
-            {sampleFrameworks.map(f => {
+            {activeFrameworks.map(f => {
               const active = compare.includes(f.id);
               return (
                 <button key={f.id} onClick={() => setCompare(c => active ? c.filter(id => id !== f.id) : [...c, f.id])} className={cn('rounded-lg px-3 py-1.5 text-xs font-medium transition', active ? 'bg-primary-600 text-white' : 'surface border border-app text-slate-600 dark:text-slate-300')}>
@@ -186,15 +216,5 @@ export function CompliancePage() {
 }
 
 function generateControls(f: Framework) {
-  const base = [
-    { id: 'A.1', name: 'Governance & Leadership', description: 'Defined ownership and direction for the programme.', status: f.coverage >= 60 ? 'met' : 'partial' as const },
-    { id: 'A.2', name: 'Risk Assessment', description: 'Identify and assess risks to objectives.', status: f.coverage >= 55 ? 'met' : 'partial' as const },
-    { id: 'A.3', name: 'Access Control', description: 'Identity, authentication and authorisation.', status: f.coverage >= 65 ? 'met' : 'partial' as const },
-    { id: 'A.4', name: 'Asset Management', description: 'Inventory and classification of assets.', status: f.coverage >= 50 ? 'met' : 'missing' as const },
-    { id: 'A.5', name: 'Incident Management', description: 'Detect, respond to and learn from incidents.', status: f.coverage >= 58 ? 'met' : 'missing' as const },
-    { id: 'A.6', name: 'Business Continuity', description: 'Resilience and recovery capabilities.', status: f.coverage >= 52 ? 'partial' : 'missing' as const },
-    { id: 'A.7', name: 'Supplier Relationships', description: 'Third-party risk management.', status: f.coverage >= 48 ? 'partial' : 'missing' as const },
-    { id: 'A.8', name: 'Awareness & Training', description: 'Ongoing staff security awareness.', status: f.coverage >= 56 ? 'met' : 'partial' as const },
-  ];
-  return base;
+  return generateRealControls(f.id, f.coverage);
 }

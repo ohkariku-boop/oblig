@@ -16,7 +16,7 @@ import { PageHeader } from '@/components/ui/Feedback';
 import {
   DATA, TOTAL_ITEMS, MILESTONES, MILESTONE_NOTES, type Milestone,
   itemKey, checkedCount, bandFor, sectionScores, overallPct, recommendations,
-  type ChecklistState,
+  marketCoverage, ALL_MARKETS, MARKET_LABELS, type ChecklistState,
 } from '@/data/assessment';
 import { exportScorecardPdf } from '@/utils/exportPdf';
 import { cn } from '@/utils/cn';
@@ -44,6 +44,7 @@ export function AssessmentPage() {
   const band = useMemo(() => bandFor(count), [count]);
   const scores = useMemo(() => sectionScores(state), [state]);
   const recs = useMemo(() => recommendations(state), [state]);
+  const coverage = useMemo(() => marketCoverage(state), [state]);
   const pct = overallPct(state);
 
   function toggleItem(key: string, checked: boolean) {
@@ -100,6 +101,28 @@ export function AssessmentPage() {
             {MILESTONES.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
           </select>
           <div className="mt-2.5 text-[13px] text-ink">{MILESTONE_NOTES[milestone]}</div>
+        </div>
+      </div>
+
+      {/* Market readiness — the piece that makes this different from a generic checklist */}
+      <div className="card mb-8 px-5 py-5">
+        <div className="mb-3 flex items-center justify-between">
+          <p className="mono-label">Market Readiness</p>
+          <Link to="/app/compliance" className="text-xs font-medium text-red hover:underline">View full framework mapping →</Link>
+        </div>
+        <p className="mb-4 text-[13px] text-ink">Each market maps to a real regulator framework. Coverage updates live as you check items above.</p>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {ALL_MARKETS.map(code => {
+            const c = coverage[code];
+            return (
+              <div key={code} className="rounded-sm border border-app surface p-3">
+                <p className="text-xs font-medium text-navy dark:text-cream">{MARKET_LABELS[code]}</p>
+                <p className="mt-1 text-2xl font-bold text-navy dark:text-cream">{c.pct}%</p>
+                <p className="text-[11px] text-ink">{c.checked}/{c.total} applicable items</p>
+                <div className="mt-2"><ProgressBar value={c.pct} /></div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

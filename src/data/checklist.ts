@@ -1,9 +1,16 @@
-export type Milestone = '30min' | 'first-hire' | 'first-customer' | 'growth';
+export type Milestone = 'quick-wins' | 'sg-my' | 'first-fi' | 'expansion';
+export type MarketCode = 'SG' | 'MY' | 'ID' | 'PH' | 'KH' | 'JP' | 'KR' | 'TW';
+export const ALL_MARKETS: MarketCode[] = ['SG', 'MY', 'ID', 'PH', 'KH', 'JP', 'KR', 'TW'];
+export const MARKET_LABELS: Record<MarketCode, string> = {
+  SG: '🇸🇬 Singapore', MY: '🇲🇾 Malaysia', ID: '🇮🇩 Indonesia', PH: '🇵🇭 Philippines',
+  KH: '🇰🇭 Cambodia', JP: '🇯🇵 Japan', KR: '🇰🇷 South Korea', TW: '🇹🇼 Taiwan',
+};
 
 export interface ChecklistItem {
   t: string;   // title
   w: string;   // why
   m: Milestone[]; // milestone relevance
+  c: MarketCode[]; // which markets this item's citation actually applies to
 }
 
 export interface ChecklistSection {
@@ -14,102 +21,113 @@ export interface ChecklistSection {
 }
 
 export const MILESTONES: { value: Milestone; label: string }[] = [
-  { value: '30min', label: '30-Minute Setup Sprint' },
-  { value: 'first-hire', label: 'Before your first hire' },
-  { value: 'first-customer', label: 'Before your first paying customer' },
-  { value: 'growth', label: 'Growing team & data' },
+  { value: 'quick-wins', label: 'Quick Wins Before Your First RFP' },
+  { value: 'sg-my', label: 'Before Selling into Singapore/Malaysia' },
+  { value: 'first-fi', label: 'Before Your First Regulated FI Customer' },
+  { value: 'expansion', label: 'Expanding to ID/PH/JP/KR/TW/KH' },
 ];
 
 export const MILESTONE_NOTES: Record<Milestone | 'none', string> = {
-  none: 'The full checklist. Work through it in any order — your progress saves in this browser.',
-  '30min': 'Just 30 minutes today gets the highest-leverage foundations in place. Items for this stage are highlighted below.',
-  'first-hire': "You're about to bring someone in. Lock down access, devices and acceptable use before day one.",
-  'first-customer': "You'll be handling someone else's data or money. Prove you can protect it before they ask.",
-  growth: 'Your team and data footprint are growing. These items keep governance from becoming a tax later.',
+  none: 'The full vendor-risk readiness checklist, grounded in what MAS, BNM, OJK, BSP, NBC, FSA and FSC actually ask for. Your progress saves in this browser.',
+  'quick-wins': 'The handful of items every one of the 8 markets converges on. Get these in place before you send out a single vendor questionnaire response.',
+  'sg-my': "Singapore and Malaysia are usually the first markets fintechs sell into, and both regulators (MAS, BNM) are actively rewriting their frameworks in 2026. Being mapped early is a real advantage here.",
+  'first-fi': "A regulated bank, insurer or payment institution is about to run a formal vendor security assessment on you. This is what they'll actually ask for.",
+  expansion: 'Each additional market has its own regulator, its own data residency rules, and its own subcontractor-consent requirements. Treat each as a distinct control pack, not a copy-paste of SG/MY.',
 };
 
 export const DATA: ChecklistSection[] = [
   {
-    id: 'access',
-    name: 'Access & Identity',
-    tag: 'who can get in',
+    id: 'board-oversight',
+    name: 'Board & Senior Management Oversight',
+    tag: 'the domain every regulator checks first',
     items: [
-      { t: 'Multi-factor authentication (MFA) on every admin and email account', w: 'Stolen passwords cause the majority of breaches. MFA stops most of them cold.', m: ['30min'] },
-      { t: 'A shared password manager (1Password, Bitwarden) — no passwords in chat or docs', w: 'Reused and shared-in-Slack passwords are how startups get popped. A manager fixes this in 20 minutes.', m: ['30min'] },
-      { t: 'Remove access when someone leaves — a written offboarding checklist', w: 'Forgotten accounts are a silent risk. A checklist means nothing gets missed under stress.', m: ['first-hire'] },
-      { t: 'Review who has admin rights every quarter', w: 'Admin sprawl happens fast. A 5-minute review prevents a former contractor from haunting you.', m: ['growth'] },
-      { t: 'Use single sign-on (SSO) where available', w: 'One identity to provision and revoke beats chasing ten dashboards.', m: ['growth'] },
+      { t: 'A named executive owner for technology risk, not just "the CTO handles it"', w: 'Every one of the 8 markets expects a clear accountability line to senior management or the board, not an informal arrangement.', m: ['quick-wins', 'first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'A written risk appetite statement for technology and vendor risk', w: 'MAS TRM Domain 1 and BNM RMiT governance requirements both expect this in writing, not verbally understood.', m: ['sg-my'], c: ['SG','MY'] },
+      { t: 'Regular (at least quarterly) risk reporting to leadership', w: 'Regulators across the region want to see this is a standing agenda item, not a once-a-year fire drill before an audit.', m: ['first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'A designated CISO-level owner, even if it is a fractional or part-time role', w: 'BNM RMiT explicitly expects designated CISO-level ownership; several other markets ask for the equivalent in practice.', m: ['expansion'], c: ['MY'] },
     ],
   },
   {
-    id: 'devices',
-    name: 'Devices & Endpoint',
-    tag: 'what they log in from',
+    id: 'vendor-due-diligence',
+    name: 'Vendor Due Diligence & Onboarding',
+    tag: 'what your buyer checks before signing',
     items: [
-      { t: 'Full-disk encryption on every laptop (FileVault / BitLocker)', w: 'A lost laptop with customer data is a breach. Encryption makes it a non-event.', m: ['30min'] },
-      { t: 'Remote lock/wipe enrolled (Find My, MDM)', w: 'If a device is stolen you want to act in minutes, not after a meeting.', m: ['first-hire'] },
-      { t: 'Automatic screen lock after 5 minutes', w: 'The cheapest control there is. Stops shoulder-surfing in cafes and offices.', m: ['30min'] },
-      { t: 'A mobile device management (MDM) tool for team laptops', w: 'You cannot enforce security on devices you cannot see. MDM gives you that visibility.', m: ['growth'] },
-      { t: 'Keep operating systems and browsers auto-updating', w: 'Most exploits target old, patched software. Auto-updates close the door for you.', m: ['30min'] },
+      { t: 'A documented due-diligence process you run before onboarding your own vendors', w: 'Regulated FIs will ask how you vet your own supply chain, since their exposure runs through you to your vendors too.', m: ['first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'Security evidence ready to hand over on request (not built from scratch when asked)', w: 'A vendor who can produce evidence within a day closes deals faster than one who needs three weeks to assemble it.', m: ['quick-wins'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'A materiality test for your own outsourcing arrangements', w: "BSP Circular 1137 and Taiwan's FSC framework both classify arrangements as material or non-material, knowing where you sit shapes how deep the questionnaire goes.", m: ['expansion'], c: ['PH','TW'] },
+      { t: 'Secure SDLC practices documented (secure coding, change approval, testing)', w: "This is explicitly domain 3 of MAS TRM and shows up in nearly every market's vendor questionnaire in some form.", m: ['sg-my'], c: ['SG'] },
     ],
   },
   {
-    id: 'data',
-    name: 'Data & Backups',
-    tag: 'what you stand to lose',
+    id: 'ongoing-monitoring',
+    name: 'Ongoing Vendor & Technology Monitoring',
+    tag: 'proving it did not stop after onboarding',
     items: [
-      { t: 'Know where your customer data actually lives (SaaS, cloud, laptops)', w: 'You cannot protect what you have not located. This one list unlocks everything else.', m: ['30min'] },
-      { t: 'Backups running automatically, in a separate account/region', w: 'Ransomware and accidental deletion happen. A backup that is not tested is not a backup.', m: ['30min'] },
-      { t: 'Test a restore at least once — actually recover a file', w: 'Backups fail silently. The only way to know they work is to use one.', m: ['first-customer'] },
-      { t: 'A simple data-classification scheme: Public / Internal / Confidential', w: 'Not everything needs the same protection. Three buckets your team can actually remember.', m: ['first-customer'] },
-      { t: 'Encrypt backups at rest', w: 'A backup is a second copy of your crown jewels. It should not be readable by anyone who finds it.', m: ['growth'] },
+      { t: 'A cadence for re-assessing your own security posture (not just at signup)', w: 'Every one of the 8 frameworks distinguishes onboarding due diligence from continuous monitoring, regulators explicitly check for the second one.', m: ['first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'Vulnerability management and patching cadence documented', w: "Part of MAS TRM's cybersecurity controls domain and echoed in BNM RMiT and FSA's guidelines.", m: ['sg-my'], c: ['SG','MY','JP'] },
+      { t: 'Annual penetration testing, or a credible plan to get there', w: 'Explicitly named as a mandatory baseline control under BNM RMiT; increasingly expected elsewhere too.', m: ['expansion'], c: ['MY'] },
+      { t: 'SIEM or equivalent logging with a defined retention period', w: "BNM RMiT specifies 3-year log retention as a baseline, a concrete, checkable number a buyer may ask for directly.", m: ['expansion'], c: ['MY'] },
     ],
   },
   {
-    id: 'apps',
-    name: 'Applications & Code',
-    tag: 'what you build and buy',
+    id: 'subcontractor',
+    name: 'Subcontractor & Sub-Processor Visibility',
+    tag: 'the question most vendors get caught flat on',
     items: [
-      { t: 'Inventory of every SaaS tool in use — who pays, who owns, what data', w: 'Shadow IT is how data leaks. A quarterly spreadsheet catches the drift.', m: ['30min'] },
-      { t: 'Separate production and development environments', w: 'Testing in prod is how customer data gets exposed. Keep them apart.', m: ['first-customer'] },
-      { t: 'Secrets and API keys in a vault, never in code or repos', w: 'A leaked key in a public repo can drain an account in minutes.', m: ['30min'] },
-      { t: 'Dependency scanning on your codebase (Dependabot, Snyk)', w: "You ship other people's code. Scanning tells you when a library you use has a hole.", m: ['growth'] },
-      { t: 'A documented change process — even a lightweight one', w: 'Unreviewed changes cause outages and breaches. A PR review is a control.', m: ['growth'] },
+      { t: 'A current list of your own subcontractors/sub-processors handling customer data', w: 'Under MAS Notices 658/1121, banks must do due diligence on your subcontractors too, not just you directly.', m: ['sg-my'], c: ['SG'] },
+      { t: 'A process to get customer consent before subcontracting work that touches their data', w: 'Explicitly required under MAS outsourcing notices when subcontracting discloses customer information.', m: ['first-fi'], c: ['SG'] },
+      { t: 'Written consent from your own institutional customers before adding new subcontractors', w: "Taiwan's FSC framework is the strictest on this point regionally, prior written consent, not just notification.", m: ['expansion'], c: ['TW'] },
+      { t: 'Subcontracting terms and scope spelled out explicitly in vendor contracts', w: 'A generic "vendor may subcontract" clause will not satisfy Taiwanese or Singaporean institutional buyers, they expect scope and conditions in writing.', m: ['expansion'], c: ['TW','SG'] },
     ],
   },
   {
-    id: 'people',
-    name: 'People & Policy',
-    tag: 'the rules of the road',
+    id: 'data-residency',
+    name: 'Data Residency & Localization',
+    tag: 'non-negotiable in several markets, not a nice-to-have',
     items: [
-      { t: 'A simple Acceptable Use Policy signed at onboarding', w: 'Sets expectations day one. Without it you cannot enforce much later.', m: ['first-hire'] },
-      { t: 'Security awareness basics in onboarding (phishing, passwords)', w: 'People are the attack surface. A 20-minute talk prevents most incidents.', m: ['first-hire'] },
-      { t: 'A named person accountable for IT/governance', w: 'If everyone owns it, no one does. Name one human, even if it is you.', m: ['30min'] },
-      { t: 'A written incident response plan — who calls whom, what to do first', w: 'In a crisis you will not invent a plan. You will follow the one you wrote.', m: ['first-customer'] },
-      { t: 'Run a phishing simulation once a quarter', w: 'Training rots. A fake phish tells you who actually clicks.', m: ['growth'] },
+      { t: 'Know exactly where your customer data physically lives, by market', w: 'Cambodia and parts of Indonesia (rural banks, FSTI providers) have hard in-country data residency requirements, not a preference, a rule.', m: ['expansion'], c: ['KH','ID'] },
+      { t: 'A cloud security posture story ready for Singapore-specific questions', w: 'MAS TRM has cloud-specific requirements: data residency, the shared-responsibility model, and cloud security posture management all get asked about.', m: ['sg-my'], c: ['SG'] },
+      { t: 'A documented answer for "can this data leave the country" per market you sell into', w: 'This single question stops more regional deals than any other technical control, know your answer before it is asked live on a call.', m: ['first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
     ],
   },
   {
-    id: 'vendors',
-    name: 'Vendors & Third Parties',
-    tag: 'who you trust',
+    id: 'incident-notification',
+    name: 'Incident Notification & Response',
+    tag: 'the clock starts the moment something breaks',
     items: [
-      { t: 'A signed data processing agreement (DPA) with any vendor handling customer data', w: 'A contract is how you pass your obligations on. Without it, you keep the liability.', m: ['first-customer'] },
-      { t: 'Basic vendor due diligence before onboarding (SOC2 / ISO 27001 / security page)', w: "You inherit your vendor's risks. A 10-minute check is cheap insurance.", m: ['first-customer'] },
-      { t: 'A list of vendors with access to production data, reviewed annually', w: 'Access accumulates. A yearly review removes the ones who no longer need it.', m: ['growth'] },
-      { t: 'Require MFA on vendor accounts too', w: 'A vendor breach is your breach. Their front door matters as much as yours.', m: ['growth'] },
+      { t: 'A written incident response plan with defined roles', w: "Every market expects this in some form; Japan's FSA guidelines break it into detection, response and recovery as separate scored areas.", m: ['sg-my'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'Know your actual notification deadlines by market, not a generic "we will tell you"', w: 'Singapore requires 1-hour notification to MAS for severe incidents, with a 14-day root-cause report, a number worth having memorized, not looked up mid-incident.', m: ['first-fi'], c: ['SG'] },
+      { t: 'A tested (not just written) communication chain for notifying affected institutional customers', w: 'A plan that has never been run through a tabletop exercise usually falls apart on the first real incident.', m: ['expansion'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
     ],
   },
   {
-    id: 'continuity',
-    name: 'Continuity & Compliance',
-    tag: 'keeping the lights on',
+    id: 'concentration-risk',
+    name: 'Concentration Risk & Exit Planning',
+    tag: 'what happens if your buyer has to walk away',
     items: [
-      { t: 'Document your critical services and their owners', w: 'When something breaks at 2am you need to know what matters most and who owns it.', m: ['first-customer'] },
-      { t: 'Recovery time objective — how fast must you be back online?', w: 'Every system has a tolerance. Writing it down turns panic into a runbook.', m: ['growth'] },
-      { t: 'Know which regulations apply to you (PDPA, GDPR, SOC 2) and why', w: 'Compliance is cheaper when you plan for it than when a customer demands it.', m: ['first-customer'] },
-      { t: 'Annual review of this checklist with the team', w: 'Governance drifts. A yearly hour keeps it honest.', m: ['growth'] },
-      { t: 'Keep an evidence folder (policies, screenshots, certificates)', w: 'When a customer or auditor asks, you have it ready instead of scrambling.', m: ['growth'] },
+      { t: 'An exit/offboarding plan your institutional customers can actually see', w: "MAS's emerging Third-Party Risk Management Guidelines (TPRMG, in consultation as of March 2026) explicitly extend into concentration risk and exit planning, this is where the regulatory direction is heading, not a static requirement.", m: ['expansion'], c: ['SG'] },
+      { t: 'Data portability and handover process documented for contract termination', w: 'A buyer needs to know they are not locked in before they will commit, this is as much a sales enabler as a compliance one.', m: ['first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+    ],
+  },
+  {
+    id: 'outsourcing-register',
+    name: 'Outsourcing Register & Documentation',
+    tag: 'be ready to be the entry in someone else\'s spreadsheet',
+    items: [
+      { t: 'A one-page summary of your service that maps cleanly to a bank outsourcing register', w: 'Singapore banks must maintain and submit an outsourcing register to MAS, the easier you make it for them to describe you accurately, the faster you get approved.', m: ['sg-my'], c: ['SG'] },
+      { t: 'Contract language ready that covers audit rights and inspection access', w: "Taiwan's Article 10 explicitly allows the FSC and central bank to demand information or inspect outsourced arrangements at any time, buyers there will check your contract supports this.", m: ['expansion'], c: ['TW'] },
+      { t: 'Evidence folder kept current: certificates, audit reports, policies, screenshots', w: 'When a buyer or regulator asks, you produce it in minutes instead of assembling it from scratch under deadline pressure.', m: ['quick-wins'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+    ],
+  },
+  {
+    id: 'ai-governance',
+    name: 'AI Governance Readiness',
+    tag: 'the newest, fastest-moving track across every market',
+    items: [
+      { t: 'A documented answer for what AI/ML you use in your product, and where', w: "Every market's AI governance track starts here, you cannot be assessed against a framework if you cannot first state what you are doing.", m: ['quick-wins'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'Fairness, ethics, accountability and transparency (FEAT) principles considered for any customer-facing AI', w: "Singapore's MAS AI guidelines (in consultation) are built directly around FEAT, worth getting ahead of before it is finalized.", m: ['expansion'], c: ['SG'] },
+      { t: 'Human oversight defined for any AI-driven decision that affects a customer', w: "South Korea's AI Framework Act is binding for high-impact AI use cases specifically, 'the model decided' is not a defensible answer there.", m: ['expansion'], c: ['KR'] },
+      { t: 'A lifecycle view of your AI systems: development, validation, deployment, monitoring', w: "Indonesia's OJK AI governance framework is explicitly structured as an 8-stage lifecycle, thinking in stages now saves a rebuild later.", m: ['expansion'], c: ['ID'] },
     ],
   },
 ];
