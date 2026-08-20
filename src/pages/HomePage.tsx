@@ -19,7 +19,7 @@ export function HomePage() {
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b border-app glass">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Logo />
+          <Link to="/"><Logo /></Link>
           <nav className="hidden items-center gap-8 md:flex">
             <Link to="/pricing" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition">Pricing</Link>
             <a href="#modules" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition">Modules</a>
@@ -238,7 +238,7 @@ export function HomePage() {
       <footer className="border-t border-app surface">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <Logo />
+            <Link to="/"><Logo /></Link>
             <div className="flex items-center gap-6 text-sm text-muted">
               <a href="#features" className="hover:text-slate-900 dark:hover:text-white transition">Platform</a>
               <a href="#modules" className="hover:text-slate-900 dark:hover:text-white transition">Modules</a>
