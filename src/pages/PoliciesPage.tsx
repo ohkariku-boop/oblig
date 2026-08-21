@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileText, Plus, Search, Sparkles, FileDown, Edit3, History,
-  CheckCircle2, Clock, AlertCircle, FileEdit, type LucideIcon,
+  CheckCircle2, Clock, AlertCircle, FileEdit, Trash2, type LucideIcon,
 } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -10,6 +10,8 @@ import { PageHeader, EmptyState, ComingSoon } from '@/components/ui/Feedback';
 import { samplePolicies } from '@/data/sampleData';
 import type { PolicyDoc } from '@/types';
 import { cn, formatDate } from '@/utils/cn';
+import { useAuth } from '@/lib/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 const policyTemplates: { title: string; type: string; icon: LucideIcon; desc: string }[] = [
   { title: 'Information Security Policy', type: 'Security', icon: FileText, desc: 'Core security responsibilities and controls.' },
@@ -32,18 +34,69 @@ const statusIcon: Record<string, typeof CheckCircle2> = {
 };
 
 export function PoliciesPage() {
+  const { user } = useAuth();
+  const [userPolicies, setUserPolicies] = useState<PolicyDoc[]>([]);
   const [filter, setFilter] = useState<'all' | 'draft' | 'review' | 'approved'>('all');
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<PolicyDoc | null>(null);
   const [showGenerator, setShowGenerator] = useState(false);
 
-  const filtered = samplePolicies.filter(p =>
+  function mapRow(row: any): PolicyDoc {
+    return {
+      id: row.id, title: row.title, type: row.framework_ref ?? 'General',
+      status: row.status, version: '1.0', updatedAt: row.updated_at,
+      owner: user?.email ?? 'You', summary: (row.content ?? '').slice(0, 140),
+      content: row.content ?? '',
+    };
+  }
+
+  useEffect(() => {
+    if (!user || !supabase) { setUserPolicies([]); return; }
+    supabase.from('policies').select('*').eq('user_id', user.id).order('updated_at', { ascending: false })
+      .then(({ data }) => { if (data) setUserPolicies(data.map(mapRow)); });
+  }, [user]);
+
+  async function generateFromTemplate(template: { title: string; desc: string }) {
+    if (!user || !supabase) return;
+    const draftContent = `1. Purpose\n${template.desc}\n\n2. Scope\nThis policy applies to all employees, contractors and third parties who access company systems or data.\n\n3. Responsibilities\nLeadership approves and reviews this policy annually. IT implements and monitors technical controls. All staff comply with the requirements below.\n\n4. Requirements\n[Edit this section to add your organisation's specific requirements.]\n\n5. Review\nThis policy is reviewed at least annually or following a significant incident.`;
+    const { data, error } = await supabase.from('policies').insert({
+      user_id: user.id, title: template.title, content: draftContent, status: 'draft',
+    }).select().single();
+    if (error || !data) return;
+    const newPolicy = mapRow(data);
+    setUserPolicies(prev => [newPolicy, ...prev]);
+    setShowGenerator(false);
+    setSelected(newPolicy);
+  }
+
+  async function saveContent(id: string, content: string) {
+    if (!supabase) return;
+    await supabase.from('policies').update({ content, updated_at: new Date().toISOString() }).eq('id', id);
+    setUserPolicies(prev => prev.map(p => p.id === id ? { ...p, content, summary: content.slice(0, 140) } : p));
+  }
+
+  async function deletePolicy(id: string) {
+    if (!supabase) return;
+    await supabase.from('policies').delete().eq('id', id);
+    setUserPolicies(prev => prev.filter(p => p.id !== id));
+    setSelected(null);
+  }
+
+  const allPolicies = [...userPolicies, ...samplePolicies];
+  const filtered = allPolicies.filter(p =>
     (filter === 'all' || p.status === filter) &&
     p.title.toLowerCase().includes(query.toLowerCase()),
   );
 
   if (selected) {
-    return <PolicyEditor policy={selected} onBack={() => setSelected(null)} />;
+    return (
+      <PolicyEditor
+        policy={selected}
+        onBack={() => setSelected(null)}
+        onSave={userPolicies.some(p => p.id === selected.id) ? (content) => saveContent(selected.id, content) : undefined}
+        onDelete={userPolicies.some(p => p.id === selected.id) ? () => deletePolicy(selected.id) : undefined}
+      />
+    );
   }
 
   return (
@@ -62,9 +115,9 @@ export function PoliciesPage() {
       {/* Status summary */}
       <div className="mb-6 grid gap-4 sm:grid-cols-4">
         {[
-          { label: 'Approved', value: samplePolicies.filter(p => p.status === 'approved').length, tone: 'text-success-600' },
-          { label: 'In review', value: samplePolicies.filter(p => p.status === 'review').length, tone: 'text-warning-600' },
-          { label: 'Drafts', value: samplePolicies.filter(p => p.status === 'draft').length, tone: 'text-slate-600' },
+          { label: 'Approved', value: allPolicies.filter(p => p.status === 'approved').length, tone: 'text-success-600' },
+          { label: 'In review', value: allPolicies.filter(p => p.status === 'review').length, tone: 'text-warning-600' },
+          { label: 'Drafts', value: allPolicies.filter(p => p.status === 'draft').length, tone: 'text-slate-600' },
           { label: 'Coverage', value: '48%', tone: 'text-primary-600' },
         ].map(s => (
           <Card key={s.label} className="p-4">
@@ -138,7 +191,7 @@ export function PoliciesPage() {
                 <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{t.title}</p>
                 <p className="truncate text-xs text-muted">{t.desc}</p>
               </div>
-              <button className="btn-ghost !p-1.5" aria-label={`Generate ${t.title}`}><Sparkles className="h-4 w-4 text-primary-500" /></button>
+              <button onClick={() => generateFromTemplate(t)} disabled={!user} title={!user ? 'Sign in to generate policies' : undefined} className="btn-ghost !p-1.5" aria-label={`Generate ${t.title}`}><Sparkles className="h-4 w-4 text-primary-500" /></button>
             </div>
           ))}
         </div>
@@ -156,7 +209,7 @@ export function PoliciesPage() {
             <p className="mt-2 text-sm text-muted">Choose a template and the AI Copilot will draft a full policy based on your governance context. Editing and export open automatically.</p>
             <div className="mt-4 max-h-72 space-y-2 overflow-y-auto">
               {policyTemplates.map(t => (
-                <button key={t.title} onClick={() => { setShowGenerator(false); }} className="flex w-full items-center gap-3 rounded-xl border border-app p-3 text-left hover:border-primary-300 transition">
+                <button key={t.title} onClick={() => generateFromTemplate(t)} className="flex w-full items-center gap-3 rounded-xl border border-app p-3 text-left hover:border-primary-300 transition">
                   <t.icon className="h-4 w-4 text-primary-500" />
                   <span className="text-sm font-medium text-slate-800 dark:text-slate-100">{t.title}</span>
                 </button>
@@ -170,7 +223,11 @@ export function PoliciesPage() {
   );
 }
 
-function PolicyEditor({ policy, onBack }: { policy: PolicyDoc; onBack: () => void }) {
+function PolicyEditor({ policy, onBack, onSave, onDelete }: { policy: PolicyDoc; onBack: () => void; onSave?: (content: string) => void; onDelete?: () => void }) {
+  const isReal = !!onSave;
+  const [draft, setDraft] = useState(policy.content ?? '');
+  const [saved, setSaved] = useState(true);
+
   return (
     <div>
       <PageHeader
@@ -179,6 +236,7 @@ function PolicyEditor({ policy, onBack }: { policy: PolicyDoc; onBack: () => voi
         action={
           <>
             <button onClick={onBack} className="btn-secondary">Back</button>
+            {onDelete && <button onClick={onDelete} className="btn-secondary text-error-600"><Trash2 className="h-4 w-4" /> Delete</button>}
             <button className="btn-secondary"><FileDown className="h-4 w-4" /> Export Word</button>
             <button className="btn-primary"><FileDown className="h-4 w-4" /> Export PDF</button>
           </>
@@ -188,22 +246,43 @@ function PolicyEditor({ policy, onBack }: { policy: PolicyDoc; onBack: () => voi
         <Card>
           <CardHeader title="Document" icon={<FileEdit className="h-5 w-5" />} action={<Badge variant={statusVariant[policy.status]}>{policy.status}</Badge>} />
           <CardBody>
-            <div className="prose prose-sm max-w-none dark:prose-invert">
-              <h2>1. Purpose</h2>
-              <p>{policy.summary}</p>
-              <h2>2. Scope</h2>
-              <p>This policy applies to all employees, contractors and third parties who access company systems or data.</p>
-              <h2>3. Responsibilities</h2>
-              <ul>
-                <li>Leadership: approve and review this policy annually.</li>
-                <li>IT: implement and monitor technical controls.</li>
-                <li>All staff: comply with the requirements below.</li>
-              </ul>
-              <h2>4. Requirements</h2>
-              <p>Detailed control requirements are defined in the supporting procedures. Edit this section to tailor it to your organisation.</p>
-              <h2>5. Review</h2>
-              <p>This policy is reviewed at least annually or following a significant incident.</p>
-            </div>
+            {isReal ? (
+              <div>
+                <textarea
+                  value={draft}
+                  onChange={e => { setDraft(e.target.value); setSaved(false); }}
+                  rows={18}
+                  className="input w-full font-mono text-sm leading-relaxed"
+                />
+                <div className="mt-3 flex items-center gap-3">
+                  <button
+                    onClick={() => { onSave?.(draft); setSaved(true); }}
+                    disabled={saved}
+                    className="btn-primary"
+                  >
+                    Save changes
+                  </button>
+                  {saved && <span className="text-xs text-success-600">Saved</span>}
+                </div>
+              </div>
+            ) : (
+              <div className="prose prose-sm max-w-none dark:prose-invert">
+                <h2>1. Purpose</h2>
+                <p>{policy.summary}</p>
+                <h2>2. Scope</h2>
+                <p>This policy applies to all employees, contractors and third parties who access company systems or data.</p>
+                <h2>3. Responsibilities</h2>
+                <ul>
+                  <li>Leadership: approve and review this policy annually.</li>
+                  <li>IT: implement and monitor technical controls.</li>
+                  <li>All staff: comply with the requirements below.</li>
+                </ul>
+                <h2>4. Requirements</h2>
+                <p>Detailed control requirements are defined in the supporting procedures. Edit this section to tailor it to your organisation.</p>
+                <h2>5. Review</h2>
+                <p>This policy is reviewed at least annually or following a significant incident.</p>
+              </div>
+            )}
             <div className="mt-6 rounded-xl bg-slate-50 dark:bg-slate-800/50 p-4">
               <p className="flex items-center gap-2 text-xs text-muted"><Sparkles className="h-3.5 w-3.5 text-primary-500" /> This is an AI-generated draft. Review and edit before publishing.</p>
             </div>

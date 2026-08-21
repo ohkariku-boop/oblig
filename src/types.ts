@@ -46,6 +46,7 @@ export interface PolicyDoc {
   updatedAt: string;
   owner: string;
   summary: string;
+  content?: string; // real editable body, present only for user-created policies
 }
 
 export interface EvidenceItem {

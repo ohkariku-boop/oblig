@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FolderArchive, Upload, Search, FileText, FileCheck, FileSignature,
-  Award, FileSearch, Filter, Sparkles, Download, Eye, Tag,
+  Award, FileSearch, Filter, Sparkles, Download, Eye, Tag, Trash2, X,
 } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -10,6 +10,8 @@ import { PageHeader, EmptyState } from '@/components/ui/Feedback';
 import { sampleEvidence } from '@/data/sampleData';
 import type { EvidenceItem } from '@/types';
 import { cn, formatDate } from '@/utils/cn';
+import { useAuth } from '@/lib/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 const typeIcon: Record<string, typeof FileText> = {
   policy: FileText, screenshot: FileSearch, contract: FileSignature, audit: FileCheck, certificate: Award, report: FileText,
@@ -19,31 +21,70 @@ const typeColor: Record<string, string> = {
 };
 
 export function EvidencePage() {
+  const { user } = useAuth();
+  const [userEvidence, setUserEvidence] = useState<EvidenceItem[]>([]);
+  const [showAdd, setShowAdd] = useState(false);
   const [query, setQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | EvidenceItem['type']>('all');
   const [selected, setSelected] = useState<EvidenceItem | null>(null);
 
+  useEffect(() => {
+    if (!user || !supabase) { setUserEvidence([]); return; }
+    supabase.from('evidence').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (!data) return;
+        setUserEvidence(data.map((r): EvidenceItem => ({
+          id: r.id, name: r.title, type: r.type ?? 'policy', size: '—',
+          uploadedAt: r.created_at, tags: r.framework_ref ? [r.framework_ref] : [],
+        })));
+      });
+  }, [user]);
+
+  async function addEvidence(input: { title: string; description: string; type: EvidenceItem['type']; frameworkRef: string }) {
+    if (!user || !supabase) return;
+    const { data, error } = await supabase.from('evidence').insert({
+      user_id: user.id, title: input.title, description: input.description,
+      type: input.type, framework_ref: input.frameworkRef || null,
+    }).select().single();
+    if (error || !data) return;
+    setUserEvidence(prev => [{
+      id: data.id, name: data.title, type: data.type ?? 'policy', size: '—',
+      uploadedAt: data.created_at, tags: data.framework_ref ? [data.framework_ref] : [],
+    }, ...prev]);
+    setShowAdd(false);
+  }
+
+  async function deleteEvidence(id: string) {
+    if (!supabase) return;
+    await supabase.from('evidence').delete().eq('id', id);
+    setUserEvidence(prev => prev.filter(e => e.id !== id));
+    setSelected(null);
+  }
+
+  const allEvidence = [...userEvidence, ...sampleEvidence];
   const types: ('all' | EvidenceItem['type'])[] = ['all', 'policy', 'screenshot', 'contract', 'audit', 'certificate', 'report'];
-  const filtered = sampleEvidence.filter(e =>
+  const filtered = allEvidence.filter(e =>
     (typeFilter === 'all' || e.type === typeFilter) &&
     (e.name.toLowerCase().includes(query.toLowerCase()) || e.tags.some(t => t.includes(query.toLowerCase()))),
   );
+
+  if (showAdd) return <AddEvidenceForm onCancel={() => setShowAdd(false)} onSave={addEvidence} />;
 
   return (
     <div>
       <PageHeader
         title="Evidence Library"
         description="A searchable repository for policies, contracts, audits and certificates."
-        action={<button className="btn-primary"><Upload className="h-4 w-4" /> Upload Evidence</button>}
+        action={<button onClick={() => setShowAdd(true)} className="btn-primary" disabled={!user} title={!user ? 'Sign in to add evidence' : undefined}><Upload className="h-4 w-4" /> Upload Evidence</button>}
       />
 
       {/* Summary */}
       <div className="mb-6 grid gap-4 sm:grid-cols-4">
         {[
-          { label: 'Total documents', value: sampleEvidence.length },
-          { label: 'Policies', value: sampleEvidence.filter(e => e.type === 'policy').length },
-          { label: 'Certificates', value: sampleEvidence.filter(e => e.type === 'certificate').length },
-          { label: 'Audits & reports', value: sampleEvidence.filter(e => e.type === 'audit' || e.type === 'report').length },
+          { label: 'Total documents', value: allEvidence.length },
+          { label: 'Policies', value: allEvidence.filter(e => e.type === 'policy').length },
+          { label: 'Certificates', value: allEvidence.filter(e => e.type === 'certificate').length },
+          { label: 'Audits & reports', value: allEvidence.filter(e => e.type === 'audit' || e.type === 'report').length },
         ].map(s => (
           <Card key={s.label} className="p-4">
             <p className="text-2xl font-bold text-slate-900 dark:text-white">{s.value}</p>
@@ -68,13 +109,13 @@ export function EvidencePage() {
       </div>
 
       {/* Upload dropzone */}
-      <Card className="mb-6 border-dashed">
+      <Card className="mb-6 cursor-pointer border-dashed" onClick={() => user && setShowAdd(true)}>
         <CardBody className="flex flex-col items-center justify-center py-8 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 dark:bg-primary-900/30 dark:text-primary-300">
             <Upload className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-medium text-slate-800 dark:text-slate-100">Drag and drop files here, or click to browse</p>
-          <p className="mt-1 text-xs text-muted">PDF, PNG, JPG, DOCX up to 25 MB. AI categorises them automatically.</p>
+          <p className="mt-3 text-sm font-medium text-slate-800 dark:text-slate-100">Log a piece of evidence</p>
+          <p className="mt-1 text-xs text-muted">{user ? 'Click to record a title, type, and note (file upload not yet available).' : 'Sign in to add evidence to your account.'}</p>
         </CardBody>
       </Card>
 
@@ -114,7 +155,7 @@ export function EvidencePage() {
       <Card className="mt-6">
         <CardBody className="flex items-center gap-3">
           <Sparkles className="h-5 w-5 text-primary-500 shrink-0" />
-          <p className="text-sm text-muted">AI auto-categorisation and tagging will be applied to new uploads. Existing items can be re-tagged in bulk soon.</p>
+          <p className="text-sm text-muted">Evidence entries are logged manually for now (title, type, framework reference). Real file storage and AI auto-categorisation are on the roadmap.</p>
         </CardBody>
       </Card>
 
@@ -136,16 +177,60 @@ export function EvidencePage() {
               </div>
             </div>
             <div className="mt-5 flex items-center justify-between rounded-xl bg-slate-50 dark:bg-slate-800/50 p-4">
-              <p className="text-sm text-muted">Preview not available for this file type in the demo.</p>
-              <div className="flex gap-2">
-                <button className="btn-secondary !py-2"><Eye className="h-4 w-4" /> Preview</button>
-                <button className="btn-primary !py-2"><Download className="h-4 w-4" /> Download</button>
-              </div>
+              <p className="text-sm text-muted">{userEvidence.some(e => e.id === selected.id) ? 'Logged manually — no file attached yet.' : 'Preview not available for this file type in the demo.'}</p>
+              {userEvidence.some(e => e.id === selected.id) ? (
+                <button onClick={() => deleteEvidence(selected.id)} className="btn-secondary !py-2 text-error-600"><Trash2 className="h-4 w-4" /> Delete</button>
+              ) : (
+                <div className="flex gap-2">
+                  <button className="btn-secondary !py-2"><Eye className="h-4 w-4" /> Preview</button>
+                  <button className="btn-primary !py-2"><Download className="h-4 w-4" /> Download</button>
+                </div>
+              )}
             </div>
             <button onClick={() => setSelected(null)} className="btn-secondary mt-4 w-full">Close</button>
           </Card>
         </div>
       )}
+    </div>
+  );
+}
+
+function AddEvidenceForm({ onCancel, onSave }: { onCancel: () => void; onSave: (input: { title: string; description: string; type: EvidenceItem['type']; frameworkRef: string }) => void }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [type, setType] = useState<EvidenceItem['type']>('policy');
+  const [frameworkRef, setFrameworkRef] = useState('');
+
+  return (
+    <div>
+      <PageHeader title="Log Evidence" description="Real file upload isn't available yet — this records the metadata so you have a searchable log." action={<button onClick={onCancel} className="btn-secondary"><X className="h-4 w-4" /> Cancel</button>} />
+      <Card className="max-w-xl">
+        <CardBody className="space-y-4">
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Title</label>
+            <input value={title} onChange={e => setTitle(e.target.value)} className="input w-full" placeholder="e.g. ISO 27001 certificate 2026" />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Type</label>
+            <select value={type} onChange={e => setType(e.target.value as EvidenceItem['type'])} className="input w-full">
+              {(['policy', 'screenshot', 'contract', 'audit', 'certificate', 'report'] as const).map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Note</label>
+            <textarea value={description} onChange={e => setDescription(e.target.value)} className="input w-full" rows={3} placeholder="Where the real file lives, who owns it, when it expires, etc." />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Framework reference (optional)</label>
+            <input value={frameworkRef} onChange={e => setFrameworkRef(e.target.value)} className="input w-full" placeholder="e.g. MAS TRM" />
+          </div>
+          <button disabled={!title.trim()} onClick={() => onSave({ title, description, type, frameworkRef })} className="btn-primary w-full justify-center">
+            <Upload className="h-4 w-4" /> Save Entry
+          </button>
+        </CardBody>
+      </Card>
     </div>
   );
 }
