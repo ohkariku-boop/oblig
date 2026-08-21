@@ -1,4 +1,6 @@
 import { NavLink, Link } from 'react-router-dom';
+import { useAuth, hasSupabase } from '@/lib/AuthContext';
+import { LogOut, UserCircle } from 'lucide-react';
 import {
   LayoutDashboard, ClipboardCheck, Sparkles, FileText, ShieldAlert,
   Map, Network, FolderArchive, FileBarChart, Settings, type LucideIcon,
@@ -60,7 +62,8 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           ))}
         </ul>
       </nav>
-      <div className="border-t border-app p-4">
+      <div className="border-t border-app p-4 space-y-3">
+        <AccountBadge />
         <div className="rounded-md bg-navy p-4 text-cream">
           <p className="text-sm font-semibold">Free plan</p>
           <p className="mt-1 text-xs text-white/80">Upgrade for AI policy generation and unlimited assessments.</p>
@@ -69,6 +72,26 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           </Link>
         </div>
       </div>
+    </div>
+  );
+}
+
+function AccountBadge() {
+  const { user, signOut } = useAuth();
+  if (!hasSupabase) return null;
+  if (!user) {
+    return (
+      <Link to="/login" className="flex items-center gap-2 rounded-md border border-app px-3 py-2 text-xs font-medium text-ink hover:border-navy dark:hover:border-cream transition">
+        <UserCircle className="h-4 w-4" /> Sign in to save your progress
+      </Link>
+    );
+  }
+  return (
+    <div className="flex items-center justify-between rounded-md border border-app px-3 py-2">
+      <span className="truncate text-xs font-medium text-navy dark:text-cream">{user.email}</span>
+      <button onClick={() => signOut()} title="Sign out" className="text-ink hover:text-error-600 transition">
+        <LogOut className="h-4 w-4" />
+      </button>
     </div>
   );
 }

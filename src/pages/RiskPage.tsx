@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   ShieldAlert, Plus, Search, Sparkles, Filter, ArrowUpDown,
-  Flame, AlertTriangle, CheckCircle2, Eye,
+  Flame, AlertTriangle, CheckCircle2, Eye, Trash2, X,
 } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge, ProgressBar } from '@/components/ui/Badge';
@@ -10,6 +10,8 @@ import { PageHeader, EmptyState } from '@/components/ui/Feedback';
 import { sampleRisks } from '@/data/sampleData';
 import type { Risk } from '@/types';
 import { cn, formatDate, daysUntil } from '@/utils/cn';
+import { useAuth } from '@/lib/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 const statusVariant: Record<string, 'error' | 'warning' | 'success' | 'neutral'> = {
   open: 'error', mitigating: 'warning', closed: 'success', accepted: 'neutral',
@@ -31,12 +33,54 @@ const levelColor: Record<string, string> = {
 type SortKey = 'score' | 'likelihood' | 'impact' | 'reviewDate';
 
 export function RiskPage() {
+  const { user } = useAuth();
+  const [userRisks, setUserRisks] = useState<Risk[]>([]);
+  const [showAdd, setShowAdd] = useState(false);
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'open' | 'mitigating' | 'closed' | 'accepted'>('all');
   const [sortKey, setSortKey] = useState<SortKey>('score');
   const [selected, setSelected] = useState<Risk | null>(null);
 
-  let risks = sampleRisks.filter(r =>
+  useEffect(() => {
+    if (!user || !supabase) { setUserRisks([]); return; }
+    supabase.from('risks').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (!data) return;
+        setUserRisks(data.map((r): Risk => ({
+          id: r.id, title: r.title, description: r.description ?? '',
+          likelihood: r.likelihood, impact: r.impact, owner: r.owner ?? 'Unassigned',
+          reviewDate: r.review_date ?? new Date().toISOString().slice(0, 10),
+          mitigation: r.mitigation ?? '', status: r.status,
+        })));
+      });
+  }, [user]);
+
+  async function addRisk(input: { title: string; description: string; likelihood: number; impact: number; owner: string }) {
+    if (!user || !supabase) return;
+    const { data, error } = await supabase.from('risks').insert({
+      user_id: user.id, title: input.title, description: input.description,
+      likelihood: input.likelihood, impact: input.impact, owner: input.owner || 'Unassigned',
+      status: 'open',
+    }).select().single();
+    if (error || !data) return;
+    setUserRisks(prev => [{
+      id: data.id, title: data.title, description: data.description ?? '',
+      likelihood: data.likelihood, impact: data.impact, owner: data.owner ?? 'Unassigned',
+      reviewDate: data.review_date ?? new Date().toISOString().slice(0, 10),
+      mitigation: data.mitigation ?? '', status: data.status,
+    }, ...prev]);
+    setShowAdd(false);
+  }
+
+  async function deleteRisk(id: string) {
+    if (!supabase) return;
+    await supabase.from('risks').delete().eq('id', id);
+    setUserRisks(prev => prev.filter(r => r.id !== id));
+    setSelected(null);
+  }
+
+  const allRisks = [...userRisks, ...sampleRisks];
+  let risks = allRisks.filter(r =>
     (statusFilter === 'all' || r.status === statusFilter) &&
     r.title.toLowerCase().includes(query.toLowerCase()),
   );
@@ -46,9 +90,10 @@ export function RiskPage() {
     return (b[sortKey] as number) - (a[sortKey] as number);
   });
 
-  const heatData = sampleRisks.map(r => ({ x: r.likelihood, y: r.impact, title: r.title, level: riskLevel(riskScore(r.likelihood, r.impact)) }));
+  const heatData = allRisks.map(r => ({ x: r.likelihood, y: r.impact, title: r.title, level: riskLevel(riskScore(r.likelihood, r.impact)) }));
 
-  if (selected) return <RiskDetail risk={selected} onBack={() => setSelected(null)} />;
+  if (selected) return <RiskDetail risk={selected} onBack={() => setSelected(null)} onDelete={userRisks.some(r => r.id === selected.id) ? () => deleteRisk(selected.id) : undefined} />;
+  if (showAdd) return <AddRiskForm onCancel={() => setShowAdd(false)} onSave={addRisk} />;
 
   return (
     <div>
@@ -58,7 +103,7 @@ export function RiskPage() {
         action={
           <>
             <button className="btn-secondary"><Sparkles className="h-4 w-4" /> AI Generate Risks</button>
-            <button className="btn-primary"><Plus className="h-4 w-4" /> Add Risk</button>
+            <button onClick={() => setShowAdd(true)} className="btn-primary" disabled={!user} title={!user ? 'Sign in to add your own risks' : undefined}><Plus className="h-4 w-4" /> Add Risk</button>
           </>
         }
       />
@@ -66,10 +111,10 @@ export function RiskPage() {
       {/* Summary */}
       <div className="mb-6 grid gap-4 sm:grid-cols-4">
         {[
-          { label: 'Open risks', value: sampleRisks.filter(r => r.status === 'open').length, tone: 'text-error-600' },
-          { label: 'Mitigating', value: sampleRisks.filter(r => r.status === 'mitigating').length, tone: 'text-warning-600' },
-          { label: 'Closed', value: sampleRisks.filter(r => r.status === 'closed').length, tone: 'text-success-600' },
-          { label: 'High+ critical', value: sampleRisks.filter(r => riskLevel(riskScore(r.likelihood, r.impact)) === 'high' || riskLevel(riskScore(r.likelihood, r.impact)) === 'critical').length, tone: 'text-accent-600' },
+          { label: 'Open risks', value: allRisks.filter(r => r.status === 'open').length, tone: 'text-error-600' },
+          { label: 'Mitigating', value: allRisks.filter(r => r.status === 'mitigating').length, tone: 'text-warning-600' },
+          { label: 'Closed', value: allRisks.filter(r => r.status === 'closed').length, tone: 'text-success-600' },
+          { label: 'High+ critical', value: allRisks.filter(r => riskLevel(riskScore(r.likelihood, r.impact)) === 'high' || riskLevel(riskScore(r.likelihood, r.impact)) === 'critical').length, tone: 'text-accent-600' },
         ].map(s => (
           <Card key={s.label} className="p-4">
             <p className={cn('text-2xl font-bold', s.tone)}>{s.value}</p>
@@ -151,6 +196,7 @@ export function RiskPage() {
                             <div className="flex items-center gap-2">
                               {r.aiGenerated && <Sparkles className="h-3.5 w-3.5 text-primary-500 shrink-0" />}
                               <span className="font-medium text-slate-800 dark:text-slate-100">{r.title}</span>
+                              {userRisks.some(ur => ur.id === r.id) && <Badge variant="info">Yours</Badge>}
                             </div>
                           </td>
                           <td className="px-3 py-3 text-muted">{r.likelihood}</td>
@@ -217,7 +263,7 @@ function HeatMap({ data }: { data: { x: number; y: number; title: string; level:
   );
 }
 
-function RiskDetail({ risk, onBack }: { risk: Risk; onBack: () => void }) {
+function RiskDetail({ risk, onBack, onDelete }: { risk: Risk; onBack: () => void; onDelete?: () => void }) {
   const score = riskScore(risk.likelihood, risk.impact);
   const level = riskLevel(score);
   return (
@@ -227,6 +273,7 @@ function RiskDetail({ risk, onBack }: { risk: Risk; onBack: () => void }) {
         description={risk.description}
         action={<>
           <button onClick={onBack} className="btn-secondary">Back</button>
+          {onDelete && <button onClick={onDelete} className="btn-secondary text-error-600"><Trash2 className="h-4 w-4" /> Delete</button>}
           <button className="btn-primary">Update</button>
         </>}
       />
@@ -275,6 +322,57 @@ function DetailRow({ label, value }: { label: string; value: React.ReactNode }) 
     <div className="rounded-xl border border-app p-3">
       <p className="text-xs text-muted">{label}</p>
       <p className="mt-1 text-sm font-medium text-slate-800 dark:text-slate-100">{value}</p>
+    </div>
+  );
+}
+
+function AddRiskForm({ onCancel, onSave }: { onCancel: () => void; onSave: (input: { title: string; description: string; likelihood: number; impact: number; owner: string }) => void }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [likelihood, setLikelihood] = useState(3);
+  const [impact, setImpact] = useState(3);
+  const [owner, setOwner] = useState('');
+
+  return (
+    <div>
+      <PageHeader title="Add Risk" description="This is saved to your account and will persist across sessions." action={<button onClick={onCancel} className="btn-secondary"><X className="h-4 w-4" /> Cancel</button>} />
+      <Card className="max-w-xl">
+        <CardBody className="space-y-4">
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Title</label>
+            <input value={title} onChange={e => setTitle(e.target.value)} className="input w-full" placeholder="e.g. Vendor lacks documented incident response plan" />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Description</label>
+            <textarea value={description} onChange={e => setDescription(e.target.value)} className="input w-full" rows={3} />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-ink">Likelihood (1-5)</label>
+              <select value={likelihood} onChange={e => setLikelihood(Number(e.target.value))} className="input w-full">
+                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-ink">Impact (1-5)</label>
+              <select value={impact} onChange={e => setImpact(Number(e.target.value))} className="input w-full">
+                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Owner</label>
+            <input value={owner} onChange={e => setOwner(e.target.value)} className="input w-full" placeholder="e.g. Head of Engineering" />
+          </div>
+          <button
+            disabled={!title.trim()}
+            onClick={() => onSave({ title, description, likelihood, impact, owner })}
+            className="btn-primary w-full justify-center"
+          >
+            <Plus className="h-4 w-4" /> Save Risk
+          </button>
+        </CardBody>
+      </Card>
     </div>
   );
 }

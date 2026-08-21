@@ -29,7 +29,7 @@ export function HomePage() {
             <button onClick={toggle} className="btn-ghost !p-2" aria-label="Toggle theme">
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
-            <Link to="/app" className="btn-secondary hidden sm:inline-flex">Sign in</Link>
+            <Link to="/login" className="btn-secondary hidden sm:inline-flex">Sign in</Link>
             <Link to="/app/assessment" className="btn-primary">
               Start Free Assessment <ArrowRight className="h-4 w-4" />
             </Link>
@@ -245,7 +245,11 @@ export function HomePage() {
               <Link to="/app" className="hover:text-slate-900 dark:hover:text-white transition">Dashboard</Link>
             </div>
           </div>
-          <p className="mt-8 text-center text-xs text-muted">© {new Date().getFullYear()} Oblig. Built for founders, CIOs, CTOs and IT managers.</p>
+          <p className="mt-8 text-center text-xs text-muted">
+            © {new Date().getFullYear()} Oblig. Built for founders, CIOs, CTOs and IT managers.
+            {' '}·{' '}<Link to="/terms" className="hover:underline">Terms</Link>
+            {' '}·{' '}<Link to="/privacy" className="hover:underline">Privacy</Link>
+          </p>
         </div>
       </footer>
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />

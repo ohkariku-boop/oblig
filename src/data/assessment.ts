@@ -31,7 +31,11 @@ export function itemKey(sectionId: string, idx: number): string {
 }
 
 export function checkedCount(state: ChecklistState): number {
-  return Object.values(state).filter(Boolean).length;
+  let count = 0;
+  for (const sec of DATA) {
+    sec.items.forEach((_, i) => { if (state[itemKey(sec.id, i)]) count++; });
+  }
+  return count;
 }
 
 export interface Band {

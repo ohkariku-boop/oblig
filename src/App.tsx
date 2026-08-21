@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@/theme';
+import { AuthProvider } from '@/lib/AuthContext';
 import { AppLayout } from '@/components/AppLayout';
 import { HomePage } from '@/pages/HomePage';
+import { AuthPage } from '@/pages/AuthPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { AssessmentPage } from '@/pages/AssessmentPage';
 import { CopilotPage } from '@/pages/CopilotPage';
@@ -13,14 +15,20 @@ import { EvidencePage } from '@/pages/EvidencePage';
 import { ReportsPage } from '@/pages/ReportsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { PricingPage } from '@/pages/PricingPage';
+import { TermsPage } from '@/pages/TermsPage';
+import { PrivacyPage } from '@/pages/PrivacyPage';
 
 export default function App() {
   return (
     <ThemeProvider>
+      <AuthProvider>
       <BrowserRouter basename="/oblig">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<AuthPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/app" element={<AppLayout><DashboardPage /></AppLayout>} />
           <Route path="/app/assessment" element={<AppLayout><AssessmentPage /></AppLayout>} />
           <Route path="/app/copilot" element={<AppLayout><CopilotPage /></AppLayout>} />
@@ -34,6 +42,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
