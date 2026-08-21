@@ -65,7 +65,7 @@ export function SettingsPage() {
                     ))}
                   </div>
                 </div>
-                <button className="btn-primary"><Save className="h-4 w-4" /> Save changes</button>
+                <button className="btn-primary" disabled title="Coming soon — organisation profile isn't wired to your account yet"><Save className="h-4 w-4" /> Save changes</button>
               </CardBody>
             </Card>
           )}
@@ -73,7 +73,7 @@ export function SettingsPage() {
           {tab === 'users' && (
             <Card>
               <CardHeader title="Users" subtitle="Team members with access to this workspace" icon={<Users className="h-5 w-5" />}
-                action={<button className="btn-primary !py-2">Invite user</button>}
+                action={<button className="btn-primary !py-2" disabled title="Coming soon — team accounts aren't built yet">Invite user</button>}
               />
               <CardBody className="space-y-2">
                 {[

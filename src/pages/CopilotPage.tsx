@@ -115,7 +115,13 @@ export function CopilotPage() {
                         <button onClick={() => navigator.clipboard?.writeText(m.content)} className="inline-flex items-center gap-1 text-xs text-muted hover:text-slate-700 dark:hover:text-slate-200 transition">
                           <Copy className="h-3 w-3" /> Copy
                         </button>
-                        <button className="inline-flex items-center gap-1 text-xs text-muted hover:text-slate-700 dark:hover:text-slate-200 transition">
+                        <button onClick={() => {
+                          const blob = new Blob([m.content], { type: 'text/plain' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url; a.download = 'oblig-copilot-response.txt'; a.click();
+                          URL.revokeObjectURL(url);
+                        }} className="inline-flex items-center gap-1 text-xs text-muted hover:text-slate-700 dark:hover:text-slate-200 transition">
                           <Download className="h-3 w-3" /> Export
                         </button>
                       </div>

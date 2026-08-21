@@ -41,7 +41,7 @@ const PLANS = [
     monthly: 49,
     annual: 39,
     cta: 'Start 14-day trial',
-    href: '/app/assessment',
+    href: '/login',
     highlight: true,
     features: [
       'Everything in Starter, plus:',
@@ -49,7 +49,7 @@ const PLANS = [
       'AI policy generation (10+ templates)',
       'Unlimited AI Copilot messages',
       'Full risk register with heat maps',
-      'Compliance mapping (ISO 27001, SOC 2, NIST, GDPR, PDPA)',
+      'Compliance mapping (MAS, BNM, OJK, BSP, NBC, FSA, FSC — 8 APAC markets)',
       'Governance roadmap builder',
       'Evidence library (1 GB storage)',
       'Board-ready report exports',
@@ -65,7 +65,7 @@ const PLANS = [
     monthly: 199,
     annual: 169,
     cta: 'Book a demo',
-    href: '/app/assessment',
+    href: 'mailto:hello@oblig.app?subject=Enterprise%20demo%20request',
     highlight: false,
     features: [
       'Everything in Professional, plus:',
@@ -109,7 +109,7 @@ export function PricingPage() {
             <button onClick={toggle} className="btn-ghost !p-2" aria-label="Toggle theme">
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
-            <Link to="/app" className="btn-secondary hidden sm:inline-flex">Sign in</Link>
+            <Link to="/login" className="btn-secondary hidden sm:inline-flex">Sign in</Link>
             <Link to="/app/assessment" className="btn-primary">Start Free Assessment</Link>
           </div>
         </div>
@@ -178,12 +178,15 @@ export function PricingPage() {
               )}
               {plan.monthly === 0 && <p className="mt-1 text-xs text-ink">Free forever, no card required</p>}
 
-              <Link
-                to={plan.href}
-                className={cn('mt-5 w-full', plan.highlight ? 'btn-primary' : 'btn-secondary')}
-              >
-                {plan.cta} <ArrowRight className="h-4 w-4" />
-              </Link>
+              {plan.href.startsWith('mailto:') ? (
+                <a href={plan.href} className={cn('mt-5 w-full', plan.highlight ? 'btn-primary' : 'btn-secondary')}>
+                  {plan.cta} <ArrowRight className="h-4 w-4" />
+                </a>
+              ) : (
+                <Link to={plan.href} className={cn('mt-5 w-full', plan.highlight ? 'btn-primary' : 'btn-secondary')}>
+                  {plan.cta} <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
 
               <ul className="mt-6 space-y-2.5">
                 {plan.features.map((f, idx) => (

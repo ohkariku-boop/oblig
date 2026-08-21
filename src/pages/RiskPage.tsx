@@ -12,6 +12,8 @@ import type { Risk } from '@/types';
 import { cn, formatDate, daysUntil } from '@/utils/cn';
 import { useAuth } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { useToast } from '@/lib/ToastContext';
+import { logError } from '@/lib/errorLogging';
 
 const statusVariant: Record<string, 'error' | 'warning' | 'success' | 'neutral'> = {
   open: 'error', mitigating: 'warning', closed: 'success', accepted: 'neutral',
@@ -34,6 +36,7 @@ type SortKey = 'score' | 'likelihood' | 'impact' | 'reviewDate';
 
 export function RiskPage() {
   const { user } = useAuth();
+  const { push } = useToast();
   const [userRisks, setUserRisks] = useState<Risk[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [query, setQuery] = useState('');
@@ -62,7 +65,11 @@ export function RiskPage() {
       likelihood: input.likelihood, impact: input.impact, owner: input.owner || 'Unassigned',
       status: 'open',
     }).select().single();
-    if (error || !data) return;
+    if (error || !data) {
+      logError(`Failed to add risk: ${error?.message ?? 'unknown error'}`);
+      push('Could not save this risk. Please try again.', 'error');
+      return;
+    }
     setUserRisks(prev => [{
       id: data.id, title: data.title, description: data.description ?? '',
       likelihood: data.likelihood, impact: data.impact, owner: data.owner ?? 'Unassigned',
@@ -70,13 +77,33 @@ export function RiskPage() {
       mitigation: data.mitigation ?? '', status: data.status,
     }, ...prev]);
     setShowAdd(false);
+    push('Risk added.');
   }
 
   async function deleteRisk(id: string) {
     if (!supabase) return;
-    await supabase.from('risks').delete().eq('id', id);
+    const { error } = await supabase.from('risks').delete().eq('id', id);
+    if (error) {
+      logError(`Failed to delete risk: ${error.message}`);
+      push('Could not delete this risk. Please try again.', 'error');
+      return;
+    }
     setUserRisks(prev => prev.filter(r => r.id !== id));
     setSelected(null);
+    push('Risk deleted.');
+  }
+
+  async function updateRiskStatus(id: string, status: Risk['status']) {
+    if (!supabase) return;
+    const { error } = await supabase.from('risks').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) {
+      logError(`Failed to update risk status: ${error.message}`);
+      push('Could not update status. Please try again.', 'error');
+      return;
+    }
+    setUserRisks(prev => prev.map(r => r.id === id ? { ...r, status } : r));
+    setSelected(prev => prev && prev.id === id ? { ...prev, status } : prev);
+    push('Status updated.');
   }
 
   const allRisks = [...userRisks, ...sampleRisks];
@@ -92,7 +119,14 @@ export function RiskPage() {
 
   const heatData = allRisks.map(r => ({ x: r.likelihood, y: r.impact, title: r.title, level: riskLevel(riskScore(r.likelihood, r.impact)) }));
 
-  if (selected) return <RiskDetail risk={selected} onBack={() => setSelected(null)} onDelete={userRisks.some(r => r.id === selected.id) ? () => deleteRisk(selected.id) : undefined} />;
+  if (selected) return (
+    <RiskDetail
+      risk={selected}
+      onBack={() => setSelected(null)}
+      onDelete={userRisks.some(r => r.id === selected.id) ? () => deleteRisk(selected.id) : undefined}
+      onUpdateStatus={userRisks.some(r => r.id === selected.id) ? (status) => updateRiskStatus(selected.id, status) : undefined}
+    />
+  );
   if (showAdd) return <AddRiskForm onCancel={() => setShowAdd(false)} onSave={addRisk} />;
 
   return (
@@ -102,7 +136,7 @@ export function RiskPage() {
         description="Identify, score and mitigate your governance and security risks."
         action={
           <>
-            <button className="btn-secondary"><Sparkles className="h-4 w-4" /> AI Generate Risks</button>
+            <button className="btn-secondary" disabled title="Coming soon"><Sparkles className="h-4 w-4" /> AI Generate Risks</button>
             <button onClick={() => setShowAdd(true)} className="btn-primary" disabled={!user} title={!user ? 'Sign in to add your own risks' : undefined}><Plus className="h-4 w-4" /> Add Risk</button>
           </>
         }
@@ -263,9 +297,11 @@ function HeatMap({ data }: { data: { x: number; y: number; title: string; level:
   );
 }
 
-function RiskDetail({ risk, onBack, onDelete }: { risk: Risk; onBack: () => void; onDelete?: () => void }) {
+function RiskDetail({ risk, onBack, onDelete, onUpdateStatus }: { risk: Risk; onBack: () => void; onDelete?: () => void; onUpdateStatus?: (status: Risk['status']) => void }) {
   const score = riskScore(risk.likelihood, risk.impact);
   const level = riskLevel(score);
+  const [status, setStatus] = useState(risk.status);
+  const isReal = !!onUpdateStatus;
   return (
     <div>
       <PageHeader
@@ -274,7 +310,16 @@ function RiskDetail({ risk, onBack, onDelete }: { risk: Risk; onBack: () => void
         action={<>
           <button onClick={onBack} className="btn-secondary">Back</button>
           {onDelete && <button onClick={onDelete} className="btn-secondary text-error-600"><Trash2 className="h-4 w-4" /> Delete</button>}
-          <button className="btn-primary">Update</button>
+          {isReal ? (
+            <>
+              <select value={status} onChange={e => setStatus(e.target.value as Risk['status'])} className="input !py-2">
+                {(['open', 'mitigating', 'accepted', 'closed'] as const).map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+              <button onClick={() => onUpdateStatus(status)} disabled={status === risk.status} className="btn-primary">Update</button>
+            </>
+          ) : (
+            <button className="btn-primary" disabled title="Sample data — sign in and add your own risk to edit its status">Update</button>
+          )}
         </>}
       />
       <div className="grid gap-6 lg:grid-cols-3">

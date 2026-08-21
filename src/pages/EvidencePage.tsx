@@ -12,6 +12,8 @@ import type { EvidenceItem } from '@/types';
 import { cn, formatDate } from '@/utils/cn';
 import { useAuth } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { useToast } from '@/lib/ToastContext';
+import { logError } from '@/lib/errorLogging';
 
 const typeIcon: Record<string, typeof FileText> = {
   policy: FileText, screenshot: FileSearch, contract: FileSignature, audit: FileCheck, certificate: Award, report: FileText,
@@ -22,6 +24,7 @@ const typeColor: Record<string, string> = {
 
 export function EvidencePage() {
   const { user } = useAuth();
+  const { push } = useToast();
   const [userEvidence, setUserEvidence] = useState<EvidenceItem[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [query, setQuery] = useState('');
@@ -46,19 +49,30 @@ export function EvidencePage() {
       user_id: user.id, title: input.title, description: input.description,
       type: input.type, framework_ref: input.frameworkRef || null,
     }).select().single();
-    if (error || !data) return;
+    if (error || !data) {
+      logError(`Failed to add evidence: ${error?.message ?? 'unknown error'}`);
+      push('Could not save this entry. Please try again.', 'error');
+      return;
+    }
     setUserEvidence(prev => [{
       id: data.id, name: data.title, type: data.type ?? 'policy', size: '—',
       uploadedAt: data.created_at, tags: data.framework_ref ? [data.framework_ref] : [],
     }, ...prev]);
     setShowAdd(false);
+    push('Evidence logged.');
   }
 
   async function deleteEvidence(id: string) {
     if (!supabase) return;
-    await supabase.from('evidence').delete().eq('id', id);
+    const { error } = await supabase.from('evidence').delete().eq('id', id);
+    if (error) {
+      logError(`Failed to delete evidence: ${error.message}`);
+      push('Could not delete this entry. Please try again.', 'error');
+      return;
+    }
     setUserEvidence(prev => prev.filter(e => e.id !== id));
     setSelected(null);
+    push('Evidence deleted.');
   }
 
   const allEvidence = [...userEvidence, ...sampleEvidence];
@@ -177,14 +191,9 @@ export function EvidencePage() {
               </div>
             </div>
             <div className="mt-5 flex items-center justify-between rounded-xl bg-slate-50 dark:bg-slate-800/50 p-4">
-              <p className="text-sm text-muted">{userEvidence.some(e => e.id === selected.id) ? 'Logged manually — no file attached yet.' : 'Preview not available for this file type in the demo.'}</p>
-              {userEvidence.some(e => e.id === selected.id) ? (
+              <p className="text-sm text-muted">{userEvidence.some(e => e.id === selected.id) ? 'Logged manually — no file attached yet.' : 'Sample entry — no real file exists behind this in the demo.'}</p>
+              {userEvidence.some(e => e.id === selected.id) && (
                 <button onClick={() => deleteEvidence(selected.id)} className="btn-secondary !py-2 text-error-600"><Trash2 className="h-4 w-4" /> Delete</button>
-              ) : (
-                <div className="flex gap-2">
-                  <button className="btn-secondary !py-2"><Eye className="h-4 w-4" /> Preview</button>
-                  <button className="btn-primary !py-2"><Download className="h-4 w-4" /> Download</button>
-                </div>
               )}
             </div>
             <button onClick={() => setSelected(null)} className="btn-secondary mt-4 w-full">Close</button>

@@ -12,6 +12,9 @@ import type { PolicyDoc } from '@/types';
 import { cn, formatDate } from '@/utils/cn';
 import { useAuth } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { useToast } from '@/lib/ToastContext';
+import { logError } from '@/lib/errorLogging';
+import { exportGovernancePdf } from '@/utils/exportPdf';
 
 const policyTemplates: { title: string; type: string; icon: LucideIcon; desc: string }[] = [
   { title: 'Information Security Policy', type: 'Security', icon: FileText, desc: 'Core security responsibilities and controls.' },
@@ -35,6 +38,7 @@ const statusIcon: Record<string, typeof CheckCircle2> = {
 
 export function PoliciesPage() {
   const { user } = useAuth();
+  const { push } = useToast();
   const [userPolicies, setUserPolicies] = useState<PolicyDoc[]>([]);
   const [filter, setFilter] = useState<'all' | 'draft' | 'review' | 'approved'>('all');
   const [query, setQuery] = useState('');
@@ -62,24 +66,41 @@ export function PoliciesPage() {
     const { data, error } = await supabase.from('policies').insert({
       user_id: user.id, title: template.title, content: draftContent, status: 'draft',
     }).select().single();
-    if (error || !data) return;
+    if (error || !data) {
+      logError(`Failed to generate policy: ${error?.message ?? 'unknown error'}`);
+      push('Could not generate this policy. Please try again.', 'error');
+      return;
+    }
     const newPolicy = mapRow(data);
     setUserPolicies(prev => [newPolicy, ...prev]);
     setShowGenerator(false);
     setSelected(newPolicy);
+    push('Policy generated.');
   }
 
   async function saveContent(id: string, content: string) {
     if (!supabase) return;
-    await supabase.from('policies').update({ content, updated_at: new Date().toISOString() }).eq('id', id);
+    const { error } = await supabase.from('policies').update({ content, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) {
+      logError(`Failed to save policy: ${error.message}`);
+      push('Could not save your changes. Please try again.', 'error');
+      return;
+    }
     setUserPolicies(prev => prev.map(p => p.id === id ? { ...p, content, summary: content.slice(0, 140) } : p));
+    push('Policy saved.');
   }
 
   async function deletePolicy(id: string) {
     if (!supabase) return;
-    await supabase.from('policies').delete().eq('id', id);
+    const { error } = await supabase.from('policies').delete().eq('id', id);
+    if (error) {
+      logError(`Failed to delete policy: ${error.message}`);
+      push('Could not delete this policy. Please try again.', 'error');
+      return;
+    }
     setUserPolicies(prev => prev.filter(p => p.id !== id));
     setSelected(null);
+    push('Policy deleted.');
   }
 
   const allPolicies = [...userPolicies, ...samplePolicies];
@@ -106,7 +127,7 @@ export function PoliciesPage() {
         description="Generate, edit and export governance documentation."
         action={
           <>
-            <button className="btn-secondary"><History className="h-4 w-4" /> Version history</button>
+            <button className="btn-secondary" disabled title="Coming soon"><History className="h-4 w-4" /> Version history</button>
             <button onClick={() => setShowGenerator(true)} className="btn-primary"><Sparkles className="h-4 w-4" /> Generate Policy</button>
           </>
         }
@@ -237,8 +258,15 @@ function PolicyEditor({ policy, onBack, onSave, onDelete }: { policy: PolicyDoc;
           <>
             <button onClick={onBack} className="btn-secondary">Back</button>
             {onDelete && <button onClick={onDelete} className="btn-secondary text-error-600"><Trash2 className="h-4 w-4" /> Delete</button>}
-            <button className="btn-secondary"><FileDown className="h-4 w-4" /> Export Word</button>
-            <button className="btn-primary"><FileDown className="h-4 w-4" /> Export PDF</button>
+            <button className="btn-secondary" disabled title="Coming soon"><FileDown className="h-4 w-4" /> Export Word</button>
+            <button onClick={() => exportGovernancePdf({
+              title: `${policy.title} — Oblig`,
+              subtitle: `Version ${policy.version} · ${policy.owner} · ${formatDate(policy.updatedAt)}`,
+              overall: 0,
+              levelLabel: policy.status,
+              perCategory: [],
+              bodyLines: (policy.content ?? policy.summary).split('\n').filter(Boolean),
+            })} className="btn-primary"><FileDown className="h-4 w-4" /> Export PDF</button>
           </>
         }
       />

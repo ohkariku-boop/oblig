@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@/theme';
 import { AuthProvider } from '@/lib/AuthContext';
+import { ToastProvider } from '@/lib/ToastContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { AppLayout } from '@/components/AppLayout';
 import { HomePage } from '@/pages/HomePage';
@@ -24,6 +25,7 @@ export default function App() {
     <ErrorBoundary>
     <ThemeProvider>
       <AuthProvider>
+      <ToastProvider>
       <BrowserRouter basename="/oblig">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -44,6 +46,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </ToastProvider>
       </AuthProvider>
     </ThemeProvider>
     </ErrorBoundary>

@@ -11,6 +11,7 @@ import { useLiveGovernanceSummary } from '@/lib/useLiveGovernanceSummary';
 import { exportGovernancePdf } from '@/utils/exportPdf';
 import { useAuth } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { useToast } from '@/lib/ToastContext';
 
 const reports = [
   { id: 'dashboard', title: 'Governance Dashboard', desc: 'A one-page executive summary of score, risks and readiness.', icon: Target, sections: 6 },
@@ -22,6 +23,7 @@ const reports = [
 
 export function ReportsPage() {
   const { user } = useAuth();
+  const { push } = useToast();
   const dashboardSummary = useLiveGovernanceSummary();
   const [history, setHistory] = useState<{ id: string; report_type: string; created_at: string }[]>([]);
 
@@ -45,6 +47,7 @@ export function ReportsPage() {
         `Top frameworks: ${sampleFrameworks.slice(0, 3).map(f => `${f.shortName} ${f.coverage}%`).join(', ')}.`,
       ],
     });
+    push('Report downloaded.');
     if (user && supabase) {
       const client = supabase;
       client.from('report_log').insert({ user_id: user.id, report_type: reportId }).then(() => {
@@ -59,7 +62,7 @@ export function ReportsPage() {
       <PageHeader
         title="Reports"
         description="Generate and export board-ready governance reports."
-        action={<button className="btn-primary"><Sparkles className="h-4 w-4" /> AI Generate Report</button>}
+        action={<button className="btn-primary" disabled title="Coming soon"><Sparkles className="h-4 w-4" /> AI Generate Report</button>}
       />
 
       {/* Report cards */}
@@ -76,8 +79,8 @@ export function ReportsPage() {
             <p className="mt-1 flex-1 text-sm text-muted">{r.desc}</p>
             <div className="mt-4 flex items-center gap-2">
               <button onClick={() => handleExport(r.title, r.id)} className="btn-secondary !py-2 flex-1"><FileDown className="h-4 w-4" /> PDF</button>
-              <button className="btn-secondary !py-2 flex-1"><Presentation className="h-4 w-4" /> PPT</button>
-              <button className="btn-secondary !py-2 flex-1"><FileText className="h-4 w-4" /> Word</button>
+              <button className="btn-secondary !py-2 flex-1" disabled title="Coming soon"><Presentation className="h-4 w-4" /> PPT</button>
+              <button className="btn-secondary !py-2 flex-1" disabled title="Coming soon"><FileText className="h-4 w-4" /> Word</button>
             </div>
           </Card>
         ))}
