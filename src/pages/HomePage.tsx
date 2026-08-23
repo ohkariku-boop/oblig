@@ -49,7 +49,7 @@ export function HomePage() {
                 Free 5-Minute Governance Assessment
               </span>
               <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05] text-balance">
-                Vendor &amp; AI Governance Readiness <span className="text-red">for APAC Fintechs</span>
+                Technology Risk &amp; Governance <span className="text-red">for APAC Fintechs</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-muted text-balance">
                 Map your vendor security and AI governance posture directly to MAS, BNM, OJK, BSP, NBC, FSA and FSC — the frameworks banks, insurers and payment institutions actually use to assess you, not just SOC 2 or ISO 27001.

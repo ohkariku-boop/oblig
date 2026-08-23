@@ -57,7 +57,7 @@ export function CompliancePage() {
       />
 
       <div className="mb-6 inline-flex rounded-md border border-app p-1 surface">
-        <button onClick={() => { setTrack('vendor'); setSelected(liveFrameworks[0]); setCompare(['mas-trm', 'bnm-rmit']); }} className={cn('rounded-sm px-3 py-1.5 text-sm font-medium transition', track === 'vendor' ? 'bg-navy text-cream' : 'text-muted hover:text-navy dark:hover:text-cream')}>Vendor & Tech Risk</button>
+        <button onClick={() => { setTrack('vendor'); setSelected(liveFrameworks[0]); setCompare(['mas-trm', 'bnm-rmit']); }} className={cn('rounded-sm px-3 py-1.5 text-sm font-medium transition', track === 'vendor' ? 'bg-navy text-cream' : 'text-muted hover:text-navy dark:hover:text-cream')}>Technology &amp; Vendor Risk</button>
         <button onClick={() => { setTrack('ai'); setSelected(sampleAiFrameworks[0]); setCompare(['mas-ai-feat', 'bnm-ai']); }} className={cn('rounded-sm px-3 py-1.5 text-sm font-medium transition', track === 'ai' ? 'bg-navy text-cream' : 'text-muted hover:text-navy dark:hover:text-cream')}>AI Governance</button>
       </div>
 
