@@ -1,4 +1,5 @@
 -- Run this after 0001_init.sql in the Supabase SQL Editor.
+-- Safe to run more than once.
 
 -- Evidence needs a type column (policy/screenshot/contract/audit/
 -- certificate/report) to match the app's categorisation, added here
@@ -23,6 +24,7 @@ alter table public.error_logs enable row level security;
 
 -- Anyone (including anonymous visitors) can insert an error report, but
 -- nobody can read them back through the app's anon/authenticated roles.
+drop policy if exists "error_logs: anyone can insert" on public.error_logs;
 create policy "error_logs: anyone can insert" on public.error_logs
   for insert with check (true);
 
@@ -37,5 +39,6 @@ create table if not exists public.report_log (
 
 alter table public.report_log enable row level security;
 
+drop policy if exists "report_log: full access to own rows" on public.report_log;
 create policy "report_log: full access to own rows" on public.report_log
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

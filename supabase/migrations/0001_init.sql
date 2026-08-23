@@ -1,4 +1,6 @@
--- Oblig core schema. Run this once in Supabase Dashboard -> SQL Editor.
+-- Oblig core schema. Run this in Supabase Dashboard -> SQL Editor.
+-- Safe to run more than once — every policy is dropped first if it
+-- already exists, so a partial or repeat run won't error out.
 -- Every table uses Row Level Security so a signed-in user can only ever
 -- read or write their own rows, enforced by the database, not the app.
 
@@ -11,8 +13,10 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+drop policy if exists "profiles: read own" on public.profiles;
 create policy "profiles: read own" on public.profiles
   for select using (auth.uid() = id);
+drop policy if exists "profiles: update own" on public.profiles;
 create policy "profiles: update own" on public.profiles
   for update using (auth.uid() = id);
 
@@ -39,10 +43,13 @@ create table if not exists public.assessments (
 
 alter table public.assessments enable row level security;
 
+drop policy if exists "assessments: read own" on public.assessments;
 create policy "assessments: read own" on public.assessments
   for select using (auth.uid() = user_id);
+drop policy if exists "assessments: upsert own" on public.assessments;
 create policy "assessments: upsert own" on public.assessments
   for insert with check (auth.uid() = user_id);
+drop policy if exists "assessments: update own" on public.assessments;
 create policy "assessments: update own" on public.assessments
   for update using (auth.uid() = user_id);
 
@@ -66,6 +73,7 @@ create table if not exists public.risks (
 
 alter table public.risks enable row level security;
 
+drop policy if exists "risks: full access to own rows" on public.risks;
 create policy "risks: full access to own rows" on public.risks
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
@@ -83,6 +91,7 @@ create table if not exists public.policies (
 
 alter table public.policies enable row level security;
 
+drop policy if exists "policies: full access to own rows" on public.policies;
 create policy "policies: full access to own rows" on public.policies
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
@@ -99,5 +108,6 @@ create table if not exists public.evidence (
 
 alter table public.evidence enable row level security;
 
+drop policy if exists "evidence: full access to own rows" on public.evidence;
 create policy "evidence: full access to own rows" on public.evidence
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
