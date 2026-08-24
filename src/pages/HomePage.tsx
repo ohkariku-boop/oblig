@@ -205,7 +205,7 @@ export function HomePage() {
                 { name: 'Information Security', v: 72, c: '#22c55e' },
                 { name: 'Risk Management', v: 48, c: '#f59e0b' },
                 { name: 'Asset & Data Management', v: 41, c: '#2563eb' },
-                { name: 'People & Awareness', v: 58, c: '#6a7993' },
+                { name: 'People & Awareness', v: 58, c: '#5b7280' },
               ].map(r => (
                 <div key={r.name}>
                   <div className="flex justify-between text-xs"><span className="text-navy dark:text-cream">{r.name}</span><span className="font-semibold text-navy dark:text-cream">{r.v}%</span></div>

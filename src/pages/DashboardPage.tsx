@@ -6,13 +6,14 @@ import {
 } from 'recharts';
 import {
   ShieldCheck, ShieldAlert, FileText, TrendingUp, Sparkles, ArrowRight,
-  CalendarClock, Activity, Target, AlertTriangle, ChevronRight, type LucideIcon,
+  CalendarClock, Activity, Target, AlertTriangle, ChevronRight, Globe2, type LucideIcon,
 } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { ScoreRing, ProgressBar, Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { sampleActivity } from '@/data/sampleData';
 import { useLiveGovernanceSummary } from '@/lib/useLiveGovernanceSummary';
+import { useLiveFrameworks } from '@/lib/useLiveFrameworks';
 import { formatRelative, daysUntil, cn } from '@/utils/cn';
 
 const activityIcon: Record<string, LucideIcon> = {
@@ -22,6 +23,7 @@ const activityIcon: Record<string, LucideIcon> = {
 
 export function DashboardPage() {
   const s = useLiveGovernanceSummary();
+  const { marketGrid } = useLiveFrameworks();
   const healthTone = s.healthStatus === 'healthy' ? 'success' : s.healthStatus === 'attention' ? 'warning' : 'error';
 
   return (
@@ -45,10 +47,34 @@ export function DashboardPage() {
         <KpiCard icon={FileText} label="Policy Coverage" value={`${s.policyCoverage}%`} tone="primary" trend="3 drafts pending" />
       </div>
 
+      {/* Market Access Readiness — leads the dashboard because this is the
+          one thing only Oblig's data model can show: per-regulator standing,
+          not a single blended maturity score. */}
+      <Card className="mt-6">
+        <CardHeader
+          title="Market Access Readiness"
+          subtitle="Your standing against each market's regulator, live from your assessment"
+          icon={<Globe2 className="h-5 w-5" />}
+          action={<Link to="/app/compliance" className="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400">Full framework mapping →</Link>}
+        />
+        <CardBody>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {marketGrid.map(m => (
+              <div key={m.code} className="rounded-sm border border-app surface p-3">
+                <p className="citation-chip">{m.code}</p>
+                <p className="mt-2 text-xs font-medium text-navy dark:text-cream truncate">{m.label.replace(/^\S+\s/, '')}</p>
+                <p className="mt-1 text-2xl font-bold text-navy dark:text-cream">{m.pct}%</p>
+                <div className="mt-2"><ProgressBar value={m.pct} /></div>
+              </div>
+            ))}
+          </div>
+        </CardBody>
+      </Card>
+
       {/* Score + trend */}
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
-          <CardHeader title="Governance Health" subtitle="Overall maturity score" icon={<ShieldCheck className="h-5 w-5" />} />
+          <CardHeader title="Overall Readiness" subtitle="Blended across all 8 markets" icon={<ShieldCheck className="h-5 w-5" />} />
           <CardBody className="flex flex-col items-center pt-2">
             <ScoreRing score={s.governanceScore} size={140} label="Score" />
             <Badge variant={healthTone as 'success' | 'warning' | 'error'} className="mt-4">
@@ -81,9 +107,9 @@ export function DashboardPage() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(106,121,147,0.18)" />
-                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#6a7993' }} axisLine={false} tickLine={false} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: '#6a7993' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid #e6ddca', fontSize: 13 }} />
+                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#5b7280' }} axisLine={false} tickLine={false} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: '#5b7280' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid #d3dfe6', fontSize: 13 }} />
                   <Area type="monotone" dataKey="score" stroke="#0c1b2e" strokeWidth={2.5} fill="url(#scoreGrad)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -101,8 +127,8 @@ export function DashboardPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={s.categoryScores} outerRadius="72%">
                   <PolarGrid stroke="rgba(106,121,147,0.25)" />
-                  <PolarAngleAxis dataKey="name" tick={{ fontSize: 11, fill: '#6a7993' }} />
-                  <PolarRadiusAxis domain={[0, 100]} tick={{ fontSize: 10, fill: '#6a7993' }} axisLine={false} />
+                  <PolarAngleAxis dataKey="name" tick={{ fontSize: 11, fill: '#5b7280' }} />
+                  <PolarRadiusAxis domain={[0, 100]} tick={{ fontSize: 10, fill: '#5b7280' }} axisLine={false} />
                   <Radar dataKey="score" stroke="#0c1b2e" fill="#0c1b2e" fillOpacity={0.3} strokeWidth={2} />
                 </RadarChart>
               </ResponsiveContainer>

@@ -11,6 +11,7 @@ import { PageHeader } from '@/components/ui/Feedback';
 import { sampleFrameworks, sampleAiFrameworks } from '@/data/sampleData';
 import { generateRealControls } from '@/data/trmControls';
 import { marketCoverage, MARKET_TO_FRAMEWORK, type ChecklistState } from '@/data/assessment';
+import { useLiveFrameworks } from '@/lib/useLiveFrameworks';
 import type { Framework } from '@/types';
 import { cn } from '@/utils/cn';
 
@@ -18,23 +19,7 @@ export function CompliancePage() {
   const navigate = useNavigate();
   const [track, setTrack] = useState<'vendor' | 'ai'>('vendor');
 
-  const liveFrameworks = useMemo(() => {
-    let assessmentState: ChecklistState = {};
-    try { assessmentState = JSON.parse(localStorage.getItem('oblig_scorecard_v1') ?? '{}'); } catch { /* ignore */ }
-    const coverage = marketCoverage(assessmentState);
-    const frameworkToMarket = Object.fromEntries(
-      Object.entries(MARKET_TO_FRAMEWORK).map(([market, fw]) => [fw, market]),
-    ) as Record<string, keyof typeof coverage>;
-
-    return sampleFrameworks.map(f => {
-      const market = frameworkToMarket[f.id];
-      const cov = market ? coverage[market] : undefined;
-      if (cov && cov.checked > 0) {
-        return { ...f, coverage: cov.pct, totalControls: cov.total, metControls: cov.checked };
-      }
-      return f;
-    });
-  }, []);
+  const { frameworks: liveFrameworks } = useLiveFrameworks();
 
   const activeFrameworks = track === 'vendor' ? liveFrameworks : sampleAiFrameworks;
   const [query, setQuery] = useState('');
