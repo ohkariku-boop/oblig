@@ -12,42 +12,42 @@ import type { ChatMessage } from '@/types';
 import { cn } from '@/utils/cn';
 
 const quickActions: { icon: LucideIcon; label: string; prompt: string }[] = [
-  { icon: FileText, label: 'Generate Password Policy', prompt: 'Generate a Password Policy' },
+  { icon: FileText, label: 'Generate Vendor Risk Policy', prompt: 'Generate a Vendor Risk Policy' },
   { icon: ShieldAlert, label: 'Summarise my gaps', prompt: 'Summarise my governance gaps' },
   { icon: TrendingUp, label: 'What to prioritise', prompt: 'What should I prioritise next?' },
-  { icon: Brain, label: 'ISO 27001 readiness', prompt: 'Are we ready for ISO 27001?' },
+  { icon: Brain, label: 'MAS TRM readiness', prompt: 'Are we ready for MAS TRM?' },
 ];
 
 const cannedResponses: { match: RegExp; reply: string }[] = [
   {
-    match: /password policy/i,
-    reply: "Here's a draft Password Policy you can adapt:\n\n**1. Purpose**\nThis policy defines requirements for secure password creation and management across all company systems.\n\n**2. Minimum standards**\n- Minimum 14 characters\n- Mix of upper, lower, numbers and symbols\n- Not found in known breach lists (screened on login)\n- Unique per system — no reuse\n\n**3. Multi-factor authentication**\nMFA is required for all critical systems, email and remote access.\n\n**4. Storage & transmission**\n- Never shared or written down in plaintext\n- Stored only in approved password managers\n- Transmitted only over encrypted channels\n\n**5. Review**\nReviewed annually or after a security incident.\n\nYou can open this in the Policy Generator to edit and export.",
+    match: /vendor|third.?party/i,
+    reply: "Here's a draft Vendor & Third-Party Risk Management Policy you can adapt:\n\n**1. Purpose**\nDefines how we assess, onboard, and continuously monitor our own vendors and subcontractors, since your institutional customers' due diligence runs through you to them.\n\n**2. Due diligence before onboarding**\n- Security evidence reviewed before signing\n- Materiality test (per BSP SAFr / Taiwan FSC classification)\n- Subcontractor list disclosed and consented\n\n**3. Ongoing monitoring**\n- Annual re-assessment, not just at signup\n- Vulnerability management and patching cadence tracked\n\n**4. Subcontractor consent**\nWritten consent required before adding any new subcontractor that touches customer data (strictest under Taiwan's FSC framework).\n\n**5. Review**\nReviewed annually or after any subcontractor change.\n\nYou can open this in the Policy Generator to edit and export.",
   },
   {
-    match: /incident response/i,
-    reply: "Here's a draft Incident Response Policy outline:\n\n**1. Purpose & scope**\nDefines how security incidents are detected, contained, eradicated and recovered.\n\n**2. Roles**\n- Incident Lead: coordinates response\n- IT: technical containment\n- Comms: internal/external notification\n\n**3. Phases**\n1. Detect & report (within 1 hour)\n2. Contain & assess impact\n3. Eradicate the cause\n4. Recover systems\n5. Post-incident review within 2 weeks\n\n**4. Escalation**\nNotify leadership for any incident involving customer data.\n\nOpen this in the Policy Generator for a full editable version.",
+    match: /incident (response|notification)/i,
+    reply: "Here's a draft Incident Notification Policy outline (regulator SLAs):\n\n**1. Purpose & scope**\nDefines how security incidents are detected, contained, and — critically — notified to regulators and affected institutional customers within each market's actual deadline.\n\n**2. Notification timers by market**\n- Singapore (MAS): 1 hour for severe-impact incidents, 14-day root-cause report\n- Japan (FSA): structured across detection/response/recovery phases\n- Other markets: general 'prompt notification' expectation, tabletop-tested\n\n**3. Roles**\n- Incident Lead: coordinates response and the notification clock\n- IT: technical containment\n- Comms: regulator and customer notification\n\n**4. Escalation**\nAny incident touching customer data triggers leadership notification immediately, not after triage.\n\nOpen this in the Policy Generator for a full editable version.",
   },
   {
     match: /gap|summar/i,
-    reply: "Based on your latest assessment (62/100, Level 3 — Defined), here are your key gaps:\n\n**High priority**\n• Asset & Data Management (41%) — no asset register, untested backups\n• Risk Management (48%) — risk register exists but not reviewed regularly\n\n**Medium priority**\n• Continuity (52%) — incident response plan untested\n• People & Awareness (58%) — no phishing simulations\n\n**Strongest areas**\n• Information Security (72%)\n• Strategy & Leadership (65%)\n\nWould you like me to generate a roadmap to close these gaps?",
+    reply: "Based on your latest assessment, here are your key gaps by market:\n\n**High priority**\n• Cambodia (NBC) — lowest coverage, in-country data residency is a hard requirement, not a recommendation\n• South Korea (EFTA) — licensing-status gate not yet confirmed, this determines which obligations even apply\n\n**Medium priority**\n• Japan (FSA) — 176-item checklist is dense; focus on third-party risk items first\n• Malaysia (BNM RMiT) — annual pentest and 3-year SIEM retention baseline not yet met\n\n**Strongest markets**\n• Singapore (MAS TRM) — furthest along, board oversight and vendor due diligence largely in place\n\nWant me to generate a market-by-market roadmap to close these?",
   },
   {
     match: /priorit/i,
-    reply: "Here's what I'd prioritise next, ranked by impact-to-effort:\n\n1. **Create an Asset Register** — lifts your weakest score (41%) and underpins everything else.\n2. **Approve a Password Policy** — quick win, closes a common audit finding.\n3. **Schedule a quarterly backup restore test** — your backups run but are untested.\n4. **Formalise vendor risk reviews** — needed before any compliance audit.\n\nWant me to generate any of these as policy drafts or roadmap items?",
+    reply: "Here's what I'd prioritise next, ranked by impact-to-effort:\n\n1. **Build the subcontractor register** — required under MAS Notices 658/1121 and unlocks Singapore deals fastest.\n2. **Schedule the BNM RMiT annual pentest** — a named mandatory baseline, and Malaysia deals will ask for it directly.\n3. **Confirm your Cambodia data residency posture** — this is a hard blocker, not a nice-to-have, for any NBC-regulated customer.\n4. **Draft the 1-hour incident notification runbook** — closes a common gap MAS explicitly checks for.\n\nWant me to generate any of these as policy drafts or roadmap items?",
   },
   {
-    match: /iso.?27001|certif/i,
-    reply: "ISO 27001 readiness assessment:\n\n**Where you are**: ~58% coverage of Annex A controls.\n\n**Ready**: Information Security (MFA, access reviews), Strategy ownership.\n\n**Gaps to close before certification**:\n• Asset register and classification (Annex A.5)\n• Documented incident response, tested (A.5.24-26)\n• Supplier risk assessments (A.5.19-22)\n• Continuity and backup testing (A.5.29-30)\n• Formal risk treatment plan with Statement of Applicability\n\n**Realistic timeline**: 4-6 months of focused work to reach audit-ready.\n\nI can generate a gap-closure roadmap if you'd like.",
+    match: /mas.?trm|readiness|certif/i,
+    reply: "MAS TRM readiness assessment:\n\n**Where you are**: coverage varies by domain — strongest in board oversight and vendor due diligence, weakest in cloud-specific requirements and incident notification.\n\n**Ready**: Named risk owner, written risk appetite statement, secure SDLC baseline.\n\n**Gaps to close**:\n• Cloud security posture (data residency, shared-responsibility model)\n• 1-hour severe-incident notification runbook, tabletop-tested\n• Outsourcing register mapped to what MAS expects banks to submit\n• Third-party concentration risk / exit planning (where MAS's emerging TPRMG is heading)\n\n**Realistic timeline**: 2-3 months of focused work to reach a strong MAS TRM position.\n\nI can generate a gap-closure roadmap if you'd like.",
   },
   {
     match: /improve|score|matur/i,
-    reply: "To improve your governance maturity score (currently 62, Level 3):\n\n**Quick wins (1-2 weeks each)**\n• Approve your draft Password and Incident Response policies\n• Document and test your backup restore process\n\n**Medium term (1-2 months)**\n• Build an asset register with data classification\n• Start quarterly risk reviews with leadership\n\n**Strategic (3-6 months)**\n• Run an ISO 27001 gap analysis\n• Introduce KPIs for governance reporting\n\nTargeting Level 4 (Managed, 70+) is realistic within two quarters. Want a phased roadmap?",
+    reply: "To improve your overall readiness across markets:\n\n**Quick wins (1-2 weeks each)**\n• Approve your draft Vendor Risk and Incident Notification policies\n• Document your subcontractor list and consent trail\n\n**Medium term (1-2 months)**\n• Schedule the BNM RMiT annual pentest\n• Confirm Cambodia/Indonesia data residency posture\n\n**Strategic (3-6 months)**\n• Build out AI governance lifecycle controls across markets\n• Formalise board-level quarterly risk reporting\n\nGetting your top 2 markets to strong coverage is realistic within a quarter. Want a phased roadmap?",
   },
 ];
 
 function findReply(prompt: string): string {
   for (const r of cannedResponses) if (r.match.test(prompt)) return r.reply;
-  return "I can help with governance strategy, policy generation, risk prioritisation and compliance readiness. Try asking me to 'Generate a Password Policy', 'Summarise my gaps', or 'Are we ready for ISO 27001?'. I'll draw on your latest assessment (62/100, Level 3).";
+  return "I can help with vendor risk strategy, policy generation, incident notification planning, and market-specific compliance readiness. Try asking me to 'Generate a Vendor Risk Policy', 'Summarise my gaps', or 'Are we ready for MAS TRM?'. I'll draw on your latest assessment.";
 }
 
 export function CopilotPage() {
@@ -55,7 +55,7 @@ export function CopilotPage() {
     {
       id: 'welcome',
       role: 'assistant',
-      content: "Hi! I'm your Oblig AI Governance Copilot. I can help you improve governance maturity, generate policies, prioritise risks and prepare for compliance. What would you like to work on?",
+      content: "Hi! I'm your Oblig AI Governance Copilot. I can help you manage vendor & third-party risk, generate policies, and get market-specific ready for MAS, BNM, OJK and the other regulators you sell into. What would you like to work on?",
       timestamp: new Date().toISOString(),
       suggestions: aiPromptSuggestions.slice(0, 4),
     },

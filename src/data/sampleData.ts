@@ -104,12 +104,12 @@ export const samplePolicies: PolicyDoc[] = [
 ];
 
 export const sampleEvidence: EvidenceItem[] = [
-  { id: 'e1', name: 'InfoSec Policy v1.3.pdf', type: 'policy', size: '248 KB', uploadedAt: '2026-07-12', tags: ['security', 'approved'] },
-  { id: 'e2', name: 'Q2 Backup Restore Test.png', type: 'screenshot', size: '1.2 MB', uploadedAt: '2026-07-05', tags: ['backup', 'continuity'] },
-  { id: 'e3', name: 'Acme SaaS DPA.pdf', type: 'contract', size: '512 KB', uploadedAt: '2026-06-30', tags: ['vendor', 'legal'] },
-  { id: 'e4', name: 'SOC2 Type II Report.pdf', type: 'audit', size: '4.8 MB', uploadedAt: '2026-05-18', tags: ['audit', 'soc2'] },
+  { id: 'e1', name: 'Vendor Due-Diligence Pack v1.3.pdf', type: 'policy', size: '248 KB', uploadedAt: '2026-07-12', tags: ['vendor', 'approved'] },
+  { id: 'e2', name: 'MAS 1-Hour Notification Tabletop Test.png', type: 'screenshot', size: '1.2 MB', uploadedAt: '2026-07-05', tags: ['incident', 'sg'] },
+  { id: 'e3', name: 'Sub-processor Outsourcing Register.pdf', type: 'contract', size: '512 KB', uploadedAt: '2026-06-30', tags: ['subcontractor', 'legal'] },
+  { id: 'e4', name: 'BNM RMiT Annual Pentest Report.pdf', type: 'audit', size: '4.8 MB', uploadedAt: '2026-05-18', tags: ['audit', 'my'] },
   { id: 'e5', name: 'ISO 27001 Certificate.pdf', type: 'certificate', size: '180 KB', uploadedAt: '2026-04-02', tags: ['iso27001'] },
-  { id: 'e6', name: 'Phishing Simulation Results.csv', type: 'report', size: '64 KB', uploadedAt: '2026-07-18', tags: ['awareness', 'people'] },
+  { id: 'e6', name: 'AI Model Fairness Review (FEAT).csv', type: 'report', size: '64 KB', uploadedAt: '2026-07-18', tags: ['ai-governance', 'sg'] },
 ];
 
 export const sampleFrameworks: Framework[] = [
@@ -144,19 +144,19 @@ export const sampleActivity: ActivityItem[] = [
 export const sampleRoadmap: RoadmapPhase[] = [
   {
     id: 'ph1', title: 'Foundations', level: 2, status: 'done', timeframe: 'Completed Q2',
-    items: ['Establish governance ownership', 'Define information classification', 'Implement MFA on critical systems'],
+    items: ['Named executive owner for technology risk', 'Written risk appetite statement', 'Secure SDLC baseline documented'],
   },
   {
-    id: 'ph2', title: 'Core Controls', level: 2, status: 'active', timeframe: 'Now — 8 weeks',
-    items: ['Implement Asset Register', 'Roll out Password Policy', 'Vendor risk reviews', 'Document incident response'],
+    id: 'ph2', title: 'First Market Entry (Singapore)', level: 2, status: 'active', timeframe: 'Now — 8 weeks',
+    items: ['Map controls to MAS TRM\'s 10 domains', 'Build outsourcing register for bank buyers', '1-hour incident notification runbook', 'Vendor due-diligence evidence pack ready'],
   },
   {
-    id: 'ph3', title: 'Operationalise', level: 3, status: 'upcoming', timeframe: 'Weeks 9-16',
-    items: ['Quarterly risk reviews', 'Annual governance review', 'Awareness training programme', 'Backup restore tests'],
+    id: 'ph3', title: 'Regional Expansion (MY, ID, PH)', level: 3, status: 'upcoming', timeframe: 'Weeks 9-16',
+    items: ['BNM RMiT annual pentest + 3-year SIEM retention', 'OJK data residency review for Indonesia', 'BSP SAFr materiality self-assessment'],
   },
   {
-    id: 'ph4', title: 'Mature', level: 3, status: 'upcoming', timeframe: 'Weeks 17-24',
-    items: ['KPI-driven governance reporting', 'ISO 27001 gap analysis', 'Continuous control monitoring'],
+    id: 'ph4', title: 'Full APAC Coverage', level: 3, status: 'upcoming', timeframe: 'Weeks 17-24',
+    items: ['Cambodia in-country data residency', 'FSA 176-item checklist review (Japan)', 'AI governance lifecycle across all markets'],
   },
 ];
 
@@ -198,13 +198,13 @@ export const dashboardSummary: DashboardSummary = {
 };
 
 export const aiPromptSuggestions: string[] = [
-  'How can I improve my governance maturity score?',
-  'Generate a Password Policy',
+  'How can I improve my readiness across markets?',
+  'Generate a Vendor Risk Policy',
   'Summarise my governance gaps',
   'What should I prioritise next?',
-  'Are we ready for ISO 27001?',
-  'Explain my governance score',
-  'Generate an Incident Response Policy',
+  'Are we ready for MAS TRM?',
+  'Explain my market readiness score',
+  'Generate an Incident Notification Policy',
 ];
 
 export function scoreToLevel(score: number): 1 | 2 | 3 | 4 | 5 {

@@ -16,10 +16,10 @@ const SCENES: { id: Scene; title: string; subtitle: string; icon: typeof Sparkle
 ];
 
 const COPILOT_SCRIPT: { role: 'user' | 'assistant'; content: string; delay: number }[] = [
-  { role: 'user', content: 'Generate a Password Policy for my company', delay: 600 },
-  { role: 'assistant', content: "Here's a draft Password Policy:\n\n**1. Purpose** — secure password creation across all systems.\n\n**2. Standards** — min 14 chars, mixed case, numbers, symbols, not in breach lists, unique per system.\n\n**3. MFA** — required for critical systems, email and remote access.\n\n**4. Storage** — approved password managers only, encrypted in transit.\n\nYou can open this in the Policy Generator to edit and export as PDF.", delay: 1400 },
+  { role: 'user', content: 'Generate a Vendor Risk Policy for my company', delay: 600 },
+  { role: 'assistant', content: "Here's a draft Vendor & Third-Party Risk Management Policy:\n\n**1. Purpose** — how we assess, onboard, and monitor our own vendors.\n\n**2. Due diligence** — security evidence reviewed before signing, materiality test per BSP SAFr / Taiwan FSC.\n\n**3. Subcontractor consent** — written consent required before adding any new subcontractor, strictest under Taiwan's FSC framework.\n\n**4. Ongoing monitoring** — annual re-assessment, not just at signup.\n\nYou can open this in the Policy Generator to edit and export as PDF.", delay: 1400 },
   { role: 'user', content: 'What should I prioritise next?', delay: 900 },
-  { role: 'assistant', content: "Ranked by impact-to-effort:\n\n1. **Create an Asset Register** — lifts your weakest score (41%)\n2. **Approve the Password Policy** — closes a common audit finding\n3. **Test backup restores quarterly** — your backups run but are untested\n4. **Formalise vendor risk reviews** — needed before any compliance audit\n\nWant me to generate any of these as roadmap items?", delay: 1500 },
+  { role: 'assistant', content: "Ranked by impact-to-effort:\n\n1. **Build the subcontractor register** — required under MAS Notices 658/1121, unlocks Singapore deals fastest\n2. **Schedule the BNM RMiT annual pentest** — a named mandatory baseline\n3. **Confirm Cambodia data residency posture** — a hard blocker, not optional, for NBC-regulated customers\n4. **Draft the 1-hour MAS incident notification runbook** — closes a common gap\n\nWant me to generate any of these as roadmap items?", delay: 1500 },
 ];
 
 function riskLevel(score: number): 'low' | 'medium' | 'high' | 'critical' {
