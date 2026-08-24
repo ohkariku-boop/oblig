@@ -17,16 +17,16 @@ import { logError } from '@/lib/errorLogging';
 import { exportGovernancePdf } from '@/utils/exportPdf';
 
 const policyTemplates: { title: string; type: string; icon: LucideIcon; desc: string }[] = [
-  { title: 'Information Security Policy', type: 'Security', icon: FileText, desc: 'Core security responsibilities and controls.' },
-  { title: 'Password Policy', type: 'Security', icon: FileText, desc: 'Password standards and MFA requirements.' },
-  { title: 'Remote Working Policy', type: 'Workplace', icon: FileText, desc: 'Secure remote access expectations.' },
-  { title: 'Asset Management Policy', type: 'Operations', icon: FileText, desc: 'How assets are tracked and classified.' },
-  { title: 'Vendor Management Policy', type: 'Third-party', icon: FileText, desc: 'Supplier due diligence and monitoring.' },
-  { title: 'Incident Response Policy', type: 'Security', icon: FileText, desc: 'How incidents are detected and handled.' },
-  { title: 'Business Continuity Policy', type: 'Continuity', icon: FileText, desc: 'Keeping the business running.' },
-  { title: 'Disaster Recovery Plan', type: 'Continuity', icon: FileText, desc: 'Recovery objectives and procedures.' },
-  { title: 'Acceptable Use Policy', type: 'Usage', icon: FileText, desc: 'Appropriate use of systems and data.' },
-  { title: 'Data Classification Policy', type: 'Data', icon: FileText, desc: 'How data is classified and handled.' },
+  { title: 'Vendor & Third-Party Risk Management Policy', type: 'Third-party', icon: FileText, desc: 'Due diligence, ongoing monitoring, and subcontractor consent (MAS Notices 658/1121, BSP SAFr).' },
+  { title: 'Data Residency & Cross-Border Transfer Policy', type: 'Data', icon: FileText, desc: 'Where customer data lives per market — hard requirement in Cambodia and parts of Indonesia.' },
+  { title: 'Incident Notification Policy (Regulator SLAs)', type: 'Security', icon: FileText, desc: "MAS's 1-hour severe-incident window, 14-day root cause report, and other market-specific timers." },
+  { title: 'AI Governance & Model Risk Policy', type: 'AI Governance', icon: FileText, desc: 'FEAT principles, human oversight, and lifecycle controls across your AI/ML use.' },
+  { title: 'Subcontractor Consent & Outsourcing Register Policy', type: 'Third-party', icon: FileText, desc: "Prior written consent standards — strictest under Taiwan's FSC framework." },
+  { title: 'Business Continuity & Exit Planning Policy', type: 'Continuity', icon: FileText, desc: "Concentration risk and exit planning, the direction MAS's emerging TPRMG is heading." },
+  { title: 'Cloud Security & Shared Responsibility Policy', type: 'Security', icon: FileText, desc: "Cloud posture, data residency, and the shared-responsibility model under MAS TRM." },
+  { title: 'Vulnerability & Penetration Testing Policy', type: 'Security', icon: FileText, desc: 'Patch cadence and annual pentest — a named mandatory baseline under BNM RMiT.' },
+  { title: 'Access Control & Privileged Access Policy', type: 'Security', icon: FileText, desc: 'MFA, privileged access management, and periodic access review.' },
+  { title: 'Board Risk Reporting & Escalation Policy', type: 'Governance', icon: FileText, desc: 'Risk appetite statement and quarterly reporting cadence to leadership.' },
 ];
 
 const statusVariant: Record<string, 'success' | 'info' | 'warning' | 'neutral'> = {

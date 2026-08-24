@@ -96,11 +96,11 @@ export const sampleRisks: Risk[] = [
 ];
 
 export const samplePolicies: PolicyDoc[] = [
-  { id: 'p1', title: 'Information Security Policy', type: 'Security', status: 'approved', version: '1.3', updatedAt: '2026-07-12', owner: 'CTO', summary: 'Defines responsibilities for protecting company and customer information.' },
-  { id: 'p2', title: 'Acceptable Use Policy', type: 'Usage', status: 'published', version: '1.1', updatedAt: '2026-06-28', owner: 'People Ops', summary: 'Rules for appropriate use of company systems and data.' },
-  { id: 'p3', title: 'Incident Response Policy', type: 'Security', status: 'review', version: '0.9', updatedAt: '2026-07-20', owner: 'IT Lead', summary: 'How security incidents are detected, contained and reported.' },
-  { id: 'p4', title: 'Remote Working Policy', type: 'Workplace', status: 'draft', version: '0.4', updatedAt: '2026-07-22', owner: 'People Ops', summary: 'Expectations for secure remote access and home working.' },
-  { id: 'p5', title: 'Vendor Management Policy', type: 'Third-party', status: 'draft', version: '0.2', updatedAt: '2026-07-25', owner: 'Procurement', summary: 'Due diligence and monitoring of suppliers handling company data.' },
+  { id: 'p1', title: 'Vendor & Third-Party Risk Management Policy', type: 'Third-party', status: 'approved', version: '1.3', updatedAt: '2026-07-12', owner: 'CTO', summary: 'Due diligence, ongoing monitoring, and subcontractor consent for our own vendor supply chain.' },
+  { id: 'p2', title: 'Data Residency & Cross-Border Transfer Policy', type: 'Data', status: 'published', version: '1.1', updatedAt: '2026-06-28', owner: 'Infra Lead', summary: 'Where customer data physically lives, by market, and when it may leave the country.' },
+  { id: 'p3', title: 'Incident Notification Policy (Regulator SLAs)', type: 'Security', status: 'review', version: '0.9', updatedAt: '2026-07-20', owner: 'IT Lead', summary: "Notification timers by market, including MAS's 1-hour severe-incident window." },
+  { id: 'p4', title: 'AI Governance & Model Risk Policy', type: 'AI Governance', status: 'draft', version: '0.4', updatedAt: '2026-07-22', owner: 'CTO', summary: 'FEAT principles and human oversight for any customer-facing AI/ML use.' },
+  { id: 'p5', title: 'Subcontractor Consent & Outsourcing Register Policy', type: 'Third-party', status: 'draft', version: '0.2', updatedAt: '2026-07-25', owner: 'Procurement', summary: 'Prior written consent before subcontracting, and a register mapped to bank outsourcing requirements.' },
 ];
 
 export const sampleEvidence: EvidenceItem[] = [
