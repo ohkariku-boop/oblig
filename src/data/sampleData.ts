@@ -174,7 +174,7 @@ export const dashboardSummary: DashboardSummary = {
   upcomingTasks: [
     { id: 't1', title: 'Approve Incident Response Policy', due: '2026-08-02', priority: 'high' },
     { id: 't2', title: 'Patch VPN appliance (CVE)', due: '2026-07-30', priority: 'high' },
-    { id: 't3', title: 'Review vendor risk for Acme SaaS', due: '2026-08-10', priority: 'medium' },
+    { id: 't3', title: 'Review vendor risk for payment gateway sub-processor', due: '2026-08-10', priority: 'medium' },
     { id: 't4', title: 'Run Q3 phishing simulation', due: '2026-08-15', priority: 'low' },
   ],
   categoryScores: [

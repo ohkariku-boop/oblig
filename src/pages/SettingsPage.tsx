@@ -50,9 +50,9 @@ export function SettingsPage() {
               <CardHeader title="Organisation Profile" subtitle="Tell Oblig about your business" icon={<Building2 className="h-5 w-5" />} />
               <CardBody className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Organisation name" defaultValue="Acme Growth Co." />
-                  <Field label="Website" defaultValue="acme.example.com" />
-                  <SelectField label="Industry" options={['Technology / SaaS', 'Financial Services', 'Healthcare', 'Retail', 'Manufacturing', 'Other']} />
+                  <Field label="Organisation name" defaultValue="Nova Pay Pte. Ltd." />
+                  <Field label="Website" defaultValue="novapay.example.com" />
+                  <SelectField label="Fintech segment" options={['Payments', 'Digital Banking', 'Lending', 'Wealth / Investment', 'Insurtech', 'Other Fintech']} />
                   <SelectField label="Company size" options={['1-10', '11-50', '51-200', '201-500', '500+']} />
                 </div>
                 <div>
@@ -77,9 +77,9 @@ export function SettingsPage() {
               />
               <CardBody className="space-y-2">
                 {[
-                  { name: 'Admin (You)', email: 'admin@acme.example.com', role: 'Owner' },
-                  { name: 'IT Lead', email: 'it@acme.example.com', role: 'Editor' },
-                  { name: 'People Ops', email: 'people@acme.example.com', role: 'Viewer' },
+                  { name: 'Admin (You)', email: 'admin@novapay.example.com', role: 'Owner' },
+                  { name: 'IT Lead', email: 'it@novapay.example.com', role: 'Editor' },
+                  { name: 'People Ops', email: 'people@novapay.example.com', role: 'Viewer' },
                 ].map(u => (
                   <div key={u.email} className="flex items-center gap-3 rounded-xl border border-app p-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 text-sm font-bold text-white">
