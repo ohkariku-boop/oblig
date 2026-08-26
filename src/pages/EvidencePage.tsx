@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   FolderArchive, Upload, Search, FileText, FileCheck, FileSignature,
@@ -23,6 +24,7 @@ const typeColor: Record<string, string> = {
 };
 
 export function EvidencePage() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { push } = useToast();
   const [userEvidence, setUserEvidence] = useState<EvidenceItem[]>([]);
@@ -89,7 +91,7 @@ export function EvidencePage() {
       <PageHeader
         title="Evidence Library"
         description="A searchable repository for policies, contracts, audits and certificates."
-        action={<button onClick={() => setShowAdd(true)} className="btn-primary" disabled={!user} title={!user ? 'Sign in to add evidence' : undefined}><Upload className="h-4 w-4" /> Upload Evidence</button>}
+        action={<button onClick={() => user ? setShowAdd(true) : navigate('/login')} className="btn-primary">{user ? <><Upload className="h-4 w-4" /> Upload Evidence</> : <>Sign in to add evidence</>}</button>}
       />
 
       {/* Summary */}
@@ -123,7 +125,7 @@ export function EvidencePage() {
       </div>
 
       {/* Upload dropzone */}
-      <Card className="mb-6 cursor-pointer border-dashed" onClick={() => user && setShowAdd(true)}>
+      <Card className="mb-6 cursor-pointer border-dashed" onClick={() => user ? setShowAdd(true) : navigate('/login')}>
         <CardBody className="flex flex-col items-center justify-center py-8 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 dark:bg-primary-900/30 dark:text-primary-300">
             <Upload className="h-6 w-6" />

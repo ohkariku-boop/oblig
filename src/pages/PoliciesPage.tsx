@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   FileText, Plus, Search, Sparkles, FileDown, Edit3, History,
@@ -37,6 +38,7 @@ const statusIcon: Record<string, typeof CheckCircle2> = {
 };
 
 export function PoliciesPage() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { push } = useToast();
   const [userPolicies, setUserPolicies] = useState<PolicyDoc[]>([]);
@@ -204,7 +206,11 @@ export function PoliciesPage() {
         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Generate from a template</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {policyTemplates.map(t => (
-            <div key={t.title} className="flex items-center gap-3 rounded-xl border border-app surface p-4 hover:border-primary-300 dark:hover:border-primary-700 transition">
+            <button
+              key={t.title}
+              onClick={() => user ? generateFromTemplate(t) : navigate('/login')}
+              className="flex items-center gap-3 rounded-xl border border-app surface p-4 text-left hover:border-primary-300 dark:hover:border-primary-700 transition cursor-pointer"
+            >
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-300">
                 <t.icon className="h-4 w-4" />
               </div>
@@ -212,8 +218,12 @@ export function PoliciesPage() {
                 <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{t.title}</p>
                 <p className="truncate text-xs text-muted">{t.desc}</p>
               </div>
-              <button onClick={() => generateFromTemplate(t)} disabled={!user} title={!user ? 'Sign in to generate policies' : undefined} className="btn-ghost !p-1.5" aria-label={`Generate ${t.title}`}><Sparkles className="h-4 w-4 text-primary-500" /></button>
-            </div>
+              {user ? (
+                <Sparkles className="h-4 w-4 shrink-0 text-primary-500" />
+              ) : (
+                <span className="shrink-0 text-xs font-medium text-primary-600 dark:text-primary-400">Sign in →</span>
+              )}
+            </button>
           ))}
         </div>
       </div>
@@ -230,9 +240,10 @@ export function PoliciesPage() {
             <p className="mt-2 text-sm text-muted">Choose a template and the AI Copilot will draft a full policy based on your governance context. Editing and export open automatically.</p>
             <div className="mt-4 max-h-72 space-y-2 overflow-y-auto">
               {policyTemplates.map(t => (
-                <button key={t.title} onClick={() => generateFromTemplate(t)} className="flex w-full items-center gap-3 rounded-xl border border-app p-3 text-left hover:border-primary-300 transition">
+                <button key={t.title} onClick={() => user ? generateFromTemplate(t) : navigate('/login')} className="flex w-full items-center gap-3 rounded-xl border border-app p-3 text-left hover:border-primary-300 transition">
                   <t.icon className="h-4 w-4 text-primary-500" />
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-100">{t.title}</span>
+                  <span className="text-sm font-medium text-slate-800 dark:text-slate-100 flex-1">{t.title}</span>
+                  {!user && <span className="shrink-0 text-xs font-medium text-primary-600 dark:text-primary-400">Sign in →</span>}
                 </button>
               ))}
             </div>

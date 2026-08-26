@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ShieldAlert, Plus, Search, Sparkles, Filter, ArrowUpDown,
@@ -35,6 +36,7 @@ const levelColor: Record<string, string> = {
 type SortKey = 'score' | 'likelihood' | 'impact' | 'reviewDate';
 
 export function RiskPage() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { push } = useToast();
   const [userRisks, setUserRisks] = useState<Risk[]>([]);
@@ -137,7 +139,7 @@ export function RiskPage() {
         action={
           <>
             <button className="btn-secondary" disabled title="Coming soon"><Sparkles className="h-4 w-4" /> AI Generate Risks</button>
-            <button onClick={() => setShowAdd(true)} className="btn-primary" disabled={!user} title={!user ? 'Sign in to add your own risks' : undefined}><Plus className="h-4 w-4" /> Add Risk</button>
+            <button onClick={() => user ? setShowAdd(true) : navigate('/login')} className="btn-primary">{user ? <><Plus className="h-4 w-4" /> Add Risk</> : <>Sign in to add a risk</>}</button>
           </>
         }
       />
