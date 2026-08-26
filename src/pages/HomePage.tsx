@@ -302,7 +302,7 @@ function DashboardPreview() {
           <div className="rounded-sm border border-app surface p-4">
             <p className="mono-label">AI RECOMMENDATIONS</p>
             <div className="mt-3 space-y-2">
-              {['Create a Password Policy', 'Add an Asset Register', 'Test your backups quarterly'].map(t => (
+              {['Build subcontractor register', 'Schedule BNM RMiT pentest', 'Confirm Cambodia data residency'].map(t => (
                 <div key={t} className="flex items-center gap-2 rounded-sm bg-paper dark:bg-navy-800/50 px-3 py-2 text-xs text-navy dark:text-cream">
                   <Sparkles className="h-3.5 w-3.5 text-red shrink-0" /> {t}
                 </div>

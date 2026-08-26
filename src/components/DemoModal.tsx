@@ -12,7 +12,7 @@ type Scene = 'copilot' | 'risk' | 'compliance';
 const SCENES: { id: Scene; title: string; subtitle: string; icon: typeof Sparkles }[] = [
   { id: 'copilot', title: 'AI Governance Copilot', subtitle: 'Generate policies and get guidance in plain language', icon: Sparkles },
   { id: 'risk', title: 'Risk Register & Heat Map', subtitle: 'Impact analysis with likelihood × impact scoring', icon: ShieldAlert },
-  { id: 'compliance', title: 'Compliance Mapping', subtitle: 'Coverage across ISO 27001, SOC 2, NIST and more', icon: Network },
+  { id: 'compliance', title: 'Compliance Mapping', subtitle: 'Coverage across MAS, BNM, OJK and 5 other APAC regulators', icon: Network },
 ];
 
 const COPILOT_SCRIPT: { role: 'user' | 'assistant'; content: string; delay: number }[] = [

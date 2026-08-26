@@ -107,8 +107,8 @@ export function RoadmapPage() {
             <div className="flex items-center gap-3">
               <Flag className="h-7 w-7" />
               <div>
-                <p className="text-lg font-semibold">Target: Level 3 (Defined) in ~6 months</p>
-                <p className="text-sm text-white/90">Complete the active phase and you'll reach a certifiable maturity baseline.</p>
+                <p className="text-lg font-semibold">Target: Full APAC market access in ~6 months</p>
+                <p className="text-sm text-white/90">Complete the active phase and you'll reach a certifiable readiness baseline for institutional buyers.</p>
               </div>
             </div>
             <Link to="/app/assessment" className="rounded-xl bg-white/20 px-4 py-2 text-sm font-semibold backdrop-blur hover:bg-white/30 transition">Re-assess</Link>

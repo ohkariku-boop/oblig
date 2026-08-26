@@ -210,7 +210,7 @@ export function CopilotPage() {
                 <CheckCircle2 className="h-4 w-4 text-success-500" /> Conversation history
               </h3>
               <div className="mt-3 space-y-2">
-                {['Password Policy draft', 'Gap summary — Jul 26', 'ISO 27001 readiness check'].map(h => (
+                {['Vendor Risk Policy draft', 'Gap summary — Jul 26', 'MAS TRM readiness check'].map(h => (
                   <div key={h} className="rounded-lg px-2.5 py-1.5 text-xs text-muted hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer">{h}</div>
                 ))}
               </div>
