@@ -64,7 +64,7 @@
     @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-[13px] font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98];
   }
   .btn-primary { @apply btn bg-navy text-cream hover:bg-navy-700 hover:shadow-lg; }
-  .btn-secondary { @apply btn surface border border-app text-navy hover:border-navy; }
+  .btn-secondary { @apply btn surface border border-app text-navy hover:border-navy dark:text-cream dark:hover:border-cream; }
   .btn-secondary:hover { background-color: rgb(var(--elev)); }
   .btn-ghost { @apply btn text-ink; }
   .btn-ghost:hover { background-color: rgb(var(--muted) / 0.12); }
