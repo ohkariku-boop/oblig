@@ -12,6 +12,7 @@ import { samplePolicies } from '@/data/sampleData';
 import type { PolicyDoc } from '@/types';
 import { cn, formatDate } from '@/utils/cn';
 import { useAuth } from '@/lib/AuthContext';
+import { useClient } from '@/lib/ClientContext';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/lib/ToastContext';
 import { logError } from '@/lib/errorLogging';
@@ -40,6 +41,7 @@ const statusIcon: Record<string, typeof CheckCircle2> = {
 export function PoliciesPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { activeClient } = useClient();
   const { push } = useToast();
   const [userPolicies, setUserPolicies] = useState<PolicyDoc[]>([]);
   const [filter, setFilter] = useState<'all' | 'draft' | 'review' | 'approved'>('all');
@@ -57,16 +59,16 @@ export function PoliciesPage() {
   }
 
   useEffect(() => {
-    if (!user || !supabase) { setUserPolicies([]); return; }
-    supabase.from('policies').select('*').eq('user_id', user.id).order('updated_at', { ascending: false })
+    if (!user || !supabase || !activeClient) { setUserPolicies([]); return; }
+    supabase.from('policies').select('*').eq('client_id', activeClient.id).order('updated_at', { ascending: false })
       .then(({ data }) => { if (data) setUserPolicies(data.map(mapRow)); });
-  }, [user]);
+  }, [user, activeClient]);
 
   async function generateFromTemplate(template: { title: string; desc: string }) {
-    if (!user || !supabase) return;
+    if (!user || !supabase || !activeClient) return;
     const draftContent = `1. Purpose\n${template.desc}\n\n2. Scope\nThis policy applies to all employees, contractors and third parties who access company systems or data.\n\n3. Responsibilities\nLeadership approves and reviews this policy annually. IT implements and monitors technical controls. All staff comply with the requirements below.\n\n4. Requirements\n[Edit this section to add your organisation's specific requirements.]\n\n5. Review\nThis policy is reviewed at least annually or following a significant incident.`;
     const { data, error } = await supabase.from('policies').insert({
-      user_id: user.id, title: template.title, content: draftContent, status: 'draft',
+      user_id: user.id, client_id: activeClient.id, title: template.title, content: draftContent, status: 'draft',
     }).select().single();
     if (error || !data) {
       logError(`Failed to generate policy: ${error?.message ?? 'unknown error'}`);

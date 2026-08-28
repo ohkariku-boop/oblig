@@ -12,6 +12,7 @@ import { sampleRisks } from '@/data/sampleData';
 import type { Risk } from '@/types';
 import { cn, formatDate, daysUntil } from '@/utils/cn';
 import { useAuth } from '@/lib/AuthContext';
+import { useClient } from '@/lib/ClientContext';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/lib/ToastContext';
 import { logError } from '@/lib/errorLogging';
@@ -38,6 +39,7 @@ type SortKey = 'score' | 'likelihood' | 'impact' | 'reviewDate';
 export function RiskPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { activeClient } = useClient();
   const { push } = useToast();
   const [userRisks, setUserRisks] = useState<Risk[]>([]);
   const [showAdd, setShowAdd] = useState(false);
@@ -47,8 +49,8 @@ export function RiskPage() {
   const [selected, setSelected] = useState<Risk | null>(null);
 
   useEffect(() => {
-    if (!user || !supabase) { setUserRisks([]); return; }
-    supabase.from('risks').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+    if (!user || !supabase || !activeClient) { setUserRisks([]); return; }
+    supabase.from('risks').select('*').eq('client_id', activeClient.id).order('created_at', { ascending: false })
       .then(({ data }) => {
         if (!data) return;
         setUserRisks(data.map((r): Risk => ({
@@ -58,12 +60,12 @@ export function RiskPage() {
           mitigation: r.mitigation ?? '', status: r.status,
         })));
       });
-  }, [user]);
+  }, [user, activeClient]);
 
   async function addRisk(input: { title: string; description: string; likelihood: number; impact: number; owner: string }) {
-    if (!user || !supabase) return;
+    if (!user || !supabase || !activeClient) return;
     const { data, error } = await supabase.from('risks').insert({
-      user_id: user.id, title: input.title, description: input.description,
+      user_id: user.id, client_id: activeClient.id, title: input.title, description: input.description,
       likelihood: input.likelihood, impact: input.impact, owner: input.owner || 'Unassigned',
       status: 'open',
     }).select().single();

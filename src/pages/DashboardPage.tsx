@@ -14,6 +14,7 @@ import { PageHeader } from '@/components/ui/Feedback';
 import { sampleActivity } from '@/data/sampleData';
 import { useLiveGovernanceSummary } from '@/lib/useLiveGovernanceSummary';
 import { useLiveFrameworks } from '@/lib/useLiveFrameworks';
+import { useClient } from '@/lib/ClientContext';
 import { formatRelative, daysUntil, cn } from '@/utils/cn';
 
 const activityIcon: Record<string, LucideIcon> = {
@@ -22,8 +23,9 @@ const activityIcon: Record<string, LucideIcon> = {
 };
 
 export function DashboardPage() {
-  const s = useLiveGovernanceSummary();
-  const { marketGrid } = useLiveFrameworks();
+  const { assessmentState } = useClient();
+  const s = useLiveGovernanceSummary(assessmentState);
+  const { marketGrid } = useLiveFrameworks(assessmentState);
   const healthTone = s.healthStatus === 'healthy' ? 'success' : s.healthStatus === 'attention' ? 'warning' : 'error';
 
   return (

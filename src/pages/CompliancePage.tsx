@@ -10,8 +10,8 @@ import { Badge, ProgressBar } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { sampleFrameworks, sampleAiFrameworks } from '@/data/sampleData';
 import { generateRealControls } from '@/data/trmControls';
-import { marketCoverage, MARKET_TO_FRAMEWORK, type ChecklistState } from '@/data/assessment';
 import { useLiveFrameworks } from '@/lib/useLiveFrameworks';
+import { useClient } from '@/lib/ClientContext';
 import type { Framework } from '@/types';
 import { cn } from '@/utils/cn';
 
@@ -19,7 +19,8 @@ export function CompliancePage() {
   const navigate = useNavigate();
   const [track, setTrack] = useState<'vendor' | 'ai'>('vendor');
 
-  const { frameworks: liveFrameworks } = useLiveFrameworks();
+  const { assessmentState } = useClient();
+  const { frameworks: liveFrameworks } = useLiveFrameworks(assessmentState);
 
   const activeFrameworks = track === 'vendor' ? liveFrameworks : sampleAiFrameworks;
   const [query, setQuery] = useState('');

@@ -12,6 +12,7 @@ import { sampleEvidence } from '@/data/sampleData';
 import type { EvidenceItem } from '@/types';
 import { cn, formatDate } from '@/utils/cn';
 import { useAuth } from '@/lib/AuthContext';
+import { useClient } from '@/lib/ClientContext';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/lib/ToastContext';
 import { logError } from '@/lib/errorLogging';
@@ -26,6 +27,7 @@ const typeColor: Record<string, string> = {
 export function EvidencePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { activeClient } = useClient();
   const { push } = useToast();
   const [userEvidence, setUserEvidence] = useState<EvidenceItem[]>([]);
   const [showAdd, setShowAdd] = useState(false);
@@ -34,8 +36,8 @@ export function EvidencePage() {
   const [selected, setSelected] = useState<EvidenceItem | null>(null);
 
   useEffect(() => {
-    if (!user || !supabase) { setUserEvidence([]); return; }
-    supabase.from('evidence').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+    if (!user || !supabase || !activeClient) { setUserEvidence([]); return; }
+    supabase.from('evidence').select('*').eq('client_id', activeClient.id).order('created_at', { ascending: false })
       .then(({ data }) => {
         if (!data) return;
         setUserEvidence(data.map((r): EvidenceItem => ({
@@ -43,12 +45,12 @@ export function EvidencePage() {
           uploadedAt: r.created_at, tags: r.framework_ref ? [r.framework_ref] : [],
         })));
       });
-  }, [user]);
+  }, [user, activeClient]);
 
   async function addEvidence(input: { title: string; description: string; type: EvidenceItem['type']; frameworkRef: string }) {
-    if (!user || !supabase) return;
+    if (!user || !supabase || !activeClient) return;
     const { data, error } = await supabase.from('evidence').insert({
-      user_id: user.id, title: input.title, description: input.description,
+      user_id: user.id, client_id: activeClient.id, title: input.title, description: input.description,
       type: input.type, framework_ref: input.frameworkRef || null,
     }).select().single();
     if (error || !data) {

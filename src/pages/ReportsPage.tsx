@@ -8,6 +8,7 @@ import { Badge, ProgressBar } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { sampleRisks, sampleFrameworks } from '@/data/sampleData';
 import { useLiveGovernanceSummary } from '@/lib/useLiveGovernanceSummary';
+import { useClient } from '@/lib/ClientContext';
 import { exportGovernancePdf } from '@/utils/exportPdf';
 import { useAuth } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -24,14 +25,15 @@ const reports = [
 export function ReportsPage() {
   const { user } = useAuth();
   const { push } = useToast();
-  const dashboardSummary = useLiveGovernanceSummary();
+  const { assessmentState, activeClient } = useClient();
+  const dashboardSummary = useLiveGovernanceSummary(assessmentState);
   const [history, setHistory] = useState<{ id: string; report_type: string; created_at: string }[]>([]);
 
   useEffect(() => {
-    if (!user || !supabase) { setHistory([]); return; }
-    supabase.from('report_log').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
+    if (!user || !supabase || !activeClient) { setHistory([]); return; }
+    supabase.from('report_log').select('*').eq('client_id', activeClient.id).order('created_at', { ascending: false }).limit(10)
       .then(({ data }) => { if (data) setHistory(data); });
-  }, [user]);
+  }, [user, activeClient]);
 
   const handleExport = (title: string, reportId: string) => {
     exportGovernancePdf({
@@ -48,10 +50,10 @@ export function ReportsPage() {
       ],
     });
     push('Report downloaded.');
-    if (user && supabase) {
+    if (user && supabase && activeClient) {
       const client = supabase;
-      client.from('report_log').insert({ user_id: user.id, report_type: reportId }).then(() => {
-        client.from('report_log').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10)
+      client.from('report_log').insert({ user_id: user.id, client_id: activeClient.id, report_type: reportId }).then(() => {
+        client.from('report_log').select('*').eq('client_id', activeClient.id).order('created_at', { ascending: false }).limit(10)
           .then(({ data }) => { if (data) setHistory(data); });
       });
     }

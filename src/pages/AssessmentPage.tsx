@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -20,8 +20,7 @@ import {
 } from '@/data/assessment';
 import { exportScorecardPdf } from '@/utils/exportPdf';
 import { cn } from '@/utils/cn';
-import { useAuth } from '@/lib/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { useClient } from '@/lib/ClientContext';
 
 type View = 'checklist' | 'results';
 
@@ -31,28 +30,10 @@ const sectionIcons: Record<string, LucideIcon> = {
 };
 
 export function AssessmentPage() {
-  const { user } = useAuth();
+  const { assessmentState: state, setAssessmentState: setState, activeClient, clients, setActiveClientId } = useClient();
   const [view, setView] = useState<View>('checklist');
-  const [state, setState] = useState<ChecklistState>(() => {
-    try { return JSON.parse(localStorage.getItem('oblig_scorecard_v1') ?? '{}'); } catch { return {}; }
-  });
   const [milestone, setMilestone] = useState<Milestone | 'none'>('none');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({ access: true });
-
-  // On sign-in, pull the saved assessment down from Supabase — the server
-  // copy is the durable source of truth once it's available.
-  useEffect(() => {
-    if (!user || !supabase) return;
-    supabase.from('assessments').select('answers').eq('user_id', user.id).maybeSingle()
-      .then(({ data }) => { if (data?.answers) setState(data.answers as ChecklistState); });
-  }, [user]);
-
-  useEffect(() => {
-    localStorage.setItem('oblig_scorecard_v1', JSON.stringify(state));
-    if (user && supabase) {
-      supabase.from('assessments').upsert({ user_id: user.id, answers: state, updated_at: new Date().toISOString() }).then();
-    }
-  }, [state, user]);
 
   const count = useMemo(() => checkedCount(state), [state]);
   const band = useMemo(() => bandFor(count), [count]);

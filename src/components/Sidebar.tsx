@@ -1,6 +1,8 @@
 import { NavLink, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth, hasSupabase } from '@/lib/AuthContext';
-import { LogOut, UserCircle } from 'lucide-react';
+import { useClient } from '@/lib/ClientContext';
+import { LogOut, UserCircle, ChevronDown, Plus, Building2 } from 'lucide-react';
 import {
   LayoutDashboard, ClipboardCheck, Sparkles, FileText, ShieldAlert,
   Map, Network, FolderArchive, FileBarChart, Settings, type LucideIcon,
@@ -34,6 +36,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <div className="flex h-16 items-center px-5 border-b border-app">
         <Link to="/"><Logo /></Link>
       </div>
+      <ClientSwitcher />
       <nav className="flex-1 overflow-y-auto px-3 py-4 no-scrollbar">
         <p className="px-3 pb-2 mono-label">Platform</p>
         <ul className="space-y-1">
@@ -92,6 +95,78 @@ function AccountBadge() {
       <button onClick={() => signOut()} title="Sign out" className="text-ink hover:text-error-600 transition">
         <LogOut className="h-4 w-4" />
       </button>
+    </div>
+  );
+}
+
+function ClientSwitcher() {
+  const { user } = useAuth();
+  const { clients, activeClient, setActiveClientId, addClient } = useClient();
+  const [open, setOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [name, setName] = useState('');
+
+  if (!hasSupabase || !user) return null;
+
+  return (
+    <div className="relative border-b border-app px-3 py-2.5">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left hover:bg-slate-100 dark:hover:bg-slate-800/50 transition"
+      >
+        <Building2 className="h-4 w-4 shrink-0 text-navy dark:text-cream" />
+        <span className="min-w-0 flex-1 truncate text-sm font-medium text-navy dark:text-cream">
+          {activeClient?.name ?? 'Select client'}
+        </span>
+        <ChevronDown className="h-4 w-4 shrink-0 text-ink" />
+      </button>
+
+      {open && (
+        <div className="absolute left-3 right-3 top-full z-20 mt-1 rounded-md border border-app surface shadow-lg">
+          <ul className="max-h-48 overflow-y-auto py-1">
+            {clients.map(c => (
+              <li key={c.id}>
+                <button
+                  onClick={() => { setActiveClientId(c.id); setOpen(false); }}
+                  className={cn(
+                    'flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-800/50 transition',
+                    c.id === activeClient?.id ? 'font-semibold text-navy dark:text-cream' : 'text-ink',
+                  )}
+                >
+                  {c.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="border-t border-app p-2">
+            {adding ? (
+              <div className="flex items-center gap-1.5">
+                <input
+                  autoFocus
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && name.trim()) { addClient(name.trim()); setName(''); setAdding(false); setOpen(false); }
+                    if (e.key === 'Escape') { setAdding(false); setName(''); }
+                  }}
+                  placeholder="Client name"
+                  className="input !py-1.5 flex-1 text-sm"
+                />
+                <button
+                  onClick={() => { if (name.trim()) { addClient(name.trim()); setName(''); setAdding(false); setOpen(false); } }}
+                  className="btn-primary !px-2.5 !py-1.5"
+                >
+                  Add
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setAdding(true)} className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm font-medium text-primary-600 hover:bg-slate-100 dark:text-primary-400 dark:hover:bg-slate-800/50 transition">
+                <Plus className="h-4 w-4" /> Add client
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
