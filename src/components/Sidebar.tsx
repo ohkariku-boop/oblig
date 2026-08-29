@@ -2,7 +2,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth, hasSupabase } from '@/lib/AuthContext';
 import { useClient } from '@/lib/ClientContext';
-import { LogOut, UserCircle, ChevronDown, Plus, Building2 } from 'lucide-react';
+import { LogOut, UserCircle, ChevronDown, Plus, Building2, ShieldCheck, Copy, Check } from 'lucide-react';
 import {
   LayoutDashboard, ClipboardCheck, Sparkles, FileText, ShieldAlert,
   Map, Network, FolderArchive, FileBarChart, Settings, type LucideIcon,
@@ -138,6 +138,7 @@ function ClientSwitcher() {
               </li>
             ))}
           </ul>
+          <TrustPageToggle />
           <div className="border-t border-app p-2">
             {adding ? (
               <div className="flex items-center gap-1.5">
@@ -166,6 +167,45 @@ function ClientSwitcher() {
             )}
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function TrustPageToggle() {
+  const { activeClient, setTrustPageEnabled } = useClient();
+  const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  if (!activeClient) return null;
+  const enabled = activeClient.public_share_enabled;
+  const url = `${window.location.origin}/oblig/trust/${activeClient.public_token}`;
+
+  return (
+    <div className="border-t border-app p-3">
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-1.5 text-xs font-medium text-ink">
+          <ShieldCheck className="h-3.5 w-3.5" /> Trust page
+        </span>
+        <button
+          onClick={async () => { setBusy(true); await setTrustPageEnabled(!enabled); setBusy(false); }}
+          disabled={busy}
+          className={cn('relative h-5 w-9 shrink-0 rounded-full transition', enabled ? 'bg-primary-600' : 'bg-slate-300 dark:bg-slate-700')}
+        >
+          <span className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all', enabled ? 'left-[18px]' : 'left-0.5')} />
+        </button>
+      </div>
+      {enabled && (
+        <button
+          onClick={() => { navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+          className="mt-2 flex w-full items-center gap-1.5 rounded-sm border border-app px-2 py-1.5 text-left text-[11px] text-ink hover:border-navy dark:hover:border-cream transition"
+        >
+          {copied ? <Check className="h-3 w-3 shrink-0 text-success-600" /> : <Copy className="h-3 w-3 shrink-0" />}
+          <span className="truncate">{copied ? 'Link copied' : url}</span>
+        </button>
+      )}
+      {!enabled && (
+        <p className="mt-1.5 text-[11px] text-muted">Share a live readiness page with prospects, no login required.</p>
       )}
     </div>
   );

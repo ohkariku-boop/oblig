@@ -3,13 +3,14 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import type { ChecklistState } from '@/data/assessment';
 
-export interface Client { id: string; name: string; created_at: string }
+export interface Client { id: string; name: string; created_at: string; public_token: string; public_share_enabled: boolean }
 
 interface ClientContextValue {
   clients: Client[];
   activeClient: Client | null;
   setActiveClientId: (id: string) => void;
   addClient: (name: string) => Promise<void>;
+  setTrustPageEnabled: (enabled: boolean) => Promise<void>;
   assessmentState: ChecklistState;
   setAssessmentState: (updater: ChecklistState | ((prev: ChecklistState) => ChecklistState)) => void;
   loading: boolean;
@@ -73,6 +74,13 @@ export function ClientProvider({ children }: { children: ReactNode }) {
     setActiveClientId(data.id);
   }
 
+  async function setTrustPageEnabled(enabled: boolean) {
+    if (!user || !supabase || !activeClientId) return;
+    const { data, error } = await supabase.from('clients').update({ public_share_enabled: enabled }).eq('id', activeClientId).select().single();
+    if (error || !data) return;
+    setClients(prev => prev.map(c => c.id === activeClientId ? data : c));
+  }
+
   function setAssessmentState(updater: ChecklistState | ((prev: ChecklistState) => ChecklistState)) {
     setAssessmentStateRaw(prev => {
       const next = typeof updater === 'function' ? (updater as (p: ChecklistState) => ChecklistState)(prev) : updater;
@@ -89,7 +97,7 @@ export function ClientProvider({ children }: { children: ReactNode }) {
   const activeClient = clients.find(c => c.id === activeClientId) ?? null;
 
   return (
-    <ClientContext.Provider value={{ clients, activeClient, setActiveClientId, addClient, assessmentState, setAssessmentState, loading }}>
+    <ClientContext.Provider value={{ clients, activeClient, setActiveClientId, addClient, setTrustPageEnabled, assessmentState, setAssessmentState, loading }}>
       {children}
     </ClientContext.Provider>
   );
