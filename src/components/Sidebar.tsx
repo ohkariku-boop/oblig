@@ -5,7 +5,7 @@ import { useClient } from '@/lib/ClientContext';
 import { LogOut, UserCircle, ChevronDown, Plus, Building2, ShieldCheck, Copy, Check } from 'lucide-react';
 import {
   LayoutDashboard, ClipboardCheck, Sparkles, FileText, ShieldAlert,
-  Map, Network, FolderArchive, FileBarChart, Settings, type LucideIcon,
+  Map, Network, FolderArchive, FileBarChart, Settings, ClipboardList, type LucideIcon,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { cn } from '@/utils/cn';
@@ -20,13 +20,14 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { to: '/app', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/app/assessment', label: 'Assessment', icon: ClipboardCheck },
-  { to: '/app/copilot', label: 'AI Copilot', icon: Sparkles, badge: 'AI' },
+  { to: '/app/copilot', label: 'AI Copilot', icon: Sparkles, badge: 'BETA' },
   { to: '/app/policies', label: 'Policies', icon: FileText },
   { to: '/app/risk', label: 'Risk Register', icon: ShieldAlert },
   { to: '/app/roadmap', label: 'Roadmap', icon: Map },
   { to: '/app/compliance', label: 'Compliance', icon: Network },
   { to: '/app/evidence', label: 'Evidence Library', icon: FolderArchive },
   { to: '/app/reports', label: 'Reports', icon: FileBarChart },
+  { to: '/app/questionnaire', label: 'Questionnaire', icon: ClipboardList, badge: 'NEW' },
   { to: '/app/settings', label: 'Settings', icon: Settings },
 ];
 

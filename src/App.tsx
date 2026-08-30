@@ -16,6 +16,7 @@ import { RoadmapPage } from '@/pages/RoadmapPage';
 import { CompliancePage } from '@/pages/CompliancePage';
 import { EvidencePage } from '@/pages/EvidencePage';
 import { ReportsPage } from '@/pages/ReportsPage';
+import { QuestionnairePage } from '@/pages/QuestionnairePage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { PricingPage } from '@/pages/PricingPage';
 import { TermsPage } from '@/pages/TermsPage';
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="/app/compliance" element={<AppLayout><CompliancePage /></AppLayout>} />
           <Route path="/app/evidence" element={<AppLayout><EvidencePage /></AppLayout>} />
           <Route path="/app/reports" element={<AppLayout><ReportsPage /></AppLayout>} />
+          <Route path="/app/questionnaire" element={<AppLayout><QuestionnairePage /></AppLayout>} />
           <Route path="/app/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
