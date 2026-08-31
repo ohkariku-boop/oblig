@@ -180,7 +180,7 @@ function TrustPageToggle() {
 
   if (!activeClient) return null;
   const enabled = activeClient.public_share_enabled;
-  const url = `${window.location.origin}/oblig/trust/${activeClient.public_token}`;
+  const url = `${window.location.origin}/trust/${activeClient.public_token}`;
 
   return (
     <div className="border-t border-app p-3">

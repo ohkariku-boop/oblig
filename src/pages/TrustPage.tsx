@@ -90,9 +90,9 @@ export function TrustPage() {
         </div>
 
         <p className="mt-8 text-center text-xs text-muted">
-          <a href="https://ohkariku-boop.github.io/oblig/" className="inline-flex items-center gap-1 hover:underline">
+          <Link to="/" className="inline-flex items-center gap-1 hover:underline">
             Generated with Oblig <ExternalLink className="h-3 w-3" />
-          </a>
+          </Link>
         </p>
       </div>
     </div>

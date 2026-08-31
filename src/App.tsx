@@ -30,7 +30,7 @@ export default function App() {
       <AuthProvider>
       <ClientProvider>
       <ToastProvider>
-      <BrowserRouter basename="/oblig">
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<AuthPage />} />
