@@ -211,7 +211,7 @@ function Results({ state, scores, band, count, pct, recs, milestone, onReview, o
   onRetake: () => void;
 }) {
   const radarData = scores.map(s => ({ name: s.name.split(' ')[0], score: s.pct, fullMark: 100 }));
-  const barData = [...scores].sort((a, b) => a.pct - b.pct);
+  const barData = [...scores].map(s => ({ ...s, name: s.shortName })).sort((a, b) => a.pct - b.pct);
   const scoreColor = (s: number) => s >= 70 ? '#22c55e' : s >= 40 ? '#f59e0b' : '#2563eb';
 
   return (
@@ -274,13 +274,13 @@ function Results({ state, scores, band, count, pct, recs, milestone, onReview, o
         <Card>
           <CardHeader title="Section Scores" subtitle="Lowest to highest" icon={<TrendingUp className="h-5 w-5" />} />
           <CardBody>
-            <div className="h-64">
+            <div className="h-[380px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData} layout="vertical" margin={{ left: 20, right: 20 }}>
+                <BarChart data={barData} layout="vertical" margin={{ left: 8, right: 20, top: 4, bottom: 4 }}>
                   <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#5b7280' }} axisLine={false} tickLine={false} />
-                  <YAxis type="category" dataKey="name" width={110} tick={{ fontSize: 10, fill: '#5b7280' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid #d3dfe6', fontSize: 13 }} />
-                  <Bar dataKey="pct" radius={[0, 4, 4, 0]}>
+                  <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 11, fill: '#5b7280' }} axisLine={false} tickLine={false} interval={0} />
+                  <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid #d3dfe6', fontSize: 13 }} formatter={(value) => [`${value}%`, 'Score']} />
+                  <Bar dataKey="pct" radius={[0, 4, 4, 0]} barSize={22}>
                     {barData.map((entry, i) => <Cell key={i} fill={scoreColor(entry.pct)} />)}
                   </Bar>
                 </BarChart>

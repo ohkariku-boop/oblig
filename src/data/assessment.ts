@@ -63,12 +63,25 @@ export function bandFor(count: number): Band {
   return { label: 'Buttoned-Up', desc: 'Revisit the Milestone Playbook — you may be ready for the next stage gate.', level: 5, levelLabel: LEVEL_LABELS[5] };
 }
 
+const SHORT_SECTION_NAMES: Record<string, string> = {
+  'board-oversight': 'Board Oversight',
+  'vendor-due-diligence': 'Vendor Due Diligence',
+  'ongoing-monitoring': 'Ongoing Monitoring',
+  'subcontractor': 'Subcontractor Visibility',
+  'data-residency': 'Data Residency',
+  'incident-notification': 'Incident Notification',
+  'concentration-risk': 'Concentration Risk',
+  'outsourcing-register': 'Outsourcing Register',
+  'ai-governance': 'AI Governance',
+};
+
 export function sectionScores(state: ChecklistState) {
   return DATA.map(sec => {
     const checked = sec.items.filter((_, i) => state[itemKey(sec.id, i)]).length;
     return {
       id: sec.id,
       name: sec.name,
+      shortName: SHORT_SECTION_NAMES[sec.id] ?? sec.name,
       tag: sec.tag,
       checked,
       total: sec.items.length,
