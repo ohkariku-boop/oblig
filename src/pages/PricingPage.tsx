@@ -65,7 +65,7 @@ const PLANS = [
     monthly: 199,
     annual: 169,
     cta: 'Book a demo',
-    href: 'mailto:oblig.support@proton.me?subject=Enterprise%20demo%20request',
+    href: 'mailto:oblig.me@tutamail.com?subject=Enterprise%20demo%20request',
     highlight: false,
     features: [
       'Everything in Professional, plus:',

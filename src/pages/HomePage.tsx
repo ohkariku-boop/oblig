@@ -249,7 +249,7 @@ export function HomePage() {
             © {new Date().getFullYear()} Oblig. Built for founders, CIOs, CTOs and IT managers.
             {' '}·{' '}<Link to="/terms" className="hover:underline">Terms</Link>
             {' '}·{' '}<Link to="/privacy" className="hover:underline">Privacy</Link>
-            {' '}·{' '}<a href="mailto:oblig.support@proton.me" className="hover:underline">Contact</a>
+            {' '}·{' '}<a href="mailto:oblig.me@tutamail.com" className="hover:underline">Contact</a>
           </p>
         </div>
       </footer>
