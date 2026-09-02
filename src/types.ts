@@ -93,6 +93,7 @@ export interface ChatMessage {
   content: string;
   timestamp: string;
   suggestions?: string[];
+  model?: string;
 }
 
 export interface DashboardSummary {

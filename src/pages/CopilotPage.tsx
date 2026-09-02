@@ -100,7 +100,7 @@ export function CopilotPage() {
       if (!res.ok) throw new Error('AI unavailable');
       const data = await res.json();
       if (!data.reply) throw new Error('Empty reply');
-      const reply: ChatMessage = { id: `a${Date.now()}`, role: 'assistant', content: data.reply, timestamp: new Date().toISOString() };
+      const reply: ChatMessage = { id: `a${Date.now()}`, role: 'assistant', content: data.reply, timestamp: new Date().toISOString(), model: data.model };
       setMessages(m => [...m, reply]);
     } catch {
       // Real AI not configured or unreachable — fall back to the scripted
@@ -140,6 +140,9 @@ export function CopilotPage() {
                   </div>
                   <div className={cn('max-w-[80%] rounded-2xl px-4 py-3', m.role === 'assistant' ? 'surface-elev border border-app' : 'bg-primary-600 text-white')}>
                     <p className={cn('whitespace-pre-wrap text-sm', m.role === 'assistant' ? 'text-slate-700 dark:text-slate-200' : 'text-white')}>{m.content}</p>
+                    {m.model && (
+                      <p className="mt-1.5 text-[10px] text-muted">via {m.model}</p>
+                    )}
                     {m.role === 'assistant' && (
                       <div className="mt-3 flex items-center gap-2 border-t border-app pt-2">
                         <button onClick={() => navigator.clipboard?.writeText(m.content)} className="inline-flex items-center gap-1 text-xs text-muted hover:text-slate-700 dark:hover:text-slate-200 transition">

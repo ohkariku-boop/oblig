@@ -49,7 +49,7 @@ export default async function handler(req: Request): Promise<Response> {
         'X-Title': 'Oblig AI Copilot',
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3.5-haiku',
+        model: 'openrouter/auto',
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: userContent },
@@ -69,8 +69,9 @@ export default async function handler(req: Request): Promise<Response> {
     if (!reply) {
       return new Response(JSON.stringify({ error: 'Empty response from model' }), { status: 502 });
     }
+    const routedModel: string | undefined = data?.model;
 
-    return new Response(JSON.stringify({ reply }), {
+    return new Response(JSON.stringify({ reply, model: routedModel }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
