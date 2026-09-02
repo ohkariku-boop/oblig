@@ -8,6 +8,8 @@ import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { aiPromptSuggestions } from '@/data/sampleData';
+import { useClient } from '@/lib/ClientContext';
+import { overallPct, bandFor, checkedCount, marketCoverage, ALL_MARKETS, MARKET_LABELS } from '@/data/assessment';
 import type { ChatMessage } from '@/types';
 import { cn } from '@/utils/cn';
 
@@ -45,6 +47,18 @@ const cannedResponses: { match: RegExp; reply: string }[] = [
   },
 ];
 
+function buildContext(assessmentState: Record<string, boolean>): string {
+  const count = checkedCount(assessmentState);
+  if (count === 0) return '';
+  const pct = overallPct(assessmentState);
+  const band = bandFor(count);
+  const coverage = marketCoverage(assessmentState);
+  const marketLines = ALL_MARKETS
+    .map(code => `${MARKET_LABELS[code]}: ${coverage[code].pct}% (${coverage[code].checked}/${coverage[code].total})`)
+    .join('; ');
+  return `Overall readiness: ${pct}% (${band.levelLabel}). Per-market coverage: ${marketLines}.`;
+}
+
 function findReply(prompt: string): string {
   for (const r of cannedResponses) if (r.match.test(prompt)) return r.reply;
   return "I can help with vendor risk strategy, policy generation, incident notification planning, and market-specific compliance readiness. Try asking me to 'Generate a Vendor Risk Policy', 'Summarise my gaps', or 'Are we ready for MAS TRM?'. I'll draw on your latest assessment.";
@@ -60,6 +74,7 @@ export function CopilotPage() {
       suggestions: aiPromptSuggestions.slice(0, 4),
     },
   ]);
+  const { assessmentState } = useClient();
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -68,18 +83,33 @@ export function CopilotPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, typing]);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
     const userMsg: ChatMessage = { id: `u${Date.now()}`, role: 'user', content: trimmed, timestamp: new Date().toISOString() };
     setMessages(m => [...m, userMsg]);
     setInput('');
     setTyping(true);
-    setTimeout(() => {
+
+    try {
+      const res = await fetch('/api/copilot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed, context: buildContext(assessmentState) }),
+      });
+      if (!res.ok) throw new Error('AI unavailable');
+      const data = await res.json();
+      if (!data.reply) throw new Error('Empty reply');
+      const reply: ChatMessage = { id: `a${Date.now()}`, role: 'assistant', content: data.reply, timestamp: new Date().toISOString() };
+      setMessages(m => [...m, reply]);
+    } catch {
+      // Real AI not configured or unreachable — fall back to the scripted
+      // guidance rather than leaving the user with nothing.
       const reply: ChatMessage = { id: `a${Date.now()}`, role: 'assistant', content: findReply(trimmed), timestamp: new Date().toISOString() };
       setMessages(m => [...m, reply]);
+    } finally {
       setTyping(false);
-    }, 900);
+    }
   };
 
   return (
