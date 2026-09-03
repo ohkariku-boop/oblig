@@ -117,7 +117,7 @@ export function CopilotPage() {
       <PageHeader
         title="AI Governance Copilot"
         description="Your AI partner for governance, policy and compliance guidance."
-        action={<Badge variant="neutral"><Sparkles className="h-3.5 w-3.5" /> Guided responses — AI copilot coming soon</Badge>}
+        action={<Badge variant="info"><Sparkles className="h-3.5 w-3.5" /> AI-powered · auto-routed to the best available model</Badge>}
       />
 
       <div className="grid flex-1 gap-6 overflow-hidden lg:grid-cols-[1fr_280px]">
