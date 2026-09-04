@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { aiPromptSuggestions } from '@/data/sampleData';
 import { useClient } from '@/lib/ClientContext';
+import { supabase } from '@/lib/supabase';
 import { overallPct, bandFor, checkedCount, marketCoverage, ALL_MARKETS, MARKET_LABELS } from '@/data/assessment';
 import type { ChatMessage } from '@/types';
 import { cn } from '@/utils/cn';
@@ -92,21 +93,31 @@ export function CopilotPage() {
     setTyping(true);
 
     try {
+      const { data: sessionData } = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+      const token = sessionData.session?.access_token;
+      if (!token) throw { code: 'not_authenticated' };
+
       const res = await fetch('/api/copilot', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ message: trimmed, context: buildContext(assessmentState) }),
       });
-      if (!res.ok) throw new Error('AI unavailable');
       const data = await res.json();
-      if (!data.reply) throw new Error('Empty reply');
+      if (!res.ok) throw { code: data.code ?? 'upstream_error' };
+      if (!data.reply) throw { code: 'upstream_error' };
       const reply: ChatMessage = { id: `a${Date.now()}`, role: 'assistant', content: data.reply, timestamp: new Date().toISOString(), model: data.model };
       setMessages(m => [...m, reply]);
-    } catch {
-      // Real AI not configured or unreachable — fall back to the scripted
-      // guidance rather than leaving the user with nothing.
-      const reply: ChatMessage = { id: `a${Date.now()}`, role: 'assistant', content: findReply(trimmed), timestamp: new Date().toISOString() };
-      setMessages(m => [...m, reply]);
+    } catch (err) {
+      const code = (err as { code?: string })?.code;
+      if (code === 'not_authenticated') {
+        setMessages(m => [...m, { id: `a${Date.now()}`, role: 'assistant', content: 'Sign in to use the AI Copilot with your real readiness data.', timestamp: new Date().toISOString() }]);
+      } else if (code === 'rate_limited') {
+        setMessages(m => [...m, { id: `a${Date.now()}`, role: 'assistant', content: "You've reached today's AI Copilot limit. It resets tomorrow — in the meantime, here's a guided answer:\n\n" + findReply(trimmed), timestamp: new Date().toISOString() }]);
+      } else {
+        // Real AI not configured or briefly unreachable — fall back to
+        // scripted guidance rather than leaving the user with nothing.
+        setMessages(m => [...m, { id: `a${Date.now()}`, role: 'assistant', content: findReply(trimmed), timestamp: new Date().toISOString() }]);
+      }
     } finally {
       setTyping(false);
     }

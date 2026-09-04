@@ -14,25 +14,55 @@ Keep answers concise, practical, and structured (short paragraphs or bullet poin
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed', code: 'method_not_allowed' }), { status: 405 });
   }
 
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'AI not configured' }), { status: 503 });
+    return new Response(JSON.stringify({ error: 'AI not configured', code: 'not_configured' }), { status: 503 });
+  }
+
+  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+  const authHeader = req.headers.get('authorization');
+  if (!supabaseUrl || !supabaseAnonKey || !authHeader) {
+    return new Response(JSON.stringify({ error: 'Sign in required', code: 'not_authenticated' }), { status: 401 });
+  }
+
+  // Every call must belong to a real, signed-in user AND stay under the
+  // daily cap — this single RPC call enforces both: it runs as the
+  // caller (via their own token, checked against auth.uid()), so an
+  // invalid/missing session fails here, and an exhausted daily quota
+  // fails here too, before OpenRouter is ever touched.
+  const rpcRes = await fetch(`${supabaseUrl}/rest/v1/rpc/increment_and_check_copilot_usage`, {
+    method: 'POST',
+    headers: {
+      Authorization: authHeader,
+      apikey: supabaseAnonKey,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+  });
+
+  if (!rpcRes.ok) {
+    const errBody = await rpcRes.text().catch(() => '');
+    if (errBody.includes('RATE_LIMIT')) {
+      return new Response(JSON.stringify({ error: 'Daily AI Copilot limit reached. Try again tomorrow.', code: 'rate_limited' }), { status: 429 });
+    }
+    return new Response(JSON.stringify({ error: 'Sign in required', code: 'not_authenticated' }), { status: 401 });
   }
 
   let body: { message?: string; context?: string };
   try {
     body = await req.json();
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid request', code: 'bad_request' }), { status: 400 });
   }
 
   const message = (body.message ?? '').trim().slice(0, 2000);
   const context = (body.context ?? '').trim().slice(0, 2000);
   if (!message) {
-    return new Response(JSON.stringify({ error: 'Message required' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Message required', code: 'bad_request' }), { status: 400 });
   }
 
   const userContent = context
@@ -61,13 +91,13 @@ export default async function handler(req: Request): Promise<Response> {
 
     if (!response.ok) {
       const errText = await response.text().catch(() => '');
-      return new Response(JSON.stringify({ error: 'AI request failed', detail: errText.slice(0, 300) }), { status: 502 });
+      return new Response(JSON.stringify({ error: 'AI request failed', code: 'upstream_error', detail: errText.slice(0, 300) }), { status: 502 });
     }
 
     const data = await response.json();
     const reply: string | undefined = data?.choices?.[0]?.message?.content;
     if (!reply) {
-      return new Response(JSON.stringify({ error: 'Empty response from model' }), { status: 502 });
+      return new Response(JSON.stringify({ error: 'Empty response from model', code: 'upstream_error' }), { status: 502 });
     }
     const routedModel: string | undefined = data?.model;
 
@@ -76,6 +106,6 @@ export default async function handler(req: Request): Promise<Response> {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'AI request threw an error', detail: String(err).slice(0, 300) }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'AI request threw an error', code: 'server_error', detail: String(err).slice(0, 300) }), { status: 500 });
   }
 }
