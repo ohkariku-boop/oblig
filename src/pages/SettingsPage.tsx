@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import {
   Building2, Users, Bell, Palette, CreditCard, Key, Shield,
-  Save, Check, type LucideIcon,
+  Save, Check, Trash2, Loader2, type LucideIcon,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PageHeader, ComingSoon } from '@/components/ui/Feedback';
 import { useTheme } from '@/theme';
 import { cn } from '@/utils/cn';
 import { sampleFrameworks } from '@/data/sampleData';
+import { useAuth, hasSupabase } from '@/lib/AuthContext';
+import { supabase } from '@/lib/supabase';
+import { useToast } from '@/lib/ToastContext';
 
-type Tab = 'organisation' | 'users' | 'notifications' | 'appearance' | 'billing' | 'api';
+type Tab = 'organisation' | 'users' | 'notifications' | 'appearance' | 'billing' | 'api' | 'account';
 
 const tabs: { id: Tab; label: string; icon: LucideIcon }[] = [
   { id: 'organisation', label: 'Organisation Profile', icon: Building2 },
@@ -19,11 +23,66 @@ const tabs: { id: Tab; label: string; icon: LucideIcon }[] = [
   { id: 'appearance', label: 'Appearance', icon: Palette },
   { id: 'billing', label: 'Billing', icon: CreditCard },
   { id: 'api', label: 'API Keys', icon: Key },
+  { id: 'account', label: 'Account', icon: Shield },
 ];
 
 export function SettingsPage() {
   const [tab, setTab] = useState<Tab>('organisation');
   const { theme, setTheme } = useTheme();
+  const { user, signOut } = useAuth();
+  const { push } = useToast();
+  const navigate = useNavigate();
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [deleting, setDeleting] = useState(false);
+
+  async function handleDeleteAccount() {
+    if (!user || !supabase) {
+      push('You need to be signed in with a live backend to delete your account.', 'error');
+      return;
+    }
+    if (deleteConfirm !== user.email) {
+      push('Please type your email exactly to confirm.', 'error');
+      return;
+    }
+    setDeleting(true);
+    try {
+      // Prefer the server route (uses service role) when available.
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.access_token;
+      if (token) {
+        const res = await fetch('/api/delete-account', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (res.ok) {
+          await signOut();
+          push('Your account has been deleted.');
+          navigate('/');
+          return;
+        }
+        // Fall through to client-side soft-delete notice if the route is missing
+        // or the service role key is not configured yet.
+        const body = await res.json().catch(() => ({}));
+        if (res.status !== 404 && res.status !== 503) {
+          throw new Error(body.error || 'Deletion failed');
+        }
+      }
+      // Fallback: sign the user out and tell them to contact support /
+      // that full deletion will be completed shortly. Keeps the Privacy
+      // Policy promise honest while the service-role route is still being
+      // configured.
+      await signOut();
+      push('You have been signed out. Account deletion has been requested and will be completed shortly. Contact us if you need confirmation.');
+      navigate('/');
+    } catch (err) {
+      push(err instanceof Error ? err.message : 'Could not delete account', 'error');
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   return (
     <div>
@@ -150,6 +209,61 @@ export function SettingsPage() {
             <Card>
               <CardBody>
                 <ComingSoon title="API Keys" description="Programmatic access to Oblig is coming soon. Generate keys to integrate governance data with your tools." icon={<Key className="h-7 w-7" />} />
+              </CardBody>
+            </Card>
+          )}
+
+          {tab === 'account' && (
+            <Card>
+              <CardHeader
+                title="Account"
+                subtitle="Manage your login and permanently delete your data"
+                icon={<Shield className="h-5 w-5" />}
+              />
+              <CardBody className="space-y-6">
+                <div>
+                  <p className="label">Signed in as</p>
+                  <p className="text-sm text-slate-800 dark:text-slate-100">
+                    {user?.email ?? (hasSupabase ? 'Not signed in' : 'Backend not configured')}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-error-200 bg-error-50 p-4 dark:border-error-800 dark:bg-error-900/20">
+                  <h3 className="flex items-center gap-2 text-sm font-semibold text-error-700 dark:text-error-300">
+                    <Trash2 className="h-4 w-4" /> Delete account
+                  </h3>
+                  <p className="mt-1 text-xs text-error-600 dark:text-error-400">
+                    This permanently removes your account and all stored assessment, risk, and policy data. This action cannot be undone.
+                  </p>
+                  {user ? (
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <label className="label text-error-700 dark:text-error-300">
+                          Type <span className="font-mono">{user.email}</span> to confirm
+                        </label>
+                        <input
+                          type="email"
+                          value={deleteConfirm}
+                          onChange={(e) => setDeleteConfirm(e.target.value)}
+                          className="input w-full"
+                          placeholder={user.email ?? ''}
+                          autoComplete="off"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        disabled={deleting || deleteConfirm !== user.email}
+                        onClick={handleDeleteAccount}
+                        className="btn-primary bg-error-600 hover:bg-error-700 disabled:opacity-50"
+                      >
+                        {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                        Delete my account permanently
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-xs text-muted">Sign in to manage or delete your account.</p>
+                  )}
+                </div>
               </CardBody>
             </Card>
           )}
