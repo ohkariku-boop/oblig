@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ShieldCheck, Loader2, ArrowLeft } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { useAuth, hasSupabase } from '@/lib/AuthContext';
@@ -7,9 +7,9 @@ import { useAuth, hasSupabase } from '@/lib/AuthContext';
 type Mode = 'signin' | 'signup' | 'forgot' | 'update-password';
 
 export function AuthPage() {
-  const [searchParams] = useSearchParams();
-  const initialMode = (searchParams.get('mode') as Mode) || 'signin';
-  const [mode, setMode] = useState<Mode>(initialMode);
+  const location = useLocation();
+  const isUpdatePasswordRoute = location.pathname === '/update-password';
+  const [mode, setMode] = useState<Mode>(isUpdatePasswordRoute ? 'update-password' : 'signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,13 +19,13 @@ export function AuthPage() {
   const { signIn, signUp, resetPassword, updatePassword } = useAuth();
   const navigate = useNavigate();
 
-  // Supabase recovery links land here with tokens in the hash; once the
-  // session is recovered the user can set a new password.
+  // Supabase recovery links land on /update-password with tokens in the
+  // URL hash. Force the update-password UI when we are on that path.
   useEffect(() => {
-    if (searchParams.get('mode') === 'update-password') {
+    if (isUpdatePasswordRoute) {
       setMode('update-password');
     }
-  }, [searchParams]);
+  }, [isUpdatePasswordRoute]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

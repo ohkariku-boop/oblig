@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function resetPassword(email: string) {
     if (!supabase) return { error: 'Backend not configured yet.' };
-    const redirectTo = `${window.location.origin}/login?mode=update-password`;
+    const redirectTo = `${window.location.origin}/update-password`;
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
     return { error: error?.message ?? null };
   }
