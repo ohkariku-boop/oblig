@@ -131,18 +131,80 @@ export function DocsPage() {
               <p>
                 Oblig centres on <strong className="text-navy dark:text-cream">APAC financial-sector technology and AI expectations</strong> —
                 the references that show up when a regulated institution assesses a fintech vendor.
+                Links below point to primary regulator pages or official PDFs where a stable public URL is available.
+                Instruments change; always confirm the current version on the regulator’s site.
               </p>
-              <p className="mt-3 font-medium text-navy dark:text-cream">Technology & vendor risk (illustrative)</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5">
-                <li>Singapore — MAS Technology Risk Management (TRM) and related outsourcing notices</li>
-                <li>Malaysia — BNM Risk Management in Technology (RMiT)</li>
-                <li>Indonesia — OJK technology and digital governance instruments</li>
-                <li>Philippines — BSP technology and outsourcing circulars</li>
-                <li>Cambodia — NBC technology risk guidance</li>
-                <li>Japan — FSA cybersecurity-related guidelines</li>
-                <li>South Korea — FSC / related technology oversight</li>
-                <li>Taiwan — FSC outsourcing and supply-chain expectations</li>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Technology & vendor risk</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li>
+                  <strong className="text-navy dark:text-cream">Singapore</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.mas.gov.sg/regulation/guidelines/technology-risk-management-guidelines" target="_blank" rel="noopener noreferrer">MAS Technology Risk Management (TRM) Guidelines</a>
+                  {' · '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.mas.gov.sg/regulation/guidelines/guidelines-on-outsourcing" target="_blank" rel="noopener noreferrer">Guidelines on Outsourcing</a>
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Malaysia</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.bnm.gov.my/-/pd-rmit-nov25" target="_blank" rel="noopener noreferrer">BNM Risk Management in Technology (RMiT)</a>
+                  {' '}
+                  <span className="text-muted">(policy page; PDF linked from BNM)</span>
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Indonesia</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://ojk.go.id" target="_blank" rel="noopener noreferrer">OJK</a>
+                  {' '}technology, cyber, and digital governance instruments (current POJK / SEOJK on ojk.go.id)
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Philippines</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.bsp.gov.ph" target="_blank" rel="noopener noreferrer">BSP</a>
+                  {' '}technology and IT outsourcing circulars on bsp.gov.ph
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Cambodia</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.nbc.gov.kh" target="_blank" rel="noopener noreferrer">NBC</a>
+                  {' '}technology risk guidance on nbc.gov.kh
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Vietnam</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://sbv.gov.vn" target="_blank" rel="noopener noreferrer">State Bank of Vietnam (SBV)</a>
+                  {' '}— e.g. Circular 09/2020/TT-NHNN (IS security in banking), Circular 50/2024/TT-NHNN (online banking security). Full texts often via gazette / legal portals; start at sbv.gov.vn.
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Thailand</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.bot.or.th/content/dam/bot/fipcs/documents/FPG/2560/EngPDF/25600035.pdf" target="_blank" rel="noopener noreferrer">BOT IT Outsourcing for FIs</a>
+                  {' · '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.bot.or.th/content/dam/bot/fipcs/documents/FPG/2561/EngPDF/25610093.pdf" target="_blank" rel="noopener noreferrer">BOT IT security (payment systems)</a>
+                  {' · '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.bot.or.th" target="_blank" rel="noopener noreferrer">bot.or.th</a>
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Japan</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.fsa.go.jp/en/" target="_blank" rel="noopener noreferrer">FSA</a>
+                  {' '}cybersecurity-related guidelines for financial institutions
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">South Korea</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.fsc.go.kr/eng" target="_blank" rel="noopener noreferrer">FSC</a>
+                  {' '}and related technology / electronic financial supervision materials
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Taiwan</strong>
+                  {' — '}
+                  <a className="underline hover:text-navy dark:hover:text-cream" href="https://www.fsc.gov.tw" target="_blank" rel="noopener noreferrer">FSC</a>
+                  {' '}outsourcing and supply-chain expectations for financial institutions
+                </li>
               </ul>
+              <p className="mt-3 text-muted">
+                In-product scoring currently emphasises eight core markets with the deepest control maps; Vietnam and Thailand are included here and on the expansion roadmap. Official PDFs and circular numbers change — treat links as starting points.
+              </p>
               <p className="mt-3 font-medium text-navy dark:text-cream">AI governance</p>
               <p className="mt-1">
                 Emerging market-specific AI risk and governance guidance (for example MAS FEAT-oriented principles,
