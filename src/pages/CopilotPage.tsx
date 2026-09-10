@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/ui/Feedback';
 import { aiPromptSuggestions } from '@/data/sampleData';
 import { useClient } from '@/lib/ClientContext';
+import { useAuth, hasSupabase } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { overallPct, bandFor, checkedCount, marketCoverage, ALL_MARKETS, MARKET_LABELS } from '@/data/assessment';
 import type { ChatMessage } from '@/types';
@@ -76,6 +77,7 @@ export function CopilotPage() {
     },
   ]);
   const { assessmentState } = useClient();
+  const { user } = useAuth();
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -93,8 +95,18 @@ export function CopilotPage() {
     setTyping(true);
 
     try {
-      const { data: sessionData } = supabase ? await supabase.auth.getSession() : { data: { session: null } };
-      const token = sessionData.session?.access_token;
+      if (!hasSupabase || !supabase) {
+        throw { code: 'not_configured' };
+      }
+
+      // Prefer a live session; if AuthContext has a user but getSession is empty,
+      // try a one-shot refresh before giving up.
+      let { data: sessionData } = await supabase.auth.getSession();
+      let token = sessionData.session?.access_token;
+      if (!token && user) {
+        const refreshed = await supabase.auth.refreshSession();
+        token = refreshed.data.session?.access_token ?? undefined;
+      }
       if (!token) throw { code: 'not_authenticated' };
 
       const res = await fetch('/api/copilot', {
@@ -110,7 +122,21 @@ export function CopilotPage() {
     } catch (err) {
       const code = (err as { code?: string })?.code;
       if (code === 'not_authenticated') {
-        setMessages(m => [...m, { id: `a${Date.now()}`, role: 'assistant', content: 'Sign in to use the AI Copilot with your real readiness data.', timestamp: new Date().toISOString() }]);
+        setMessages(m => [...m, {
+          id: `a${Date.now()}`,
+          role: 'assistant',
+          content: user
+            ? 'Your session has expired. Please sign out and sign in again, then retry.'
+            : 'You are not signed in. Open Sign in (sidebar or top-right menu), then ask again so I can use your real readiness data.',
+          timestamp: new Date().toISOString(),
+        }]);
+      } else if (code === 'not_configured') {
+        setMessages(m => [...m, {
+          id: `a${Date.now()}`,
+          role: 'assistant',
+          content: "AI backend isn't configured on this deploy yet. Here's a guided answer based on common patterns:\n\n" + findReply(trimmed),
+          timestamp: new Date().toISOString(),
+        }]);
       } else if (code === 'rate_limited') {
         setMessages(m => [...m, { id: `a${Date.now()}`, role: 'assistant', content: "You've reached today's AI Copilot limit. It resets tomorrow — in the meantime, here's a guided answer:\n\n" + findReply(trimmed), timestamp: new Date().toISOString() }]);
       } else {
