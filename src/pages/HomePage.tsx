@@ -116,6 +116,7 @@ export function HomePage() {
             { icon: FileText, title: 'Generate policies instantly', body: 'Production-ready security, password and incident response policies — editable and exportable.' },
             { icon: ShieldAlert, title: 'Track real risks', body: 'A proper risk register with likelihood, impact, owners and a heat map.' },
             { icon: Network, title: 'Map to real regulator frameworks', body: 'See coverage against MAS TRM, BNM RMiT, OJK, BSP, NBC TCRMG, FSA and FSC — mapped to the exact clauses your buyers\' vendor questionnaires reference.' },
+            { icon: Sparkles, title: 'Kept current with APAC guidelines', body: 'We monitor tech, data, and AI governance updates across eight markets weekly — so mappings stay aligned with the latest TRM, residency, and AI guidance, not last year\'s PDF.' },
             { icon: TrendingUp, title: 'A roadmap that makes sense', body: 'A phased plan from where you are today to the maturity level you need next.' },
           ].map((f, i) => (
             <motion.div
