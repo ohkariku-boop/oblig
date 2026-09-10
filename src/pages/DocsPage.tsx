@@ -9,6 +9,8 @@ const NAV = [
   { id: 'assessment', label: 'The assessment' },
   { id: 'modules', label: 'Modules' },
   { id: 'frameworks', label: 'Frameworks' },
+  { id: 'vietnam-thailand', label: 'Vietnam & Thailand' },
+  { id: 'apac-emea', label: 'APAC vs EMEA' },
   { id: 'iso', label: 'ISO 27001' },
   { id: 'accounts', label: 'Accounts & data' },
   { id: 'glossary', label: 'Glossary' },
@@ -210,6 +212,111 @@ export function DocsPage() {
                 Emerging market-specific AI risk and governance guidance (for example MAS FEAT-oriented principles,
                 OJK lifecycle-style expectations, and high-impact AI oversight in markets such as Korea). AI guidance moves quickly;
                 Oblig monitors material tech, data, and AI updates weekly for product research.
+              </p>
+            </Section>
+
+            <Section id="vietnam-thailand" title="Vietnam & Thailand — status">
+              <p>
+                Vietnam and Thailand are part of Oblig’s <strong className="text-navy dark:text-cream">ten-market APAC set</strong>.
+                They matter for fintechs expanding across mainland Southeast Asia: local banks and payment institutions will still test
+                technology, data, and third-party controls even when your “home” map is Singapore or Malaysia.
+              </p>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Vietnam (SBV)</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li>
+                  <strong className="text-navy dark:text-cream">Primary tech-security baseline:</strong>{' '}
+                  Circular <strong>09/2020/TT-NHNN</strong> — security of information systems in banking operations
+                  (risk assessment, third-party/cloud conditions, incident response network, vulnerability management).
+                  Applies to credit institutions, foreign bank branches, and related payment/credit-information entities.
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Online / digital banking security:</strong>{' '}
+                  Circular <strong>50/2024/TT-NHNN</strong> (as amended) — security and confidentiality for online banking services,
+                  system security levels, and ongoing assessment expectations. Start from{' '}
+                  <a className="underline" href="https://sbv.gov.vn" target="_blank" rel="noopener noreferrer">sbv.gov.vn</a>;
+                  full texts are often mirrored on official legal portals.
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Vendor angle:</strong> institutions must assess third parties for higher-level systems
+                  and systems processing client personal data; contracts are expected to cover security commitments, interruption limits,
+                  continuity, and related controls. That is what flows into questionnaires you receive as a tech vendor.
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Oblig product status:</strong> documented and monitored; in-app control maps are
+                  <em> thinner</em> than SG/MY until a dedicated VN pack is completed. Treat VN as an expansion market with clear primary instruments.
+                </li>
+              </ul>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Thailand (BOT)</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li>
+                  <strong className="text-navy dark:text-cream">IT outsourcing for financial institutions:</strong>{' '}
+                  <a className="underline" href="https://www.bot.or.th/content/dam/bot/fipcs/documents/FPG/2560/EngPDF/25600035.pdf" target="_blank" rel="noopener noreferrer">BOT Notification on IT Outsourcing</a>{' '}
+                  — board oversight, risk management across security/integrity/availability, monitoring of providers, and cloud-related expectations.
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Broader IT risk for FIs:</strong> BOT has issued IT risk regulations and implementation-style guidance
+                  (including third-party / IT outsourcing reporting themes). Payment-system operators also face dedicated IT security notifications
+                  (e.g.{' '}
+                  <a className="underline" href="https://www.bot.or.th/content/dam/bot/fipcs/documents/FPG/2561/EngPDF/25610093.pdf" target="_blank" rel="noopener noreferrer">IT security for designated payment systems/services</a>).
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Vendor angle:</strong> Thai FIs must manage outsourcing risk as if the activity remained in-house —
+                  due diligence, contracts, continuity, and customer-data protection. Fintech vendors should expect those themes on questionnaires.
+                </li>
+                <li>
+                  <strong className="text-navy dark:text-cream">Oblig product status:</strong> documented with stable English PDF entry points; in-app depth is
+                  expanding. Pair TH with your SG/MY posture rather than treating it as “unregulated.”
+                </li>
+              </ul>
+            </Section>
+
+            <Section id="apac-emea" title="APAC vs EMEA — how the regimes differ">
+              <p>
+                Both regions push banks toward strong technology risk, cyber resilience, and third-party oversight.
+                The <em>shape</em> of the rulebook differs — which is why a single “global GRC” checklist rarely matches what an APAC FI asks a vendor.
+              </p>
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full min-w-[32rem] border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-app">
+                      <th className="py-2 pr-3 font-semibold text-navy dark:text-cream">Theme</th>
+                      <th className="py-2 pr-3 font-semibold text-navy dark:text-cream">APAC (Oblig focus)</th>
+                      <th className="py-2 font-semibold text-navy dark:text-cream">EMEA (illustrative)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-muted">
+                    <tr className="border-b border-app align-top">
+                      <td className="py-2 pr-3 text-navy dark:text-cream">Structure</td>
+                      <td className="py-2 pr-3">National supervisors (MAS, BNM, OJK, BSP, NBC, SBV, BOT, FSA, FSC…). Each market has its own TRM / outsourcing / cyber pack.</td>
+                      <td className="py-2">EU-level instruments (notably <strong>DORA</strong> for digital operational resilience; <strong>NIS2</strong> for essential entities) plus national competent authorities; UK has its own operational-resilience and outsourcing approach post-Brexit.</td>
+                    </tr>
+                    <tr className="border-b border-app align-top">
+                      <td className="py-2 pr-3 text-navy dark:text-cream">Binding style</td>
+                      <td className="py-2 pr-3">Mix of guidelines, policy documents, circulars, and notices. “Guideline” can still drive examination and vendor DD in practice (e.g. MAS TRM).</td>
+                      <td className="py-2">DORA is a regulation with direct effect for in-scope financial entities; detailed RTS/ITS sit underneath. More uniform ICT risk language across the EU single market.</td>
+                    </tr>
+                    <tr className="border-b border-app align-top">
+                      <td className="py-2 pr-3 text-navy dark:text-cream">Third parties</td>
+                      <td className="py-2 pr-3">Outsourcing / vendor risk is intense and local: materiality tests, subcontractor consent, data-location answers, register-style documentation for the bank.</td>
+                      <td className="py-2">DORA emphasises ICT third-party risk, contractual terms, and oversight of critical ICT third-party providers at EU level — a different concentration model than ten separate national packs.</td>
+                    </tr>
+                    <tr className="border-b border-app align-top">
+                      <td className="py-2 pr-3 text-navy dark:text-cream">Incident & resilience</td>
+                      <td className="py-2 pr-3">Market-specific timers and reporting paths (e.g. severe-incident expectations under MAS-related regimes). Operational resilience is rising on APAC agendas in parallel with Europe.</td>
+                      <td className="py-2">DORA standardises ICT incident classification/reporting and resilience testing themes (including threat-led testing for significant entities via EU frameworks).</td>
+                    </tr>
+                    <tr className="border-b border-app align-top">
+                      <td className="py-2 pr-3 text-navy dark:text-cream">What vendors feel</td>
+                      <td className="py-2 pr-3">Questionnaires that cite <em>local</em> frameworks — not “are you DORA ready?” alone. ISO/SOC help, but residency, consent, and local SLAs still appear.</td>
+                      <td className="py-2">Large EU FIs increasingly map vendor ICT controls to DORA-oriented clauses; cross-border vendors may still need country addenda.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4">
+                <strong className="text-navy dark:text-cream">Practical takeaway for Oblig users:</strong> if you already invested in ISO 27001 or EU-style operational resilience,
+                keep that evidence — then close <em>APAC-specific</em> gaps (notification culture, data location, outsourcing registers, local AI expectations).
+                Oblig is built for that second step, not as a DORA implementation tool.
               </p>
             </Section>
 
