@@ -83,9 +83,9 @@ export function HomePage() {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:px-8">
           {[
             { value: '6', label: 'Governance domains assessed' },
-            { value: '24', label: 'Questions in 5 minutes' },
+            { value: '~5 min', label: 'To complete the assessment' },
             { value: '10+', label: 'Policy templates, AI-generated' },
-            { value: '7', label: 'Compliance frameworks mapped' },
+            { value: '8', label: 'APAC markets mapped' },
           ].map(s => (
             <div key={s.label} className="text-center">
               <div className="text-3xl font-bold text-slate-900 dark:text-white">{s.value}</div>
@@ -173,7 +173,7 @@ export function HomePage() {
             <p className="mt-4 text-lg text-muted">No consultants, no spreadsheets, no jargon. Oblig meets you where you are and walks you forward.</p>
             <ol className="mt-8 space-y-6">
               {[
-                { title: 'Take the free assessment', body: 'Answer 24 questions across six governance domains. It takes about five minutes and auto-saves.' },
+                { title: 'Take the free assessment', body: 'Work through a short checklist across six governance domains. It takes about five minutes and auto-saves as you go.' },
                 { title: 'See your score and gaps', body: 'Get a maturity level, a radar chart of strengths and weaknesses, and clear recommendations.' },
                 { title: 'Generate what you need with AI', body: 'Use the Copilot to draft policies, prioritise actions, and prepare for the frameworks you care about.' },
                 { title: 'Track progress over time', body: 'Re-assess, monitor risks, and watch your governance score climb quarter over quarter.' },
