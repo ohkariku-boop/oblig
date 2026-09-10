@@ -35,7 +35,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signUp(email: string, password: string) {
     if (!supabase) return { error: 'Backend not configured yet.' };
-    const { error } = await supabase.auth.signUp({ email, password });
+    const emailRedirectTo = `${window.location.origin}/login`;
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo },
+    });
     return { error: error?.message ?? null };
   }
 
