@@ -115,8 +115,8 @@ export function resolveLandingVariant(search: string): LandingCopy {
     /* ignore */
   }
 
-  // Sticky random assignment for new visitors
-  const assigned: LandingVariantId = Math.random() < 0.5 ? 'a' : 'b';
+  // Default to variant B (posture + fintechs / selling into FIs)
+  const assigned: LandingVariantId = 'b';
   try {
     localStorage.setItem(STORAGE_KEY, assigned);
   } catch {
