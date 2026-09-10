@@ -29,7 +29,7 @@ export const MILESTONES: { value: Milestone; label: string }[] = [
 
 export const MILESTONE_NOTES: Record<Milestone | 'none', string> = {
   none: 'The full vendor-risk readiness checklist, grounded in what MAS, BNM, OJK, BSP, NBC, FSA and FSC actually ask for. Your progress saves in this browser.',
-  'quick-wins': 'The handful of items every one of the 8 markets converges on. Get these in place before you send out a single vendor questionnaire response.',
+  'quick-wins': 'The handful of items the region’s markets converge on. Get these in place before you send out a single vendor questionnaire response.',
   'sg-my': "Singapore and Malaysia are usually the first markets fintechs sell into, and both regulators (MAS, BNM) are actively rewriting their frameworks in 2026. Being mapped early is a real advantage here.",
   'first-fi': "A regulated bank, insurer or payment institution is about to run a formal vendor security assessment on you. This is what they'll actually ask for.",
   expansion: 'Each additional market has its own regulator, its own data residency rules, and its own subcontractor-consent requirements. Treat each as a distinct control pack, not a copy-paste of SG/MY.',
@@ -41,7 +41,7 @@ export const DATA: ChecklistSection[] = [
     name: 'Board & Senior Management Oversight',
     tag: 'the domain every regulator checks first',
     items: [
-      { t: 'A named executive owner for technology risk, not just "the CTO handles it"', w: 'Every one of the 8 markets expects a clear accountability line to senior management or the board, not an informal arrangement.', m: ['quick-wins', 'first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
+      { t: 'A named executive owner for technology risk, not just "the CTO handles it"', w: 'Every one of the covered markets expects a clear accountability line to senior management or the board, not an informal arrangement.', m: ['quick-wins', 'first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
       { t: 'A written risk appetite statement for technology and vendor risk', w: 'MAS TRM Domain 1 and BNM RMiT governance requirements both expect this in writing, not verbally understood.', m: ['sg-my'], c: ['SG','MY'] },
       { t: 'Regular (at least quarterly) risk reporting to leadership', w: 'Regulators across the region want to see this is a standing agenda item, not a once-a-year fire drill before an audit.', m: ['first-fi'], c: ['SG','MY','ID','PH','KH','JP','KR','TW'] },
       { t: 'A designated CISO-level owner, even if it is a fractional or part-time role', w: 'BNM RMiT explicitly expects designated CISO-level ownership; several other markets ask for the equivalent in practice.', m: ['expansion'], c: ['MY'] },

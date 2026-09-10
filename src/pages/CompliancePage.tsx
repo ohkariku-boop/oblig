@@ -37,7 +37,7 @@ export function CompliancePage() {
       <PageHeader
         title="Compliance Mapping"
         description={track === 'vendor'
-          ? 'Vendor & technology risk coverage across 8 APAC financial regulators.'
+          ? 'Vendor & technology risk coverage across 10 APAC financial regulators.'
           : 'AI governance coverage across each market\'s emerging AI frameworks.'}
         action={<button className="btn-primary" disabled title="Coming soon"><Sparkles className="h-4 w-4" /> AI Gap Analysis</button>}
       />

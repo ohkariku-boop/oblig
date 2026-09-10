@@ -50,7 +50,7 @@ const PLANS = [
       'AI policy generation (10+ templates)',
       'Unlimited AI Copilot messages',
       'Full risk register with heat maps',
-      'Compliance mapping (MAS, BNM, OJK, BSP, NBC, FSA, FSC — 8 APAC markets)',
+      'Compliance mapping (MAS, BNM, OJK, BSP, NBC, SBV, BOT, FSA, FSC — 10 APAC markets)',
       'Governance roadmap builder',
       'Evidence library (1 GB storage)',
       'Board-ready report exports',

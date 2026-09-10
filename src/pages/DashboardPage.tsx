@@ -76,7 +76,7 @@ export function DashboardPage() {
       {/* Score + trend */}
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
-          <CardHeader title="Overall Readiness" subtitle="Blended across all 8 markets" icon={<ShieldCheck className="h-5 w-5" />} />
+          <CardHeader title="Overall Readiness" subtitle="Blended across all 10 markets" icon={<ShieldCheck className="h-5 w-5" />} />
           <CardBody className="flex flex-col items-center pt-2">
             <ScoreRing score={s.governanceScore} size={140} label="Score" />
             <Badge variant={healthTone as 'success' | 'warning' | 'error'} className="mt-4">

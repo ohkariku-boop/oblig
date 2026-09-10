@@ -203,7 +203,7 @@ export function DocsPage() {
                 </li>
               </ul>
               <p className="mt-3 text-muted">
-                In-product scoring currently emphasises eight core markets with the deepest control maps; Vietnam and Thailand are included here and on the expansion roadmap. Official PDFs and circular numbers change — treat links as starting points.
+                Oblig covers ten APAC markets. Control maps are deepest for the original eight; Vietnam and Thailand are included in documentation and expanding in-product. Official PDFs and circular numbers change — treat links as starting points.
               </p>
               <p className="mt-3 font-medium text-navy dark:text-cream">AI governance</p>
               <p className="mt-1">
@@ -243,7 +243,7 @@ export function DocsPage() {
 
             <Section id="glossary" title="Glossary">
               <dl className="space-y-4">
-                <Gloss term="APAC" def="Asia-Pacific. In Oblig, primarily eight markets: Singapore, Malaysia, Indonesia, Philippines, Cambodia, Japan, South Korea, Taiwan." />
+                <Gloss term="APAC" def="Asia-Pacific. In Oblig, primarily ten markets: Singapore, Malaysia, Indonesia, Philippines, Cambodia, Vietnam, Thailand, Japan, South Korea, Taiwan." />
                 <Gloss term="Assessment / checklist" def="Oblig’s self-reported readiness questionnaire across technology governance domains." />
                 <Gloss term="Coverage" def="Share of relevant checklist items or framework controls marked as in place for a domain or market." />
                 <Gloss term="FEAT" def="Fairness, Ethics, Accountability, Transparency — principles associated with MAS AI guidance discussions." />
@@ -263,7 +263,7 @@ export function DocsPage() {
               <Faq q="Is this a certification?" a="No. Oblig does not issue ISO, SOC, or regulatory certifications. It helps you measure and improve posture against APAC-oriented expectations." />
               <Faq q="Is this legal advice?" a="No. Framework mappings are informational. Confirm obligations with qualified counsel and your buyers’ actual requirements." />
               <Faq q="How is this different from ISO 27001 tools?" a="ISO is a global ISMS standard. Oblig focuses on APAC financial-sector technology, data, and AI expectations that vendor questionnaires often test beyond a generic certificate." />
-              <Faq q="Which markets do you cover?" a="Eight priority markets across Southeast and Northeast Asia, with weekly research focused on tech, data, and AI governance updates — not pure payments licensing." />
+              <Faq q="Which markets do you cover?" a="Ten priority markets across Southeast and Northeast Asia, with weekly research focused on tech, data, and AI governance updates — not pure payments licensing." />
             </Section>
 
             <Section id="disclaimer" title="Disclaimer">
