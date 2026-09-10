@@ -42,11 +42,11 @@ export const landingVariantA: LandingCopy = {
   hypothesis:
     'Framing Oblig as a fintech tech-governance platform (know your posture) broadens ICP beyond “selling into FIs” while keeping APAC regulators as the credibility anchor.',
   hero: {
-    badge: 'Tech, data & AI governance for APAC fintechs',
-    headline: 'Know your governance posture',
-    headlineAccent: 'before it becomes a problem',
+    badge: 'Tech, data & AI governance — eight APAC markets',
+    headline: 'Know your tech governance posture',
+    headlineAccent: 'before the gap costs you',
     subhead:
-      'Oblig is a technology governance platform for fintechs — measure tech risk, data, and AI readiness against the frameworks that matter in eight APAC markets. Use it for internal clarity, board conversations, or when a bank’s vendor questionnaire lands.',
+      'Measure technology risk, data handling, and AI controls against the frameworks that shape APAC financial services — for fintechs building their own bar, and for those selling into banks, insurers, and payment institutions.',
     primaryCta: 'See my current posture',
     secondaryCta: 'Watch interactive demo',
     trustLine1: 'About 5 minutes',
@@ -70,10 +70,10 @@ export const landingVariantB: LandingCopy = {
     'Leading with “current posture” and naming both internal use and FI due diligence increases relevance for fintechs who are not mid-RFP.',
   hero: {
     badge: 'Free 5-minute tech governance check',
-    headline: 'Your fintech’s tech governance,',
-    headlineAccent: 'scored and actionable',
+    headline: 'Your tech governance,',
+    headlineAccent: 'scored and ready to act on',
     subhead:
-      'See where you stand on technology risk, data handling, and AI controls — mapped to APAC financial-sector expectations. Whether you need board-ready clarity or you’re preparing for a regulated buyer, start with a real baseline, not a generic SOC 2 story.',
+      'A clear baseline on tech risk, data, and AI — mapped to APAC expectations, not only a generic SOC 2 story. Built for fintechs that want to know where they stand, and for those selling into regulated FIs.',
     primaryCta: 'Get my posture score',
     secondaryCta: 'Watch how it works',
     trustLine1: 'No credit card',
