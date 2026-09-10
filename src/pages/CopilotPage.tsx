@@ -47,6 +47,10 @@ const cannedResponses: { match: RegExp; reply: string }[] = [
     match: /improve|score|matur/i,
     reply: "To improve your overall readiness across markets:\n\n**Quick wins (1-2 weeks each)**\n• Approve your draft Vendor Risk and Incident Notification policies\n• Document your subcontractor list and consent trail\n\n**Medium term (1-2 months)**\n• Schedule the BNM RMiT annual pentest\n• Confirm Cambodia/Indonesia data residency posture\n\n**Strategic (3-6 months)**\n• Build out AI governance lifecycle controls across markets\n• Formalise board-level quarterly risk reporting\n\nGetting your top 2 markets to strong coverage is realistic within a quarter. Want a phased roadmap?",
   },
+  {
+    match: /iso\s*27001|iso\/iec\s*27001|isms/i,
+    reply: "ISO 27001:2022 is a solid **ISMS baseline** (policies, suppliers, access, vulnerability management, incident process). It overlaps several Oblig checklist themes — but it is **not** a substitute for APAC maps.\n\n**Where ISO helps:** board/policy discipline, supplier security (A.5.19–A.5.21), cloud (A.5.23), secure development, monitoring, incident handling.\n\n**What ISO does not define for you:** MAS 1-hour severe-incident notification, BNM annual pentest / 3-year SIEM retention, hard data-residency rules (e.g. Cambodia, parts of Indonesia), Taiwan subcontractor consent, or market AI frameworks (FEAT, OJK lifecycle, Korea high-impact AI).\n\n**Practical takeaway:** use ISO evidence where it overlaps; close regulator-specific gaps next. ISO-ready ≠ MAS TRM / BNM RMiT questionnaire-ready.\n\nWant me to map your current assessment gaps to what ISO would vs would not already cover?",
+  },
 ];
 
 function buildContext(assessmentState: Record<string, boolean>): string {
