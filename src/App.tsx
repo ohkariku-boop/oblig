@@ -23,6 +23,7 @@ import { TermsPage } from '@/pages/TermsPage';
 import { PrivacyPage } from '@/pages/PrivacyPage';
 import { TrustPage } from '@/pages/TrustPage';
 import { DocsPage } from '@/pages/DocsPage';
+import { ContactPage } from '@/pages/ContactPage';
 
 export default function App() {
   return (

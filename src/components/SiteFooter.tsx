@@ -37,7 +37,7 @@ export function SiteFooter() {
               <li><Link to="/terms" className="hover:text-navy dark:hover:text-cream transition">Terms of Service</Link></li>
               <li><Link to="/privacy" className="hover:text-navy dark:hover:text-cream transition">Privacy Policy</Link></li>
               <li><Link to="/docs#disclaimer" className="hover:text-navy dark:hover:text-cream transition">Disclaimer</Link></li>
-              <li><a href="mailto:oblig.me@tutamail.com" className="hover:text-navy dark:hover:text-cream transition">Contact</a></li>
+              <li><Link to="/contact" className="hover:text-navy dark:hover:text-cream transition">Contact</Link></li>
             </ul>
           </div>
         </div>
