@@ -1,42 +1,34 @@
-/**
- * Oblig mark — geometric “O” with a vertical spine.
- * Reads as obligation / column of control; solid brand colours, no AI gradients.
- */
 export function ObligIcon({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 40 40"
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="Oblig"
-    >
-      {/* Light mode tile */}
-      <rect
-        x="0"
-        y="0"
-        width="40"
-        height="40"
-        rx="9"
-        className="fill-[#0c1b2e] dark:fill-[#f3f7f9]"
-      />
-      {/* Outer ring — the O */}
-      <circle
-        cx="20"
-        cy="20"
-        r="11.5"
+    <svg viewBox="0 0 100 100" className={className} xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="oblig-shield-grad" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#56f8ea" />
+          <stop offset="45%" stopColor="#2dc8bc" />
+          <stop offset="75%" stopColor="#2c6663" />
+          <stop offset="100%" stopColor="#0f2638" />
+        </linearGradient>
+      </defs>
+
+      {/* Background: genuinely swaps between light and dark mode, unlike a flattened PNG */}
+      <rect x="0" y="0" width="100" height="100" rx="18" fill="#eef2f5" className="dark:hidden" />
+      <rect x="0" y="0" width="100" height="100" rx="18" fill="#0c1b2e" className="hidden dark:block" />
+
+      {/* Shield + checkmark mark */}
+      <path
+        d="M50 14 L78 26 V50 C78 68 66 82 50 88 C34 82 22 68 22 50 V26 Z"
         fill="none"
-        strokeWidth="3.25"
-        className="stroke-[#f3f7f9] dark:stroke-[#0c1b2e]"
+        stroke="url(#oblig-shield-grad)"
+        strokeWidth={6}
+        strokeLinejoin="round"
       />
-      {/* Vertical spine — governance / obligation column */}
-      <rect
-        x="18.35"
-        y="11"
-        width="3.3"
-        height="18"
-        rx="1.2"
-        className="fill-[#3b82f6] dark:fill-[#2563eb]"
+      <path
+        d="M34 52 L46 64 L68 38"
+        fill="none"
+        stroke="url(#oblig-shield-grad)"
+        strokeWidth={7}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

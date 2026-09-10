@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, ArrowRight, ShieldCheck, Sparkles, Building2, X } from 'lucide-react';
+import { Check, ArrowRight, ShieldCheck, BadgeCheck, Building2, X } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { useTheme } from '@/theme';
 import { Moon, Sun } from 'lucide-react';
@@ -36,7 +36,7 @@ const PLANS = [
   {
     id: 'professional',
     name: 'Professional',
-    icon: Sparkles,
+    icon: BadgeCheck,
     tagline: 'For teams building a real programme',
     monthly: 49,
     annual: 39,
