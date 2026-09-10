@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Check, ArrowRight, ShieldCheck, BadgeCheck, Building2, X, Layers } from 'lucide-react';
 import { Logo } from '@/components/Logo';
+import { SiteFooter } from '@/components/SiteFooter';
 import { useTheme } from '@/theme';
 import { Moon, Sun } from 'lucide-react';
 import { cn } from '@/utils/cn';
@@ -102,7 +103,7 @@ export function PricingPage() {
           <nav className="hidden items-center gap-8 md:flex">
             <Link to="/" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Home</Link>
             <Link to="/pricing" className="text-sm font-medium text-navy dark:text-cream">Pricing</Link>
-            <Link to="/#features" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Platform</Link>
+            <Link to="/docs" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Docs</Link>
             <Link to="/#modules" className="text-sm font-medium text-ink hover:text-navy dark:hover:text-cream transition">Modules</Link>
           </nav>
           <div className="flex items-center gap-2">
@@ -236,14 +237,7 @@ export function PricingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-app surface">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <Link to="/"><Logo /></Link>
-            <p className="text-sm text-ink">© {new Date().getFullYear()} Oblig. Built for founders, CIOs, CTOs and IT managers.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

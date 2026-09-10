@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { DemoModal } from '@/components/DemoModal';
+import { SiteFooter } from '@/components/SiteFooter';
 import { useTheme } from '@/theme';
 import { Moon, Sun } from 'lucide-react';
 import { resolveLandingVariant } from '@/data/landingCopy';
@@ -25,6 +26,7 @@ export function HomePage() {
           <Link to="/"><Logo /></Link>
           <nav className="hidden items-center gap-8 md:flex">
             <Link to="/pricing" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition">Pricing</Link>
+            <Link to="/docs" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition">Docs</Link>
             <a href="#modules" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition">Modules</a>
             <a href="#how" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition">How it works</a>
           </nav>
@@ -239,25 +241,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-app surface">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <Link to="/"><Logo /></Link>
-            <div className="flex items-center gap-6 text-sm text-muted">
-              <a href="#features" className="hover:text-slate-900 dark:hover:text-white transition">Platform</a>
-              <a href="#modules" className="hover:text-slate-900 dark:hover:text-white transition">Modules</a>
-              <Link to="/app" className="hover:text-slate-900 dark:hover:text-white transition">Dashboard</Link>
-            </div>
-          </div>
-          <p className="mt-8 text-center text-xs text-muted">
-            © {new Date().getFullYear()} Oblig. Built for founders, CIOs, CTOs and IT managers.
-            {' '}·{' '}<Link to="/terms" className="hover:underline">Terms</Link>
-            {' '}·{' '}<Link to="/privacy" className="hover:underline">Privacy</Link>
-            {' '}·{' '}<a href="mailto:oblig.me@tutamail.com" className="hover:underline">Contact</a>
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </div>
   );
