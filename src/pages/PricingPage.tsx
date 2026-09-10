@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, ArrowRight, ShieldCheck, BadgeCheck, Building2, X } from 'lucide-react';
+import { Check, ArrowRight, ShieldCheck, BadgeCheck, Building2, X, Layers } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { useTheme } from '@/theme';
 import { Moon, Sun } from 'lucide-react';
@@ -120,7 +120,7 @@ export function PricingPage() {
         <div className="absolute -top-24 left-1/2 h-72 w-[640px] -translate-x-1/2 rounded-full bg-gradient-to-br from-navy-200/40 to-red-200/30 blur-3xl dark:from-navy-800/30 dark:to-red-900/20" />
         <div className="relative mx-auto max-w-3xl px-4 pt-20 pb-12 text-center sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-app surface px-4 py-1.5 text-sm font-medium text-ink shadow-soft">
-            <Sparkles className="h-4 w-4 text-red" /> Simple, transparent pricing
+            <Layers className="h-4 w-4 text-red" /> Simple, transparent pricing
           </span>
           <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl text-balance">
             Plans that scale with your governance programme
