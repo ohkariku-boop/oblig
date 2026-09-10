@@ -40,6 +40,7 @@ export default function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/docs" element={<DocsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/trust/:token" element={<TrustPage />} />
           <Route path="/app" element={<AppLayout><DashboardPage /></AppLayout>} />
           <Route path="/app/assessment" element={<AppLayout><AssessmentPage /></AppLayout>} />
