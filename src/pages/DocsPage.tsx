@@ -9,6 +9,8 @@ const NAV = [
   { id: 'assessment', label: 'The assessment' },
   { id: 'modules', label: 'Modules' },
   { id: 'frameworks', label: 'Frameworks' },
+  { id: 'mas-trm', label: 'MAS TRM (deep dive)' },
+  { id: 'bnm-rmit', label: 'BNM RMiT (deep dive)' },
   { id: 'vietnam-thailand', label: 'Vietnam & Thailand' },
   { id: 'apac-emea', label: 'APAC vs EMEA' },
   { id: 'iso', label: 'ISO 27001' },
@@ -212,6 +214,79 @@ export function DocsPage() {
                 Emerging market-specific AI risk and governance guidance (for example MAS FEAT-oriented principles,
                 OJK lifecycle-style expectations, and high-impact AI oversight in markets such as Korea). AI guidance moves quickly;
                 Oblig monitors material tech, data, and AI updates weekly for product research.
+              </p>
+            </Section>
+
+            <Section id="mas-trm" title="Deep dive: MAS Technology Risk Management (TRM)">
+              <p>
+                <strong className="text-navy dark:text-cream">Instrument:</strong>{' '}
+                <a className="underline" href="https://www.mas.gov.sg/regulation/guidelines/technology-risk-management-guidelines" target="_blank" rel="noopener noreferrer">MAS Technology Risk Management Guidelines</a>
+                {' '}(current major revision: <strong>January 2021</strong>). Status: <em>guidelines</em> — not a statute — but MAS expects proportionate implementation and uses them in supervision. They sit beside binding notices (e.g. cyber hygiene, technology risk notices for certain entities) and outsourcing rules.
+              </p>
+              <p className="mt-3">
+                <strong className="text-navy dark:text-cream">Who they bind in practice:</strong> MAS-regulated financial institutions. Fintech <em>vendors</em> feel TRM because banks and other FIs must oversee third parties to a standard consistent with their own technology risk framework — so vendor questionnaires recycle TRM themes.
+              </p>
+              <p className="mt-3 font-medium text-navy dark:text-cream">What the 2021 guidelines emphasise</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li><strong className="text-navy dark:text-cream">Board and senior management oversight</strong> — technology risk culture, risk appetite, members who understand cyber/tech risk; appointment of appropriately skilled CIO/CISO (or equivalent) roles.</li>
+                <li><strong className="text-navy dark:text-cream">Technology risk management framework</strong> — policies, standards, procedures; independent technology risk function; ongoing identification and treatment of tech risk.</li>
+                <li><strong className="text-navy dark:text-cream">Third-party service providers</strong> — assessment of arrangements that affect confidentiality, integrity, and resilience; ongoing oversight so providers meet a high standard of care (not a one-time onboarding checkbox).</li>
+                <li><strong className="text-navy dark:text-cream">IT project and change / secure development</strong> — project risk, secure SDLC, testing, and controlled change into production.</li>
+                <li><strong className="text-navy dark:text-cream">Cybersecurity and operations</strong> — threat monitoring, vulnerability management, access control, cryptography, network and data security, online financial services protections.</li>
+                <li><strong className="text-navy dark:text-cream">Resilience</strong> — availability, recovery, continuity aligned with the criticality of systems and services.</li>
+              </ul>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Related Singapore instruments vendors still hit</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li>
+                  <a className="underline" href="https://www.mas.gov.sg/regulation/guidelines/guidelines-on-outsourcing" target="_blank" rel="noopener noreferrer">Guidelines on Outsourcing</a>
+                  {' '}and binding outsourcing notices for banks / merchant banks — due diligence, contracts, audit rights, subcontractor visibility, concentration and exit themes.
+                </li>
+                <li>
+                  Evolving <strong className="text-navy dark:text-cream">third-party risk</strong> policy work (e.g. MAS consultation on Third-Party Risk Management Guidelines) that may broaden expectations beyond classic “outsourcing” labels to more SaaS and data arrangements — watch the final text and transition period.
+                </li>
+                <li>
+                  Incident expectations in the wider MAS technology-risk stack are often stricter than generic ISO language (industry practice and related notices emphasise rapid severe-incident reporting and follow-up root-cause analysis — treat specific timers as requiring primary-source confirmation for your entity type).
+                </li>
+              </ul>
+              <p className="mt-3 font-medium text-navy dark:text-cream">What this means on an Oblig assessment</p>
+              <p className="mt-1">
+                Checklist items on executive ownership, written risk appetite, secure SDLC, vendor evidence packs, subcontractor lists, cloud/shared-responsibility stories, and tested incident communication map directly to how Singapore FIs operationalise TRM + outsourcing. Closing those items is how you become “easy to approve” in a MAS-oriented questionnaire — not by waving ISO alone.
+              </p>
+            </Section>
+
+            <Section id="bnm-rmit" title="Deep dive: BNM Risk Management in Technology (RMiT)">
+              <p>
+                <strong className="text-navy dark:text-cream">Instrument:</strong>{' '}
+                <a className="underline" href="https://www.bnm.gov.my/-/pd-rmit-nov25" target="_blank" rel="noopener noreferrer">BNM Policy Document — Risk Management in Technology (RMiT)</a>
+                {' '}(major revision issued <strong>28 November 2025</strong>; effective that date except where the PD states otherwise). Unlike MAS TRM guidelines, RMiT is a <strong className="text-navy dark:text-cream">policy document</strong> with minimum requirements for in-scope institutions under BNM’s mandates.
+              </p>
+              <p className="mt-3">
+                <strong className="text-navy dark:text-cream">Scope (high level):</strong> licensed banks, investment banks, Islamic banks, insurers/takaful, prescribed DFIs, certain e-money and payment-system entities, and — in the 2025 revision — expanded reach toward larger non-bank merchant acquirers and intermediary remittance institutions meeting market-share thresholds. Always confirm the applicability list in the current PD.
+              </p>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Themes the 2025 PD reinforces</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li><strong className="text-navy dark:text-cream">Governance and the CISO</strong> — board/senior oversight of technology and cyber risk; elevated expectations on CISO capability and authority.</li>
+                <li><strong className="text-navy dark:text-cream">Service resilience and customer impact</strong> — risk appetite that includes customer impact tolerances; structured handling of intermittent degradation, not only total outages; recovery capabilities including harder cyber-resumption scenarios (e.g. isolated recovery concepts in recent updates).</li>
+                <li><strong className="text-navy dark:text-cream">Technology operations</strong> — enterprise technology architecture discipline; capacity and continuity; stronger baseline security expectations extended more broadly across the industry.</li>
+                <li><strong className="text-navy dark:text-cream">Cybersecurity management</strong> — heightened controls aligned with global practice; proactive testing culture (vulnerability assessment, penetration testing, and periodic red-team style exercises appear in industry summaries of the PD — confirm cadence in the primary text for your entity class).</li>
+                <li><strong className="text-navy dark:text-cream">Third parties and cyber supply chain</strong> — due diligence, continuous monitoring of third-party cyber posture, and supply-chain risk management — directly relevant to fintech vendors.</li>
+                <li><strong className="text-navy dark:text-cream">Cloud</strong> — cloud-specific risk assessment, shared responsibility, key ownership, architecture and exit considerations (detailed appendix-style guidance in recent RMiT editions).</li>
+                <li><strong className="text-navy dark:text-cream">Digital services & fraud</strong> — stronger fraud detection, monitoring, and customer-empowerment expectations for digital channels.</li>
+              </ul>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Concrete expectations vendors often hear (verify in PD)</p>
+              <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li>Named technology/cyber accountability (CISO-level ownership is a frequent questionnaire theme).</li>
+                <li>Logging / monitoring retention and SOC-style capability discussions — BNM has historically set explicit operational baselines industry participants quote in DD (confirm current numbers in the PD text you are assessed against).</li>
+                <li>Annual (or otherwise periodic) independent security testing evidence.</li>
+                <li>Cloud and outsourcing files: contracts, audit rights, exit, and continuous assurance — not a certificate alone.</li>
+              </ul>
+              <p className="mt-3 font-medium text-navy dark:text-cream">Parallel Malaysia track</p>
+              <p className="mt-1">
+                BNM has also issued technology requirements aimed at <strong className="text-navy dark:text-cream">payment-services regulatees</strong> (distinct from the core RMiT bank/insurer track). If you sell into a Malaysian e-money issuer or payment player, ask which policy document drives their vendor assessment rather than assuming “RMiT only.”
+              </p>
+              <p className="mt-3 font-medium text-navy dark:text-cream">What this means on an Oblig assessment</p>
+              <p className="mt-1">
+                Items on CISO ownership, pentest cadence, SIEM/logging discipline, cloud posture, and continuous vendor monitoring are RMiT-shaped. Strengthening them improves both Malaysian FI questionnaires and your overall APAC readiness score.
               </p>
             </Section>
 
