@@ -1,21 +1,24 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ShieldCheck, Sparkles, ArrowRight, Play, CheckCircle2, BarChart3,
-  FileText, ShieldAlert, Network, Brain, Zap, TrendingUp, Users, Lock,
+  FileText, ShieldAlert, Network, Brain, Zap, TrendingUp, Lock,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { DemoModal } from '@/components/DemoModal';
 import { useTheme } from '@/theme';
 import { Moon, Sun } from 'lucide-react';
+import { resolveLandingVariant } from '@/data/landingCopy';
 
 export function HomePage() {
   const { theme, toggle } = useTheme();
+  const location = useLocation();
   const [demoOpen, setDemoOpen] = useState(false);
+  const copy = useMemo(() => resolveLandingVariant(location.search), [location.search]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#080b16]">
+    <div className="min-h-screen bg-white dark:bg-[#080b16]" data-landing-variant={copy.id}>
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b border-app glass">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -31,13 +34,13 @@ export function HomePage() {
             </button>
             <Link to="/login" className="btn-secondary hidden sm:inline-flex">Sign in</Link>
             <Link to="/app/assessment" className="btn-primary">
-              Start Free Assessment <ArrowRight className="h-4 w-4" />
+              {copy.hero.primaryCta} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
+      {/* Hero — copy driven by A/B variant (see docs/tone-guidelines.md) */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-60" />
         <div className="absolute -top-32 left-1/2 h-[480px] w-[820px] -translate-x-1/2 rounded-full bg-gradient-to-br from-navy-200/40 to-red-200/30 blur-3xl dark:from-navy-800/30 dark:to-red-900/20" />
@@ -46,25 +49,26 @@ export function HomePage() {
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-left">
               <span className="inline-flex items-center gap-2 rounded-full border border-app surface px-4 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 shadow-soft">
                 <CheckCircle2 className="h-4 w-4 text-success-500" />
-                Free 5-Minute Governance Assessment
+                {copy.hero.badge}
               </span>
               <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05] text-balance">
-                Technology Risk &amp; Governance <span className="text-red">for APAC Fintechs</span>
+                {copy.hero.headline}{' '}
+                <span className="text-red">{copy.hero.headlineAccent}</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-muted text-balance">
-                Map your vendor security and AI governance posture directly to MAS, BNM, OJK, BSP, NBC, FSA and FSC — the frameworks banks, insurers and payment institutions actually use to assess you, not just SOC 2 or ISO 27001.
+                {copy.hero.subhead}
               </p>
               <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row">
                 <Link to="/app/assessment" className="btn-primary px-6 py-3 text-base">
-                  Start Free Assessment <ArrowRight className="h-4 w-4" />
+                  {copy.hero.primaryCta} <ArrowRight className="h-4 w-4" />
                 </Link>
                 <button onClick={() => setDemoOpen(true)} className="btn-secondary px-6 py-3 text-base">
-                  <Play className="h-4 w-4" /> Watch Interactive Demo
+                  <Play className="h-4 w-4" /> {copy.hero.secondaryCta}
                 </button>
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
-                <span className="inline-flex items-center gap-1.5"><Zap className="h-4 w-4 text-red" /> 5 Minutes</span>
-                <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-red" /> 8 APAC Markets</span>
+                <span className="inline-flex items-center gap-1.5"><Zap className="h-4 w-4 text-red" /> {copy.hero.trustLine1}</span>
+                <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-red" /> {copy.hero.trustLine2}</span>
               </div>
             </motion.div>
 
@@ -99,10 +103,10 @@ export function HomePage() {
       <section id="features" className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-            One platform, before you need a consultant
+            {copy.featuresTitle}
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Oblig turns scattered governance guesswork into a clear, measured programme your leadership can trust.
+            {copy.featuresSub}
           </p>
         </div>
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -169,8 +173,8 @@ export function HomePage() {
       <section id="how" className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">From uncertainty to a plan in one sitting</h2>
-            <p className="mt-4 text-lg text-muted">No consultants, no spreadsheets, no jargon. Oblig meets you where you are and walks you forward.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">{copy.howTitle}</h2>
+            <p className="mt-4 text-lg text-muted">{copy.howSub}</p>
             <ol className="mt-8 space-y-6">
               {[
                 { title: 'Take the free assessment', body: 'Work through a short checklist across six governance domains. It takes about five minutes and auto-saves as you go.' },
@@ -188,7 +192,7 @@ export function HomePage() {
               ))}
             </ol>
             <Link to="/app/assessment" className="btn-primary mt-8 px-6 py-3 text-base">
-              Start your free assessment <ArrowRight className="h-4 w-4" />
+              {copy.hero.primaryCta} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="rounded-3xl border border-app surface p-8 shadow-card">
@@ -227,9 +231,9 @@ export function HomePage() {
       <section className="relative overflow-hidden border-t border-app">
         <div className="absolute inset-0 bg-gradient-to-br from-navy to-red" />
         <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Start governing smarter today</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{copy.ctaTitle}</h2>
           <Link to="/app/assessment" className="mt-8 inline-flex items-center gap-2 rounded-md bg-cream px-6 py-3 text-base font-semibold text-navy shadow-lg hover:bg-paper transition">
-            Start Free Assessment <ArrowRight className="h-4 w-4" />
+            {copy.hero.primaryCta} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
