@@ -2,6 +2,11 @@
  * Landing page copy variants for A/B tests.
  * See docs/tone-guidelines.md for theory, tone rules, and test process.
  *
+ * Positioning: Oblig is a **fintech technology governance platform**
+ * (tech risk, data, AI) for APAC fintechs who need a clear current posture —
+ * whether for internal leadership, board readiness, or vendor due diligence
+ * when selling into regulated FIs. Not payments-licensing compliance.
+ *
  * Assignment: localStorage key oblig_landing_variant, override with ?v=a|b
  */
 
@@ -30,54 +35,56 @@ export interface LandingCopy {
   ctaTitle: string;
 }
 
-/** Control — current product positioning, slightly de-jargonised for load */
+/** Control — platform + posture first; FI questionnaires as proof of usefulness */
 export const landingVariantA: LandingCopy = {
   id: 'a',
-  label: 'Control — category + markets',
-  hypothesis: 'Baseline: clear category and who it’s for; regulators deferred past the first line.',
+  label: 'Control — platform + posture',
+  hypothesis:
+    'Framing Oblig as a fintech tech-governance platform (know your posture) broadens ICP beyond “selling into FIs” while keeping APAC regulators as the credibility anchor.',
   hero: {
-    badge: 'Free 5-minute governance assessment',
-    headline: 'Technology risk & governance',
-    headlineAccent: 'for APAC fintechs',
+    badge: 'Tech, data & AI governance for APAC fintechs',
+    headline: 'Know your governance posture',
+    headlineAccent: 'before it becomes a problem',
     subhead:
-      'See how ready you are for the vendor reviews banks, insurers, and payment institutions actually run — mapped to the frameworks they use across eight APAC markets, not only SOC 2 or ISO 27001.',
-    primaryCta: 'Start free assessment',
+      'Oblig is a technology governance platform for fintechs — measure tech risk, data, and AI readiness against the frameworks that matter in eight APAC markets. Use it for internal clarity, board conversations, or when a bank’s vendor questionnaire lands.',
+    primaryCta: 'See my current posture',
     secondaryCta: 'Watch interactive demo',
     trustLine1: 'About 5 minutes',
     trustLine2: '8 APAC markets',
   },
-  featuresTitle: 'One platform, before you need a consultant',
-  featuresSub: 'Turn scattered governance guesswork into a clear programme your leadership can trust.',
-  howTitle: 'From uncertainty to a plan in one sitting',
-  howSub: 'No consultants, no spreadsheets, no jargon. Oblig meets you where you are and walks you forward.',
-  ctaTitle: 'Start governing smarter today',
+  featuresTitle: 'A governance programme you can actually run',
+  featuresSub:
+    'From a clear score today to policies, risks, and a roadmap — built for fintech operators, not a six-month GRC rollout.',
+  howTitle: 'From “we think we’re fine” to a measured plan',
+  howSub: 'No consultants required to start. Assess, prioritise, improve, and re-check as guidelines move.',
+  ctaTitle: 'Get a clear view of where you stand',
 };
 
 /**
- * Challenger — outcome-led, lower intrinsic load in the hero
- * (problem → time → action; regulator list stays below the fold)
+ * Challenger — sharper outcome line; still platform not only “vendor DD”
  */
 export const landingVariantB: LandingCopy = {
   id: 'b',
-  label: 'Challenger — outcome + time',
+  label: 'Challenger — posture score + dual use',
   hypothesis:
-    'Leading with the buyer pain and time cost reduces extraneous load and increases assessment starts vs category-first headline.',
+    'Leading with “current posture” and naming both internal use and FI due diligence increases relevance for fintechs who are not mid-RFP.',
   hero: {
-    badge: 'Built for fintechs selling into regulated FIs',
-    headline: 'Know your gaps before',
-    headlineAccent: 'the questionnaire hits',
+    badge: 'Free 5-minute tech governance check',
+    headline: 'Your fintech’s tech governance,',
+    headlineAccent: 'scored and actionable',
     subhead:
-      'A short readiness check shows where you stand for APAC vendor due diligence — then a clear plan and AI help to close the gaps. About five minutes to your first score.',
-    primaryCta: 'See my gaps in 5 minutes',
+      'See where you stand on technology risk, data handling, and AI controls — mapped to APAC financial-sector expectations. Whether you need board-ready clarity or you’re preparing for a regulated buyer, start with a real baseline, not a generic SOC 2 story.',
+    primaryCta: 'Get my posture score',
     secondaryCta: 'Watch how it works',
     trustLine1: 'No credit card',
     trustLine2: 'Saves as you go',
   },
-  featuresTitle: 'Everything you need before the RFP',
-  featuresSub: 'Measure readiness, draft what buyers ask for, and prioritise the work that unblocks deals.',
-  howTitle: 'Four steps. One afternoon is enough to start.',
-  howSub: 'Designed for busy founders and IT leads — not a six-month GRC rollout.',
-  ctaTitle: 'Get your readiness score free',
+  featuresTitle: 'Built for how fintechs actually govern technology',
+  featuresSub:
+    'Measure readiness, close gaps with AI help, and stay aligned with the latest tech, data, and AI guidance across the region.',
+  howTitle: 'Four steps to a living governance view',
+  howSub: 'Designed for founders, CIOs, and IT leads who need signal this quarter — not a binder next year.',
+  ctaTitle: 'Start with your free posture score',
 };
 
 export const LANDING_VARIANTS: Record<LandingVariantId, LandingCopy> = {

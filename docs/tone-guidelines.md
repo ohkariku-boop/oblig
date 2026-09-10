@@ -23,7 +23,7 @@ Grounded in **cognitive load theory** (Sweller): working memory is limited. Land
 ## Voice
 
 - **Credible, not corporate.** Written for a busy founder, CIO, or compliance lead who has been burned by generic GRC tools.
-- **Specific to APAC buyers.** We name the problem (vendor questionnaires from regulated FIs), not “enterprise security posture.”
+- **Specific to APAC fintechs.** Primary promise: know your **tech / data / AI governance posture**. Selling into regulated FIs (vendor questionnaires) is a major use case, not the only one. Not payments-licensing compliance.
 - **Plain language first.** Regulator names appear when they add trust, not as decoration.
 - **Honest about stage.** Pre-launch / beta claims stay factual; no fake social proof counts.
 - **British/Singaporean professional English is fine** (programme, prioritise) if consistent within a page.

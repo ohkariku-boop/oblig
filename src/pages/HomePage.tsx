@@ -115,8 +115,8 @@ export function HomePage() {
             { icon: Brain, title: 'AI governance copilot', body: 'Ask how to improve, generate policies, and get prioritised recommendations in plain language.' },
             { icon: FileText, title: 'Generate policies instantly', body: 'Production-ready security, password and incident response policies — editable and exportable.' },
             { icon: ShieldAlert, title: 'Track real risks', body: 'A proper risk register with likelihood, impact, owners and a heat map.' },
-            { icon: Network, title: 'Map to real regulator frameworks', body: 'See coverage against MAS TRM, BNM RMiT, OJK, BSP, NBC TCRMG, FSA and FSC — mapped to the exact clauses your buyers\' vendor questionnaires reference.' },
-            { icon: Sparkles, title: 'Kept current with APAC guidelines', body: 'We monitor tech, data, and AI governance updates across eight markets weekly — so mappings stay aligned with the latest TRM, residency, and AI guidance, not last year\'s PDF.' },
+            { icon: Network, title: 'Map to real regulator frameworks', body: 'Coverage against MAS TRM, BNM RMiT, OJK, BSP, NBC TCRMG, FSA and FSC — the tech, data, and AI expectations that shape both your internal bar and what regulated buyers ask vendors.' },
+            { icon: Sparkles, title: 'Kept current with APAC guidelines', body: 'We monitor tech, data, and AI governance updates across eight markets weekly — so your posture view tracks the latest guidance, not last year\'s PDF.' },
             { icon: TrendingUp, title: 'A roadmap that makes sense', body: 'A phased plan from where you are today to the maturity level you need next.' },
           ].map((f, i) => (
             <motion.div
@@ -142,7 +142,7 @@ export function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Every module your governance programme needs</h2>
-            <p className="mt-4 text-lg text-muted">Start with an assessment. Expand into a full governance platform as you grow.</p>
+            <p className="mt-4 text-lg text-muted">Start with your posture score. Expand into a full tech governance platform as you grow.</p>
           </div>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
