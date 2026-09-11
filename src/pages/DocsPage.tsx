@@ -221,7 +221,10 @@ export function DocsPage() {
               <p>
                 <strong className="text-navy dark:text-cream">Instrument:</strong>{' '}
                 <a className="underline" href="https://www.mas.gov.sg/regulation/guidelines/technology-risk-management-guidelines" target="_blank" rel="noopener noreferrer">MAS Technology Risk Management Guidelines</a>
-                {' '}(current major revision: <strong>January 2021</strong>). Status: <em>guidelines</em> — not a statute — but MAS expects proportionate implementation and uses them in supervision. They sit beside binding notices (e.g. cyber hygiene, technology risk notices for certain entities) and outsourcing rules.
+                {' '}— published <strong>18 January 2021</strong>. As of 2026 this is still the current <em>Guidelines</em> text on MAS.gov.sg (no newer full Guidelines edition has replaced it). Status: principles and best-practice guidance — not a statute — but MAS expects proportionate implementation and uses them in supervision.
+              </p>
+              <p className="mt-3">
+                <strong className="text-navy dark:text-cream">Guidelines are not the whole stack.</strong> Binding detail often sits in entity-specific <strong className="text-navy dark:text-cream">Technology Risk Management Notices</strong>, cyber hygiene notices, and outsourcing rules. Notices have been renumbered and updated over time (for example reference changes around May 2024). In 2026 MAS has also consulted on further amendments to TRM Notices (e.g. asset management, change management, backup and recovery). Separate tracks — third-party risk, AI risk management, operational risk — continue to move in parallel. So “Jan 2021” means the Guidelines book is current; it does <em>not</em> mean MAS technology-risk policy froze in 2021.
               </p>
               <p className="mt-3">
                 <strong className="text-navy dark:text-cream">Who they bind in practice:</strong> MAS-regulated financial institutions. Fintech <em>vendors</em> feel TRM because banks and other FIs must oversee third parties to a standard consistent with their own technology risk framework — so vendor questionnaires recycle TRM themes.
@@ -237,6 +240,9 @@ export function DocsPage() {
               </ul>
               <p className="mt-3 font-medium text-navy dark:text-cream">Related Singapore instruments vendors still hit</p>
               <ul className="mt-2 list-disc space-y-2 pl-5">
+                <li>
+                  <strong className="text-navy dark:text-cream">TRM Notices</strong> (binding, by FI type) — availability, recovery, monitoring, and related hard requirements that complement the 2021 Guidelines. Confirm the notice that applies to your buyer’s licence class.
+                </li>
                 <li>
                   <a className="underline" href="https://www.mas.gov.sg/regulation/guidelines/guidelines-on-outsourcing" target="_blank" rel="noopener noreferrer">Guidelines on Outsourcing</a>
                   {' '}and binding outsourcing notices for banks / merchant banks — due diligence, contracts, audit rights, subcontractor visibility, concentration and exit themes.

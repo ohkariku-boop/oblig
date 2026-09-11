@@ -2,12 +2,13 @@
 
 Public-facing deep dives live on the website at `/docs#mas-trm` and `/docs#bnm-rmit`. This file is a short internal pointer.
 
-## MAS Technology Risk Management Guidelines (Jan 2021)
+## MAS Technology Risk Management Guidelines (Jan 2021 — still current Guidelines text)
 
 - **Type:** Guidelines (proportionate supervisory expectations), not a statute.
 - **Primary page:** https://www.mas.gov.sg/regulation/guidelines/technology-risk-management-guidelines
+- **Currency:** Published 18 Jan 2021; as of 2026 still the live *Guidelines* document on MAS.gov.sg (no full replacement edition). Binding TRM Notices, cyber hygiene, outsourcing/TPRM, and 2026 Notice consultations continue to evolve separately — “Jan 2021” ≠ frozen stack.
 - **Themes:** Board/senior oversight; TRM framework; third-party oversight; secure SDLC/change; cybersecurity operations; access/crypto/data; resilience.
-- **Sibling instruments:** Outsourcing guidelines/notices; cyber hygiene notices; evolving third-party risk (TPRM) consultation track.
+- **Sibling instruments:** Entity-specific TRM Notices; outsourcing guidelines/notices; cyber hygiene notices; TPRM consultation track; AI / operational-risk updates in parallel.
 - **Vendor implication:** FI questionnaires recycle TRM + outsourcing themes (ownership, evidence, subcontractors, cloud, incident readiness).
 
 ## BNM Risk Management in Technology (RMiT) PD (28 Nov 2025)
