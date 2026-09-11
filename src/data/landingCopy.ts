@@ -73,7 +73,7 @@ export const landingVariantB: LandingCopy = {
     'Leading with “current posture” and naming both internal use and FI due diligence increases relevance for fintechs who are not mid-RFP.',
   hero: {
     badge: 'Free 5-minute tech governance check',
-    headline: 'Your tech governance,',
+    headline: 'Your Tech Governance',
     headlineAccent: 'scored and ready to act on',
     subhead:
       'A clear baseline on tech risk, data, and AI — mapped to APAC expectations, not only a generic SOC 2 story. Built for fintechs that want to know where they stand, and for those selling into regulated FIs.',

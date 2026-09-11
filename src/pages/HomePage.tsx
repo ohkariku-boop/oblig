@@ -54,7 +54,7 @@ export function HomePage() {
                 {copy.hero.badge}
               </span>
               <h1 className="mt-6 text-4xl font-grotesk font-bold tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05] text-balance">
-                {copy.hero.headline}{' '}
+                <span className="whitespace-nowrap">{copy.hero.headline}</span>{' '}
                 <span className="text-red">{copy.hero.headlineAccent}</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-muted text-balance">
