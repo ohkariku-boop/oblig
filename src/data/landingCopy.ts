@@ -21,6 +21,8 @@ export interface LandingHeroCopy {
   secondaryCta: string;
   trustLine1: string;
   trustLine2: string;
+  /** Soft currency line — not a headline, not dated circulars */
+  trustLine3: string;
 }
 
 export interface LandingCopy {
@@ -51,6 +53,7 @@ export const landingVariantA: LandingCopy = {
     secondaryCta: 'Watch interactive demo',
     trustLine1: 'About 5 minutes',
     trustLine2: '10 APAC markets',
+    trustLine3: 'Updated as APAC guidance moves',
   },
   featuresTitle: 'A governance programme you can actually run',
   featuresSub:
@@ -78,6 +81,7 @@ export const landingVariantB: LandingCopy = {
     secondaryCta: 'Watch how it works',
     trustLine1: 'No credit card',
     trustLine2: 'Saves as you go',
+    trustLine3: 'Updated as APAC guidance moves',
   },
   featuresTitle: 'Built for how fintechs actually govern technology',
   featuresSub:

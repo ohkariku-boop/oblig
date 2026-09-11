@@ -71,6 +71,7 @@ export function HomePage() {
               <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
                 <span className="inline-flex items-center gap-1.5"><Zap className="h-4 w-4 text-red" /> {copy.hero.trustLine1}</span>
                 <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-red" /> {copy.hero.trustLine2}</span>
+                <span className="inline-flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-red" /> {copy.hero.trustLine3}</span>
               </div>
             </motion.div>
 
