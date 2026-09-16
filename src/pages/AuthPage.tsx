@@ -6,6 +6,8 @@ import { useAuth, hasSupabase } from '@/lib/AuthContext';
 
 type Mode = 'signin' | 'signup' | 'forgot' | 'update-password';
 
+const MIN_PASSWORD_LENGTH = 14;
+
 export function AuthPage() {
   const location = useLocation();
   const isUpdatePasswordRoute = location.pathname === '/update-password';
@@ -45,9 +47,9 @@ export function AuthPage() {
     }
 
     if (mode === 'update-password') {
-      if (password.length < 6) {
+      if (password.length < MIN_PASSWORD_LENGTH) {
         setBusy(false);
-        setError('Password must be at least 6 characters.');
+        setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
         return;
       }
       if (password !== confirmPassword) {
@@ -68,6 +70,19 @@ export function AuthPage() {
       return;
     }
 
+    if (mode === 'signup') {
+      if (password.length < MIN_PASSWORD_LENGTH) {
+        setBusy(false);
+        setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
+        return;
+      }
+      if (password !== confirmPassword) {
+        setBusy(false);
+        setError('Passwords do not match.');
+        return;
+      }
+    }
+
     const { error } = mode === 'signin' ? await signIn(email, password) : await signUp(email, password);
     setBusy(false);
     if (error) {
@@ -77,6 +92,8 @@ export function AuthPage() {
     if (mode === 'signup') {
       setInfo('Account created. Check your inbox to confirm your email, then sign in.');
       setMode('signin');
+      setPassword('');
+      setConfirmPassword('');
       return;
     }
     navigate('/app');
@@ -132,27 +149,31 @@ export function AuthPage() {
                 <input
                   type="password"
                   required
-                  minLength={6}
+                  minLength={mode === 'signin' ? 1 : MIN_PASSWORD_LENGTH}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input w-full"
-                  placeholder="At least 6 characters"
-                  autoComplete={mode === 'update-password' ? 'new-password' : 'current-password'}
+                  placeholder={mode === 'signin' ? 'Your password' : `At least ${MIN_PASSWORD_LENGTH} characters`}
+                  autoComplete={
+                    mode === 'update-password' || mode === 'signup' ? 'new-password' : 'current-password'
+                  }
                 />
               </div>
             )}
 
-            {mode === 'update-password' && (
+            {(mode === 'signup' || mode === 'update-password') && (
               <div>
-                <label className="mb-1 block text-xs font-medium text-ink">Confirm new password</label>
+                <label className="mb-1 block text-xs font-medium text-ink">
+                  {mode === 'signup' ? 'Confirm password' : 'Confirm new password'}
+                </label>
                 <input
                   type="password"
                   required
-                  minLength={6}
+                  minLength={MIN_PASSWORD_LENGTH}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="input w-full"
-                  placeholder="Repeat the new password"
+                  placeholder={mode === 'signup' ? 'Re-type your password' : 'Repeat the new password'}
                   autoComplete="new-password"
                 />
               </div>
@@ -213,6 +234,8 @@ export function AuthPage() {
                   setMode(mode === 'signin' ? 'signup' : 'signin');
                   setError(null);
                   setInfo(null);
+                  setPassword('');
+                  setConfirmPassword('');
                 }}
                 className="font-semibold text-navy hover:underline dark:text-cream"
               >
