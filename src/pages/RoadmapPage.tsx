@@ -24,8 +24,9 @@ export function RoadmapPage() {
     <div>
       <PageHeader
         title="Governance Roadmap"
-        description="A phased path from your current maturity to your target level."
-        action={<Link to="/app/copilot" className="btn-primary"><Sparkles className="h-4 w-4" /> Ask AI to refine</Link>}
+        description="Phased path from current maturity. High-risk inventory systems and evidence gaps should feed this plan as you fill Inventory and Evidence."
+        action={<Link to="/app/inventory" className="btn-secondary">Inventory gaps</Link>
+        <Link to="/app/copilot" className="btn-primary"><Sparkles className="h-4 w-4" /> Ask AI to refine</Link>}
       />
 
       {/* Level summary */}

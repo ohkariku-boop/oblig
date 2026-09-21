@@ -92,7 +92,7 @@ export function HomePage() {
             { value: '6', label: 'Governance domains assessed' },
             { value: '~5 min', label: 'To complete the assessment' },
             { value: '10+', label: 'Policy templates, AI-generated' },
-            { value: '10', label: 'APAC markets mapped' },
+            { value: '10', label: 'Core APAC markets mapped' },
           ].map(s => (
             <div key={s.label} className="text-center">
               <div className="text-3xl font-bold text-slate-900 dark:text-white">{s.value}</div>
@@ -155,7 +155,7 @@ export function HomePage() {
               { icon: FileText, name: 'AI Policy Generator', desc: 'Generate, edit and export governance documents.', to: '/app/policies' },
               { icon: ShieldAlert, name: 'Risk Register', desc: 'Identify, score and mitigate your risks.', to: '/app/risk' },
               { icon: TrendingUp, name: 'Governance Roadmap', desc: 'A phased path to your target maturity.', to: '/app/roadmap' },
-              { icon: Network, name: 'Compliance Mapping', desc: '10 APAC markets — MAS, BNM, OJK, BSP, NBC, SBV, BOT, FSA, FSC.', to: '/app/compliance' },
+              { icon: Network, name: 'Compliance Mapping', desc: 'APAC focus — deepest maps on eight core markets; VN/TH expanding.', to: '/app/compliance' },
               { icon: Lock, name: 'Evidence Library', desc: 'A searchable home for all your proof.', to: '/app/evidence' },
               { icon: FileText, name: 'Reports', desc: 'Board-ready reports in a click.', to: '/app/reports' },
             ].map(m => (

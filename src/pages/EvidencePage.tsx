@@ -42,16 +42,29 @@ export function EvidencePage() {
         if (!data) return;
         setUserEvidence(data.map((r): EvidenceItem => ({
           id: r.id, name: r.title, type: r.type ?? 'policy', size: '—',
-          uploadedAt: r.created_at, tags: r.framework_ref ? [r.framework_ref] : [],
+          uploadedAt: r.created_at,
+          tags: [r.framework_ref, r.control_ref, r.checklist_key].filter(Boolean) as string[],
+          controlRef: r.control_ref ?? undefined,
+          checklistKey: r.checklist_key ?? undefined,
+          systemId: r.system_id ?? null,
+          vendorId: r.vendor_id ?? null,
+          coverageStatus: r.coverage_status ?? 'partial',
+          description: r.description ?? undefined,
         })));
       });
   }, [user, activeClient]);
 
-  async function addEvidence(input: { title: string; description: string; type: EvidenceItem['type']; frameworkRef: string }) {
+  async function addEvidence(input: {
+    title: string; description: string; type: EvidenceItem['type']; frameworkRef: string;
+    controlRef: string; checklistKey: string; coverageStatus: 'none' | 'partial' | 'full';
+  }) {
     if (!user || !supabase || !activeClient) return;
     const { data, error } = await supabase.from('evidence').insert({
       user_id: user.id, client_id: activeClient.id, title: input.title, description: input.description,
       type: input.type, framework_ref: input.frameworkRef || null,
+      control_ref: input.controlRef || null,
+      checklist_key: input.checklistKey || null,
+      coverage_status: input.coverageStatus,
     }).select().single();
     if (error || !data) {
       logError(`Failed to add evidence: ${error?.message ?? 'unknown error'}`);
@@ -60,7 +73,12 @@ export function EvidencePage() {
     }
     setUserEvidence(prev => [{
       id: data.id, name: data.title, type: data.type ?? 'policy', size: '—',
-      uploadedAt: data.created_at, tags: data.framework_ref ? [data.framework_ref] : [],
+      uploadedAt: data.created_at,
+      tags: [data.framework_ref, data.control_ref, data.checklist_key].filter(Boolean) as string[],
+      controlRef: data.control_ref ?? undefined,
+      checklistKey: data.checklist_key ?? undefined,
+      coverageStatus: data.coverage_status ?? 'partial',
+      description: data.description ?? undefined,
     }, ...prev]);
     setShowAdd(false);
     push('Evidence logged.');
@@ -79,7 +97,7 @@ export function EvidencePage() {
     push('Evidence deleted.');
   }
 
-  const allEvidence = [...userEvidence, ...sampleEvidence];
+  const allEvidence = user ? userEvidence : [...userEvidence, ...sampleEvidence];
   const types: ('all' | EvidenceItem['type'])[] = ['all', 'policy', 'screenshot', 'contract', 'audit', 'certificate', 'report'];
   const filtered = allEvidence.filter(e =>
     (typeFilter === 'all' || e.type === typeFilter) &&
@@ -92,7 +110,7 @@ export function EvidencePage() {
     <div>
       <PageHeader
         title="Evidence Library"
-        description="A searchable repository for policies, contracts, audits and certificates."
+        description="Log evidence and link it to controls or checklist items. File upload comes later — metadata and coverage status first."
         action={<button onClick={() => user ? setShowAdd(true) : navigate('/login')} className="btn-primary">{user ? <><Upload className="h-4 w-4" /> Upload Evidence</> : <>Sign in to add evidence</>}</button>}
       />
 
@@ -208,15 +226,28 @@ export function EvidencePage() {
   );
 }
 
-function AddEvidenceForm({ onCancel, onSave }: { onCancel: () => void; onSave: (input: { title: string; description: string; type: EvidenceItem['type']; frameworkRef: string }) => void }) {
+function AddEvidenceForm({ onCancel, onSave }: {
+  onCancel: () => void;
+  onSave: (input: {
+    title: string; description: string; type: EvidenceItem['type']; frameworkRef: string;
+    controlRef: string; checklistKey: string; coverageStatus: 'none' | 'partial' | 'full';
+  }) => void;
+}) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState<EvidenceItem['type']>('policy');
   const [frameworkRef, setFrameworkRef] = useState('');
+  const [controlRef, setControlRef] = useState('');
+  const [checklistKey, setChecklistKey] = useState('');
+  const [coverageStatus, setCoverageStatus] = useState<'none' | 'partial' | 'full'>('partial');
 
   return (
     <div>
-      <PageHeader title="Log Evidence" description="Real file upload isn't available yet — this records the metadata so you have a searchable log." action={<button onClick={onCancel} className="btn-secondary"><X className="h-4 w-4" /> Cancel</button>} />
+      <PageHeader
+        title="Log Evidence"
+        description="Link metadata to a control or checklist item. Real file storage is on the roadmap."
+        action={<button onClick={onCancel} className="btn-secondary"><X className="h-4 w-4" /> Cancel</button>}
+      />
       <Card className="max-w-xl">
         <CardBody className="space-y-4">
           <div>
@@ -226,21 +257,47 @@ function AddEvidenceForm({ onCancel, onSave }: { onCancel: () => void; onSave: (
           <div>
             <label className="mb-1 block text-xs font-medium text-ink">Type</label>
             <select value={type} onChange={e => setType(e.target.value as EvidenceItem['type'])} className="input w-full">
-              {(['policy', 'screenshot', 'contract', 'audit', 'certificate', 'report'] as const).map(t => (
-                <option key={t} value={t}>{t}</option>
-              ))}
+              <option value="policy">Policy</option>
+              <option value="screenshot">Screenshot</option>
+              <option value="contract">Contract</option>
+              <option value="audit">Audit</option>
+              <option value="certificate">Certificate</option>
+              <option value="report">Report</option>
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-ink">Note</label>
+            <label className="mb-1 block text-xs font-medium text-ink">Notes / location</label>
             <textarea value={description} onChange={e => setDescription(e.target.value)} className="input w-full" rows={3} placeholder="Where the real file lives, who owns it, when it expires, etc." />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-ink">Framework reference (optional)</label>
-            <input value={frameworkRef} onChange={e => setFrameworkRef(e.target.value)} className="input w-full" placeholder="e.g. MAS TRM" />
+            <label className="mb-1 block text-xs font-medium text-ink">Framework ref</label>
+            <input value={frameworkRef} onChange={e => setFrameworkRef(e.target.value)} className="input w-full" placeholder="e.g. MAS TRM, BNM RMiT" />
           </div>
-          <button disabled={!title.trim()} onClick={() => onSave({ title, description, type, frameworkRef })} className="btn-primary w-full justify-center">
-            <Upload className="h-4 w-4" /> Save Entry
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Control ref</label>
+            <input value={controlRef} onChange={e => setControlRef(e.target.value)} className="input w-full" placeholder="e.g. TPR, GOV, access-control" />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Checklist key (optional)</label>
+            <input value={checklistKey} onChange={e => setChecklistKey(e.target.value)} className="input w-full" placeholder="e.g. section id or item label" />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-ink">Coverage status</label>
+            <select value={coverageStatus} onChange={e => setCoverageStatus(e.target.value as 'none' | 'partial' | 'full')} className="input w-full">
+              <option value="none">None</option>
+              <option value="partial">Partial</option>
+              <option value="full">Full</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            className="btn-primary"
+            disabled={!title.trim()}
+            onClick={() => onSave({
+              title: title.trim(), description, type, frameworkRef, controlRef, checklistKey, coverageStatus,
+            })}
+          >
+            Save evidence
           </button>
         </CardBody>
       </Card>

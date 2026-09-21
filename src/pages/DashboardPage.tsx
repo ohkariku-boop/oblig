@@ -32,10 +32,11 @@ export function DashboardPage() {
     <div>
       <PageHeader
         title="Dashboard"
-        description="Your governance programme at a glance."
+        description="Posture from assessment — extend with AI & vendor inventory when you are ready."
         action={
           <>
-            <Link to="/app/assessment" className="btn-secondary">New Assessment</Link>
+            <Link to="/app/inventory" className="btn-secondary">Inventory</Link>
+            <Link to="/app/assessment" className="btn-secondary">Assessment</Link>
             <Link to="/app/copilot" className="btn-primary"><Sparkles className="h-4 w-4" /> Ask AI Copilot</Link>
           </>
         }
@@ -76,7 +77,7 @@ export function DashboardPage() {
       {/* Score + trend */}
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
-          <CardHeader title="Overall Readiness" subtitle="Blended across all 10 markets" icon={<ShieldCheck className="h-5 w-5" />} />
+          <CardHeader title="Overall Readiness" subtitle="Blended from your assessment (core market maps)" icon={<ShieldCheck className="h-5 w-5" />} />
           <CardBody className="flex flex-col items-center pt-2">
             <ScoreRing score={s.governanceScore} size={140} label="Score" />
             <Badge variant={healthTone as 'success' | 'warning' | 'error'} className="mt-4">

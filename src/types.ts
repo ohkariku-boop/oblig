@@ -56,6 +56,12 @@ export interface EvidenceItem {
   size: string;
   uploadedAt: string;
   tags: string[];
+  controlRef?: string;
+  checklistKey?: string;
+  systemId?: string | null;
+  vendorId?: string | null;
+  coverageStatus?: 'none' | 'partial' | 'full';
+  description?: string;
 }
 
 export interface Framework {
@@ -111,4 +117,50 @@ export interface DashboardSummary {
   categoryScores: { name: string; score: number; fullMark: number }[];
   trend: { month: string; score: number }[];
   aiRecommendations: { id: string; title: string; impact: 'high' | 'medium' | 'low'; category: string }[];
+}
+
+/** Inventory — AI system is the unit of analysis */
+export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
+export type LifecycleStatus = 'discovered' | 'pilot' | 'production' | 'retired';
+export type AiInvolvement = 'none' | 'partial' | 'core';
+export type CoverageStatus = 'none' | 'partial' | 'full';
+
+export interface Vendor {
+  id: string;
+  name: string;
+  products?: string;
+  aiInvolvement: AiInvolvement;
+  dataAccess?: string;
+  jurisdictions?: string;
+  criticality: RiskLevel;
+  certifications?: string;
+  notes?: string;
+  reviewStatus: 'draft' | 'in_review' | 'approved';
+  updatedAt: string;
+}
+
+export interface AiSystem {
+  id: string;
+  name: string;
+  purpose?: string;
+  ownerName?: string;
+  businessUnit?: string;
+  jurisdiction?: string;
+  lifecycleStatus: LifecycleStatus;
+  riskLevel: RiskLevel;
+  modelName?: string;
+  vendorId?: string | null;
+  vendorName?: string;
+  dataSources?: string;
+  dataClassification?: string;
+  processesCustomerData: boolean;
+  humanOversight?: string;
+  isAgent: boolean;
+  agentAllowedActions?: string;
+  agentApprovalRequired: boolean;
+  production: boolean;
+  controlsNotes?: string;
+  controlRefs?: string;
+  reviewDate?: string;
+  updatedAt: string;
 }

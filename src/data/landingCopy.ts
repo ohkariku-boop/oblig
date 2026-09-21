@@ -44,7 +44,7 @@ export const landingVariantA: LandingCopy = {
   hypothesis:
     'Framing Oblig as a fintech tech-governance platform (know your posture) broadens ICP beyond “selling into FIs” while keeping APAC regulators as the credibility anchor.',
   hero: {
-    badge: 'Tech, data & AI governance — ten APAC markets',
+    badge: 'Tech, data & AI governance — APAC fintechs',
     headline: 'Know your tech governance posture',
     headlineAccent: 'before the gap costs you',
     subhead:
@@ -52,7 +52,7 @@ export const landingVariantA: LandingCopy = {
     primaryCta: 'See my current posture',
     secondaryCta: 'Watch interactive demo',
     trustLine1: 'About 5 minutes',
-    trustLine2: '10 APAC markets',
+    trustLine2: '8+ APAC markets',
     trustLine3: 'Updated as APAC guidance moves',
   },
   featuresTitle: 'A governance programme you can actually run',

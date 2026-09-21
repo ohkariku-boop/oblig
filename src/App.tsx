@@ -45,6 +45,7 @@ export default function App() {
           <Route path="/trust/:token" element={<TrustPage />} />
           <Route path="/app" element={<AppLayout><DashboardPage /></AppLayout>} />
           <Route path="/app/assessment" element={<AppLayout><AssessmentPage /></AppLayout>} />
+          <Route path="/app/inventory" element={<AppLayout><InventoryPage /></AppLayout>} />
           <Route path="/app/copilot" element={<AppLayout><CopilotPage /></AppLayout>} />
           <Route path="/app/policies" element={<AppLayout><PoliciesPage /></AppLayout>} />
           <Route path="/app/risk" element={<AppLayout><RiskPage /></AppLayout>} />
