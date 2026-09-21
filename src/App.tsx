@@ -9,6 +9,7 @@ import { HomePage } from '@/pages/HomePage';
 import { AuthPage } from '@/pages/AuthPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { AssessmentPage } from '@/pages/AssessmentPage';
+import { InventoryPage } from '@/pages/InventoryPage';
 import { CopilotPage } from '@/pages/CopilotPage';
 import { PoliciesPage } from '@/pages/PoliciesPage';
 import { RiskPage } from '@/pages/RiskPage';
