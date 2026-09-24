@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Boxes, Building2, Cpu, Plus, Search, Trash2, AlertTriangle, Bot, Shield,
-} from 'lucide-react';
+import { Layers, Building2, Cpu, Plus, Search, Trash2, AlertTriangle, Shield } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PageHeader, EmptyState } from '@/components/ui/Feedback';
@@ -193,7 +191,7 @@ export function InventoryPage() {
         <PageHeader title="AI & Vendor Inventory" description="Catalogue AI systems and technology vendors — the foundation for continuous governance." />
         <Card>
           <EmptyState
-            icon={<Boxes className="h-6 w-6" />}
+            icon={<Layers className="h-6 w-6" />}
             title="Sign in to build your inventory"
             description="Track AI systems (the unit of analysis), vendors, risk, and customer-data exposure."
           />
@@ -233,7 +231,7 @@ export function InventoryPage() {
         <Stat label="AI systems" value={systems.length} icon={Cpu} />
         <Stat label="Vendors" value={vendors.length} icon={Building2} />
         <Stat label="High / critical risk" value={stats.highRisk} icon={AlertTriangle} warn={stats.highRisk > 0} />
-        <Stat label="Agents" value={stats.agents} icon={Bot} />
+        <Stat label="Agents" value={stats.agents} icon={Cpu} />
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -289,7 +287,7 @@ export function InventoryPage() {
                     <Badge variant={riskVariant[s.riskLevel]}>{s.riskLevel}</Badge>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
-                    {s.isAgent && <span className="inline-flex items-center gap-1"><Bot className="h-3 w-3" /> Agent</span>}
+                    {s.isAgent && <span className="inline-flex items-center gap-1"><Cpu className="h-3 w-3" /> Agent</span>}
                     {s.production && <span>Production</span>}
                     {s.processesCustomerData && <span>Customer data</span>}
                     {s.vendorName && <span>{s.vendorName}</span>}

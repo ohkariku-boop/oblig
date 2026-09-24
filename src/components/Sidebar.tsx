@@ -2,7 +2,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth, hasSupabase } from '@/lib/AuthContext';
 import { useClient } from '@/lib/ClientContext';
-import { Boxes, LogOut, UserCircle, ChevronDown, Plus, Building2, ShieldCheck, Copy, Check } from 'lucide-react';
+import { Layers, LogOut, UserCircle, ChevronDown, Plus, Building2, ShieldCheck, Copy, Check } from 'lucide-react';
 import {
   LayoutDashboard, ClipboardCheck, Sparkles, FileText, ShieldAlert,
   Map, Network, FolderArchive, FileBarChart, Settings, ClipboardList, type LucideIcon,
@@ -20,7 +20,7 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { to: '/app', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/app/assessment', label: 'Assessment', icon: ClipboardCheck },
-  { to: '/app/inventory', label: 'Inventory', icon: Boxes, badge: 'NEW' },
+  { to: '/app/inventory', label: 'Inventory', icon: Layers, badge: 'NEW' },
   { to: '/app/copilot', label: 'AI Copilot', icon: Sparkles, badge: 'BETA' },
   { to: '/app/policies', label: 'Policies', icon: FileText },
   { to: '/app/risk', label: 'Risk Register', icon: ShieldAlert },
