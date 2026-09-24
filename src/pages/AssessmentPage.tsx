@@ -66,18 +66,20 @@ export function AssessmentPage() {
         description="The original Oblig IT Governance Checklist — work through it and export a branded PDF."
         action={
           <>
-            <span className="hidden items-center gap-1.5 mono-label sm:flex"><Save className="h-3.5 w-3.5 text-success-500" />
-      <div className="mb-4 rounded-xl border border-app surface px-4 py-3 text-sm text-muted">
-        After you mark items on AI usage, third parties, or customer data, capture them in{' '}
-        <Link to="/app/inventory" className="font-semibold text-primary-600 hover:underline">Inventory</Link>
-        {' '}as AI systems and vendors — that unlocks system-level evidence and gaps.
-      </div>
- Auto-saved</span>
+            <span className="hidden items-center gap-1.5 mono-label sm:flex">
+              <Save className="h-3.5 w-3.5 text-success-500" /> Auto-saved
+            </span>
             <button onClick={resetAll} className="btn-secondary"><RotateCcw className="h-4 w-4" /> Reset</button>
             <button onClick={() => setView('results')} className="btn-primary">View Results <ArrowRight className="h-4 w-4" /></button>
           </>
         }
       />
+
+      <div className="mb-4 rounded-xl border border-app surface px-4 py-3 text-sm text-muted">
+        After you mark items on AI usage, third parties, or customer data, capture them in{' '}
+        <Link to="/app/inventory" className="font-semibold text-primary-600 hover:underline">Inventory</Link>
+        {' '}as AI systems and vendors — that unlocks system-level evidence and gaps.
+      </div>
 
       {/* Score + milestone cards */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2">
