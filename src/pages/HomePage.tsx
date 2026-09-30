@@ -92,7 +92,7 @@ export function HomePage() {
             { value: '6', label: 'Governance domains assessed' },
             { value: '~5 min', label: 'To complete the assessment' },
             { value: '10+', label: 'Policy templates, AI-generated' },
-            { value: '10', label: 'Core APAC markets mapped' },
+            { value: '8+', label: 'APAC markets mapped (core)' },
           ].map(s => (
             <div key={s.label} className="text-center">
               <div className="text-3xl font-bold text-slate-900 dark:text-white">{s.value}</div>
