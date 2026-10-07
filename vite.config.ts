@@ -29,3 +29,5 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
 });
+
+// redeploy 20261007013636
